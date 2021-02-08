@@ -499,4 +499,5 @@ MigrationBackup/
 
 # End of https://www.toptal.com/developers/gitignore/api/c,vim,visualstudio,macos,cmake,c++
 
+obj
 minishell
