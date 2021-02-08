@@ -2,6 +2,6 @@
 # define MINISHELL_H
 
 # include "libft.h"
-
+# include "hashmap.h"
 
 #endif
