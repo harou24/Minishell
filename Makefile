@@ -25,12 +25,8 @@ endif
 
 all: $(NAME)
 
-$(NAME): $(SUBMODULE) $(LIBFT) $(OBJ_D) $(OBJ) $(INC_D) $(INC)
+$(NAME): $(LIBFT) $(OBJ_D) $(OBJ) $(INC_D) $(INC)
 	@$(CC) $(CC_FLAGS) $(OBJ) -o$(NAME)
-
-$(SUBMODULE):
-	@git submodule init
-	@git submodule update
 
 $(OBJ_D):
 	@mkdir -p $(OBJ_D)
@@ -54,5 +50,9 @@ fclean: clean
 test: $(NAME)
 	@$(CC) $(CC_FLAGS) -I$(INC_D) -I$(LIB_INC) -o test tests/main.c $(NAME) lib/libft/libft.a 
 	@./test
+
+submodule:
+	@git submodule init
+	@git submodule update
 	
 re: fclean all

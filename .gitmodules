@@ -1,3 +1,9 @@
 [submodule "lib/libft"]
 	path = lib/libft
-	url = https://github.com/harou24/libft.git
+	url = https://github.com/s-t-a-n/libft.git
+[submodule "lib/libvector"]
+	path = lib/libvector
+	url = https://github.com/s-t-a-n/libvector.git
+[submodule "lib/libhashmap"]
+	path = lib/libhashmap
+	url = git@github.com:harou24/libhashmap.git
