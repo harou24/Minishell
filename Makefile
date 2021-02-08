@@ -25,8 +25,12 @@ endif
 
 all: $(NAME)
 
-$(NAME): $(LIBFT) $(OBJ_D) $(OBJ) $(INC_D) $(INC)
+$(NAME): $(SUBMODULE) $(LIBFT) $(OBJ_D) $(OBJ) $(INC_D) $(INC)
 	@$(CC) $(CC_FLAGS) $(OBJ) -o$(NAME)
+
+$(SUBMODULE):
+	@git submodule init
+	@git submodule update
 
 $(OBJ_D):
 	@mkdir -p $(OBJ_D)
