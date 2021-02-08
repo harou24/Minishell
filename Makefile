@@ -12,8 +12,9 @@ INC = $(INC_D)/minishell.h
 OBJ := $(SRC:$(SRC_D)/%.c=$(OBJ_D)/%.o)
 
 LIBFT = $(LIB_D)/libft/libft.a
-
-LIB_INC = $(LIB_D)/libft/inc
+LIBHASHMAP = $(LIB_DIR)/libhashmap/libhashmap.a
+LIBFT_INC = $(LIB_D)/libft/inc
+LIBHASHMAP_INC = $(LIB_D)/libhashmap/inc
 
 CC = clang
 CC_FLAGS = -Wall -Werror -Wextra
@@ -25,34 +26,39 @@ endif
 
 all: $(NAME)
 
-$(NAME): $(LIBFT) $(OBJ_D) $(OBJ) $(INC_D) $(INC)
+$(NAME): $(LIBFT) $(LIBHASHMAP) $(OBJ_D) $(OBJ) $(INC_D) $(INC)
 	@$(CC) $(CC_FLAGS) $(OBJ) -o$(NAME)
 
 $(OBJ_D):
 	@mkdir -p $(OBJ_D)
 
 $(OBJ): $(OBJ_D)/%.o: $(SRC_D)/%.c
-	@$(CC) $(CC_FLAGS) -I$(INC_D) -I$(LIB_INC) -c $< -o $@
+	@$(CC) $(CC_FLAGS) -I$(INC_D) -I$(LIBFT_INC) -I$(LIBHASHMAP_INC) -c $< -o $@
 
 $(LIBFT):
 	@make -C $(LIB_D)/libft
+
+$(LIBHASHMAP):
+	@make -C $(LIB_D)/libhashmap
 
 clean:
 	@rm -rf $(OBJ_D)
 	@rm	-rf *.dSYM
 	@make -C $(LIB_D)/libft clean
+	@make -C $(LIB_D)/libhashmap clean
 
 fclean: clean
 	@rm -f $(NAME)
 	@rm -f test
 	@make -C $(LIB_D)/libft fclean
+	@make -C $(LIB_D)/libhashmap fclean
 
 test: $(NAME)
-	@$(CC) $(CC_FLAGS) -I$(INC_D) -I$(LIB_INC) -o test tests/main.c $(NAME) lib/libft/libft.a 
+	@$(CC) $(CC_FLAGS) -I$(INC_D) -I$(LIBFT_INC) -o test tests/main.c $(NAME) lib/libft/libft.a 
 	@./test
 
 submodule:
 	@git submodule init
 	@git submodule update
-	
+
 re: fclean all
