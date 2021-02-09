@@ -21,6 +21,11 @@ jobs:
       run: make fclean
     - name: make re
       run: make re
+    - name: Test CMake
+      run: |
+        cmake .
+        make clean
+        make
   macos:
     runs-on: macos-latest
     steps:
@@ -37,3 +42,8 @@ jobs:
       run: make fclean
     - name: make re
       run: make re
+    - name: Test CMake
+      run: |
+        cmake .
+        make clean
+        make

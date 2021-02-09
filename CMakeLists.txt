@@ -4,10 +4,9 @@ project(minishell)
 add_subdirectory(lib/libft)
 add_subdirectory(lib/libvector)
 add_subdirectory(lib/libhashmap)
-include_directories(inc libft)
-link_directories(lib/libft)
+include_directories(inc lib/libft lib/libvector lib/libhashmap)
 
-#set(CMAKE_C_STANDARD 90)
+set(CMAKE_C_STANDARD 90)
 set(CMAKE_C_FLAGS "-Wall -Werror -Wextra -pedantic")
 
 set(CMAKE_CXX_STANDARD 98)
