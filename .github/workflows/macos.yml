@@ -1,0 +1,32 @@
+name: MacOS
+
+on: [pull_request, workflow_dispatch]
+#on: [push, pull_request, workflow_dispatch]
+
+jobs:
+  macos:
+    runs-on: macos-latest
+
+    steps:
+    - name: Checkout repository and submodules
+      uses: actions/checkout@v2
+      with:
+        submodules: recursive
+
+    - name: Norme check make
+      run: make
+
+    - name: Norme check make clean
+      run: make clean
+
+    - name: Norme check make fclean
+      run: make fclean
+
+    - name: Norme check make re
+      run: make re
+
+    - name: Test CMake
+      run: |
+        cmake .
+        make clean
+        make
