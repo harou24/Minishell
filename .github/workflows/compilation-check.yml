@@ -11,7 +11,7 @@ jobs:
     - name: Checkout repository and submodules
       uses: actions/checkout@v2
       with:
-      submodules: recursive
+        submodules: recursive
 
     - name: make
       run: make
@@ -21,13 +21,18 @@ jobs:
       run: make fclean
     - name: make re
       run: make re
+    - name: Test CMake
+      run: |
+        cmake .
+        make clean
+        make
   macos:
     runs-on: macos-latest
     steps:
     - name: Checkout repository and submodules
       uses: actions/checkout@v2
       with:
-      submodules: recursive
+        submodules: recursive
 
     - name: make
       run: make
@@ -37,3 +42,8 @@ jobs:
       run: make fclean
     - name: make re
       run: make re
+    - name: Test CMake
+      run: |
+        cmake .
+        make clean
+        make
