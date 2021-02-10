@@ -1,0 +1,22 @@
+name: Unittests
+
+on: [pull_request, workflow_dispatch]
+#on: [push, pull_request, workflow_dispatch]
+
+jobs:
+  ubuntu:
+    runs-on: ubuntu-latest
+    name: Run Catch2 unittests
+
+    steps:
+    - name: Checkout repository and submodules
+      uses: actions/checkout@v2
+      with:
+        submodules: recursive
+
+    - name: Run unittests
+      run: |
+        cd tests
+        cmake .
+        make
+        ./Unittests.bin
