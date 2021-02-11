@@ -12,7 +12,8 @@ typedef enum		s_token_type
 					VARIABLE,
 					SPACE,
 					PIPE,
-					NEWLINE
+					NEWLINE,
+					TOKEN_TYPE_INDEX
 }					e_token_type;
 
 typedef struct		s_range
