@@ -1,44 +1,33 @@
 #ifndef TOKEN_H
 # define TOKEN_H
 
-enum TokenType{
-	REGULAR,
-	NUMBER,
-	DOT = '.',
-	DOLLAR = '$',
-	NEWLINE = '\n',
-	TAB = '\t',
-	COMMA = ',',
-	SEMICOLON = ';',
-	WHITESPACE = ' ',
-	PIPE = '|',
-	QUOTE = '\'',
-	DOUBLEQUOTE = '\"',
-	END = '\0',
-	GREATER = '>',
-	LESSER = '<',
-	SLACH = '/',
-	BACKSLACH = '\\',
-	AMPERSAND = "&",
-	TILDE = '~',
-	WILDECARD = '"',
-	OPENPARENTHESE = '(',
-	CLOSEPARENTHESE = ')',
-	OPENBRACE = '{',
-	CLOSEBRACE = '}',
-	OPENBRACKETS = '[',
-	CLOSEBRACKETS = ']',
-	DASH = '-',
-	EQUAL = '=',
-	PLUS = '+',
-};
+#include <stddef.h>
+#include <stdlib.h>
+#include "libft.h"
 
-typedef struct	s_token
+typedef enum		s_token_type
 {
-		enun TokenType;
-		const char* command;
-}		t_token;
+					WORD,
+					STRING,
+					VARIABLE,
+					SPACE,
+					PIPE,
+					NEWLINE
+}					e_token_type;
 
-TokenType get_token_type(char c);
+typedef struct		s_range
+{
+	size_t			begin;
+	size_t			end;
+}					t_range;
+
+typedef struct		s_token
+{
+	e_token_type	type;
+	t_range			range;
+}					t_token;
+
+t_token				*token_create();
+t_token				*token_destroy(t_token *token);
 
 #endif
