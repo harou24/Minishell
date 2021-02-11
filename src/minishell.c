@@ -1,8 +1,9 @@
 #include "minishell.h"
-#include "stdio.h"
+#include "prompt.h"
 
-int main(void)
+int	main(void)
 {
-	printf("Hello_world");
-	return 0;
+	void *prompt = new_prompt("user@42 >");
+	print_prompt(prompt);
+	return (0);
 }

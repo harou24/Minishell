@@ -5,9 +5,11 @@ INC_D = inc
 OBJ_D = obj
 LIB_D = lib
 
-SRC = $(SRC_D)/minishell.c
+SRC = $(SRC_D)/minishell.c\
+	$(SRC_D)/prompt.c
 
-INC = $(INC_D)/minishell.h
+INC = $(INC_D)/minishell.h\
+	$(INC_D)/prompt.h
 
 OBJ := $(SRC:$(SRC_D)/%.c=$(OBJ_D)/%.o)
 
@@ -27,7 +29,7 @@ endif
 all: $(NAME)
 
 $(NAME): $(LIBFT) $(LIBHASHMAP) $(OBJ_D) $(OBJ) $(INC_D) $(INC)
-	@$(CC) $(CC_FLAGS) $(OBJ) -o$(NAME)
+	@$(CC) $(CC_FLAGS) $(OBJ) -o $(NAME) $(LIBFT) 
 
 $(OBJ_D):
 	@mkdir -p $(OBJ_D)
