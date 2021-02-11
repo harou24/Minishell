@@ -17,7 +17,7 @@ void	set_prompt(void *_prompt, char *_prompt_str)
 	if (prompt->buffer)
 		free(prompt->buffer);
 	prompt->buffer = 
-	t_strdup(_prompt_str);
+	ft_strdup(_prompt_str);
 }
 
 void	print_prompt(void *_prompt)
