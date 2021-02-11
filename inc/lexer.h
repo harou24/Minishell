@@ -9,18 +9,22 @@ typedef void * t_vector;
 #include <stddef.h>
 #include <stdlib.h>
 #include "libft.h"
-#include "token.h"
+#include "journal.h"
 
-typedef struct	s_lexer
+typedef struct	s_lex
 {
-	t_vector	tokens;
-}				t_lexer;
+	t_journal	*journal;
+}				t_lex;
 
-static const size_t g_lexer_default_size = 128;
+static const size_t g_lex_default_size = 128;
 
-t_bool		lexer(t_lexer *lex, const char *str);
+t_bool		lex(const char *str);
+t_bool		lex_for(t_lex *lex, const char *str);
 
-t_lexer     *lexer_create();
-t_lexer     *lexer_destroy(t_lexer *lex);
+t_lex     *lex_create();
+t_lex     *lex_create_for();
+
+t_lex     *lex_destroy();
+t_lex     *lex_destroy_for(t_lex *lex);
 
 #endif

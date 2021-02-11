@@ -1,34 +1,59 @@
 #include "vector.h"
 #include "lexer.h"
+#include "token.h"
 
-t_bool		lexer(t_lexer *lex, const char *str)
+static t_lex * g_lex__;
+
+t_bool		lex(const char *str)
+{
+	g_lex__ = lex_create();
+	if (!g_lex__)
+		return (FALSE);
+	(void)str;
+	return (FALSE);
+}
+
+t_bool		lex_for(t_lex *lex, const char *str)
 {
 	(void)str;
 	(void)lex;
 	return (FALSE);
 }
 
-t_lexer		*lexer_create()
+t_lex		*lex_create()
 {
-	t_lexer *lex;
+	/* return local static g_lex__ */
+	if (g_lex__ != NULL)
+		return (g_lex__);
+	else
+		return ((g_lex__ = lex_create_for()));
+}
 
-	lex = ft_calloc(sizeof(t_lexer), 1);
+t_lex		*lex_create_for()
+{
+	t_lex *lex;
+
+	lex = ft_calloc(sizeof(t_lex), 1);
 	if (lex)
 	{
-		if (!vector(&lex->tokens, V_CREATE, g_lexer_default_size, NULL))
-			return (lexer_destroy(lex));
+		lex->journal = journal_create(TOKEN_TYPE_INDEX + 1);
+		if  (!lex->journal)
+			return (lex_destroy(lex));
 	}
 	return (lex);
 }
 
-t_lexer		*lexer_destroy(t_lexer *lex)
+t_lex		*lex_destroy()
 {
-	while (*(size_t *)vector(&lex->tokens, V_SIZE, 0, 0) > 0)
-	{
-		token_destroy(vector(&lex->tokens, V_PEEKBACK, 0, 0));
-		vector(&lex->tokens, V_POPBACK, 0, 0);
-	}
-	vector(&lex->tokens, V_DESTROY, FALSE, 0);
+	if (!g_lex__)
+		return (NULL);
+	lex_destroy(g_lex__);
+	return ((g_lex__ = NULL));
+}
+
+t_lex		*lex_destroy_for(t_lex *lex)
+{
+	journal_destroy(lex->journal);
 	free(lex);
 	return (NULL);
 }
