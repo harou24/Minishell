@@ -14,9 +14,8 @@ jobs:
       with:
         submodules: recursive
 
-    - name: Run unittests
+    - name: Unittest lexer
       run: |
-        cd tests
         cmake .
         make
-        ./Unittests.bin
+        ctest --output-on-failure .
