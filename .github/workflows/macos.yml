@@ -13,19 +13,20 @@ jobs:
       with:
         submodules: recursive
 
-    - name: Norme check make
-      run: make
+# norminette rules
+#    - name: Norme check make
+#      run: make
+#
+#    - name: Norme check make clean
+#      run: make clean
+#
+#    - name: Norme check make fclean
+#      run: make fclean
+#
+#    - name: Norme check make re
+#      run: make re
 
-    - name: Norme check make clean
-      run: make clean
-
-    - name: Norme check make fclean
-      run: make fclean
-
-    - name: Norme check make re
-      run: make re
-
-    - name: Test CMake
+    - name: Compilation check
       run: |
         cmake .
         make clean
