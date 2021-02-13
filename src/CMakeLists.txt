@@ -9,7 +9,7 @@ file(GLOB SRC_LIST CONFIGURE_DEPENDS "${minishell_SOURCE_DIR}/src/*.c")
 add_library(minishell ${SRC_LIST} ${HEADER_LIST})
 
 # We need this directory, and users of our library will need it too
-target_include_directories(minishell PUBLIC ../inc)
+target_include_directories(minishell PUBLIC ../includes)
 
 # This depends on (header only) boost
 target_link_libraries(minishell PRIVATE ft vector hashmap)
