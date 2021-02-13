@@ -45,7 +45,7 @@ if(${CMAKE_VERSION} VERSION_LESS 3.14)
 endif()
 
 
-add_subdirectory(lib)
+add_subdirectory(extern)
 add_subdirectory(src)
 add_subdirectory(apps)
 
