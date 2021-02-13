@@ -8,6 +8,9 @@ file(GLOB SRC_LIST CONFIGURE_DEPENDS "${minishell_SOURCE_DIR}/src/*.c")
 # Make an automatic library - will be static or dynamic based on user setting
 add_library(minishell ${SRC_LIST} ${HEADER_LIST})
 
+# Set the compilation standards
+set_property(TARGET minishell PROPERTY C_STANDARD 90)
+
 # We need this directory, and users of our library will need it too
 target_include_directories(minishell PUBLIC ../includes)
 
