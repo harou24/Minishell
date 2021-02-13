@@ -1,5 +1,3 @@
-#include <catch2/catch.hpp>
-
 /*
  * Catch2: examples
  * for more examples checkout:
@@ -18,6 +16,13 @@
  * }
  */
 
- TEST_CASE( "Title here", "[short name]" ) {
-     REQUIRE(1) ;
- }
+/*
+extern "C" {
+#include "[YOUR_C_LIBRARY]"
+}
+*/
+
+TEST_CASE( "Title here", "[short name]" ) {
+	const bool condition = true;
+	REQUIRE(condition) ;
+}
