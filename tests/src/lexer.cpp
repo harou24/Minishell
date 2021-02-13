@@ -17,10 +17,11 @@
  *     REQUIRE( [BOOLEAN CONDITION] ) ;
  * }
  */
-
+extern "C" {
 # include "token.h"
 # include "journal.h"
 # include "lexer.h"
+}
 
  TEST_CASE( "Title here", "[short name]" ) {
      REQUIRE(1) ;
