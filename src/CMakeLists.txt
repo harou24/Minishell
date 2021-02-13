@@ -16,6 +16,6 @@ target_link_libraries(minishell PRIVATE ft vector hashmap)
 
 # IDEs should put the headers in a nice place
 source_group(
-  TREE "${PROJECT_SOURCE_DIR}/inc"
+  TREE "${PROJECT_SOURCE_DIR}/includes"
   PREFIX "Header Files"
   FILES ${HEADER_LIST})
