@@ -499,6 +499,12 @@ MigrationBackup/
 
 # End of https://www.toptal.com/developers/gitignore/api/c,vim,visualstudio,macos,cmake,c++
 
+# Doxygen rules
+CMakeDoxyfile.in
+CMakeDoxygenDefaults.cmake
+Doxyfile.docs
+# End of Doxygen rules
+
 DartConfiguration.tcl
 Makefile
 build
