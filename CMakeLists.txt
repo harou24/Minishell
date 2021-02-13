@@ -1,40 +1,57 @@
-cmake_minimum_required(VERSION 3.5)
-project(minishell)
+cmake_minimum_required(VERSION 3.12)
+project(
+	minishell
+	VERSION 0.1
+	DESCRIPTION "As beautiful as a shell - 42 project"
+	LANGUAGES C CXX)
 
-include(CTest)
+# CMakeLists.txt inspired by:
+# https://gitlab.com/CLIUtils/modern-cmake/tree/master/examples/extended-project
 
-if(BUILD_TESTING)
-	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -fsanitize=address")
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -fsanitize=address")
+# Only do these if this is the main project, and not if it is included through add_subdirectory
+if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
+	# global compilation standards
+	set(CMAKE_C_STANDARD 99)
+	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Werror -Wextra -pedantic")
+	
+	set(CMAKE_CXX_STANDARD 98)
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -Wextra -pedantic")
+
+	include(CTest)
+
+	if(BUILD_TESTING)
+		set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -fsanitize=address")
+		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -fsanitize=address")
+	endif()
+
+	# Let's nicely support folders in IDEs
+	set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+
+	# Docs only available if this is the main app
+	find_package(Doxygen)
+	if(Doxygen_FOUND)
+		add_subdirectory(docs)
+	else()
+		message(STATUS "Doxygen not found, not building docs")
+	endif()
 endif()
 
-add_subdirectory(lib/libft)
-add_subdirectory(lib/libvector)
-add_subdirectory(lib/libhashmap)
+# FetchContent added in CMake 3.11, downloads during the configure step
+include(FetchContent)
 
-if(BUILD_TESTING)
-	add_subdirectory(tests)
+# FetchContent_MakeAvailable was not added until CMake 3.14; use our shim
+if(${CMAKE_VERSION} VERSION_LESS 3.14)
+	include(cmake/add_FetchContent_MakeAvailable.cmake)
 endif()
 
-include_directories(inc
-					lib/libft
-					lib/libvector
-					lib/libhashmap
-					)
 
-set(CMAKE_C_STANDARD 90)
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Werror -Wextra -pedantic")
+add_subdirectory(extern)
+add_subdirectory(src)
+add_subdirectory(apps)
 
-set(CMAKE_CXX_STANDARD 98)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -Wextra -pedantic")
-
-AUX_SOURCE_DIRECTORY(src/ MINISHELL_SRC) 
-add_executable(minishell-bin ${MINISHELL_SRC})
-target_link_libraries(minishell-bin PUBLIC ft vector hashmap)
-set_target_properties(minishell-bin PROPERTIES OUTPUT_NAME minishell)
-
-
-list(REMOVE_ITEM ${MINISHELL_SRC} "main.c")
-add_library(minishell STATIC ${MINISHELL_SRC})
-target_include_directories(minishell PUBLIC inc)
-target_link_libraries(minishell ft vector hashmap)
+# Testing only available if this is the main app
+# Emergency override MODERN_CMAKE_BUILD_TESTING provided as well
+if((CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME OR MODERN_CMAKE_BUILD_TESTING)
+   AND BUILD_TESTING)
+  add_subdirectory(tests)
+endif()
