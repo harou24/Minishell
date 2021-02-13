@@ -8,7 +8,7 @@ t_journal	*lex(const char *str)
 {
 	g_lex__ = lex_create();
 	if (!g_lex__)
-		return (FALSE);
+		return (NULL);
 	(void)str;
 	return (NULL);
 }
