@@ -19,15 +19,28 @@ typedef struct			s_journal
 {
 	t_vector			tokens;
 	t_journal_storetype	*counter;
+	size_t				index;
 }						t_journal;
 
-void					*journal_add(t_token *token);
-void					*journal_get(size_t index);
+t_token					*journal_add(t_token *token);
+t_token					*journal_get(size_t index);
+
 size_t					journal_size();
-t_bool					journal_has_token(t_token *token);
-t_bool					*journal_has_tokentype(const e_token_type type);
-t_token					*journal_find_first_of_tokentype(const e_token_type type);
-t_token					*journal_find_last_of_tokentype(const e_token_type type);
+
+t_bool					journal_has_token(const t_token *token);
+t_bool					journal_has_tokentype(const e_token_type type);
+
+t_token                 *journal_find_first_token(const t_token *token);
+t_token                 *journal_find_last_token(const t_token *token);
+t_token					*journal_find_first_type(const e_token_type type);
+t_token					*journal_find_last_type(const e_token_type type);
+
+t_token					*journal_next();
+void					journal_reset();
+
+size_t					journal_get_index();
+void					journal_set_index(size_t index);
+
 
 /* some ..._for functions not written yet */
 
