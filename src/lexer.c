@@ -4,20 +4,20 @@
 
 static t_lex * g_lex__;
 
-t_bool		lex(const char *str)
+t_journal	*lex(const char *str)
 {
 	g_lex__ = lex_create();
 	if (!g_lex__)
 		return (FALSE);
 	(void)str;
-	return (FALSE);
+	return (NULL);
 }
 
-t_bool		lex_for(t_lex *lex, const char *str)
+t_journal	*lex_for(t_lex *lex, const char *str)
 {
 	(void)str;
 	(void)lex;
-	return (FALSE);
+	return (NULL);
 }
 
 t_lex		*lex_create()
