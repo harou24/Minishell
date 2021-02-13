@@ -13,7 +13,7 @@ typedef enum		s_token_type
 					SPACE,
 					PIPE,
 					NEWLINE,
-					TOKEN_TYPE_INDEX
+					TOKEN_TYPE_SIZE
 }					e_token_type;
 
 typedef struct		s_range
@@ -21,6 +21,8 @@ typedef struct		s_range
 	size_t			begin;
 	size_t			end;
 }					t_range;
+
+t_range				range(size_t begin, size_t end);
 
 typedef struct		s_token
 {
@@ -32,9 +34,10 @@ typedef struct		s_token
 t_bool      token_find_in_str(const char *str, size_t begin, size_t len);
 */
 
-t_bool				token_cmp(const t_token *a, const t_token *b);
+int					token_cmp(const t_token *a, const t_token *b);
 
-t_token				*token_create();
+t_token				token(t_range range, e_token_type type);
+t_token				*token_create(t_range range, e_token_type type);
 t_token				*token_destroy(t_token *token);
 
 #endif

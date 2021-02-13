@@ -1,61 +1,63 @@
+#include <assert.h>
 #include "journal.h"
 
-# define V_DEF_SIZE	(TOKEN_TYPE_INDEX + 1)
+# define V_DEF_SIZE	128
 
 static t_journal *g_journal__;
 
-t_journal        *journal_create(size_t size)
+t_journal        *journal_create()
 {
 	if (g_journal__)
 		return (g_journal__);
-	else
-		return ((g_journal__ = journal_create_for(size)));
+	g_journal__ = ft_calloc(sizeof(t_journal), 1);
+	if (g_journal__)
+	{
+		g_journal__->counter = ft_calloc(sizeof(t_journal_storetype), TOKEN_TYPE_SIZE);
+		if (!g_journal__->counter
+			|| !vector(&g_journal__->tokens, V_CREATE, V_DEF_SIZE, NULL))
+			return (journal_destroy(g_journal__));
+	}
+	return (g_journal__);
 }
 
-t_journal        *journal_create_for(size_t size)
+void			journal_clear()
 {
-	t_journal	*journal;
-
-	journal = ft_calloc(sizeof(t_journal), 1);
-	if (journal)
+	/* this de-allocs all token elements in vector, which could be costly #40 */
+	while (*(size_t *)vector(&g_journal__->tokens, V_SIZE, 0, 0) > 0)
 	{
-		journal->counter = ft_calloc(sizeof(t_journal_storetype), size);
-		if (!journal->counter
-			|| !vector(&journal->tokens, V_CREATE, V_DEF_SIZE, NULL))
-			return (journal_destroy(journal));
+		token_destroy(vector(&g_journal__->tokens, V_PEEKBACK, 0, 0));
+		vector(&g_journal__->tokens, V_POPBACK, 0, 0);
 	}
-	return (journal);
+	g_journal__->index = 0;
 }
 
 t_journal        *journal_destroy()
 {
-	journal_destroy_for(g_journal__);
+	if (!g_journal__)
+		return (NULL);
+	while (*(size_t *)vector(&g_journal__->tokens, V_SIZE, 0, 0) > 0)
+	{
+		token_destroy(vector(&g_journal__->tokens, V_PEEKBACK, 0, 0));
+		vector(&g_journal__->tokens, V_POPBACK, 0, 0);
+	}
+	vector(&g_journal__->tokens, V_DESTROY, FALSE, 0);
+	free(g_journal__->counter);
+	free(g_journal__);
 	return ((g_journal__ = NULL));
 }
 
-t_journal        *journal_destroy_for(t_journal *journal)
+t_token					*journal_push(t_token *token)
 {
-	if (!journal)
-		return (NULL);
-	while (*(size_t *)vector(&journal->tokens, V_SIZE, 0, 0) > 0)
-	{
-		token_destroy(vector(&journal->tokens, V_PEEKBACK, 0, 0));
-		vector(&journal->tokens, V_POPBACK, 0, 0);
-	}
-	vector(&journal->tokens, V_DESTROY, FALSE, 0);
-	free(journal->counter);
-	free(journal);
-	return (NULL);
-}
-
-t_token					*journal_add(t_token *token)
-{
-	
+	assert(token->type < TOKEN_TYPE_SIZE);
 	if (vector(&g_journal__->tokens, V_PUSHBACK, 0, token))
+	{
+		(g_journal__->counter)[token->type]++;
 		return (token);
+	}
 	else
+	{
 		return (NULL);
-
+	}
 }
 
 t_token					*journal_get(size_t index)
@@ -76,52 +78,22 @@ size_t					journal_size()
 
 t_bool					journal_has_token(const t_token *token)
 {
-	return (journal_find_first_token(token) != NULL);
+	return (journal_has_tokentype(token->type));
 }
 
 t_bool					journal_has_tokentype(const e_token_type type)
 {
-	return (journal_find_first_type(type) != NULL);
+	return (g_journal__->counter[type] > 0 );
 }
 
 t_token					*journal_find_first_token(const t_token *token)
 {
-	const size_t		size = journal_size();
-	size_t				index;
-	t_token				*cur_token;
-
-	index = 0;
-	while (index < size)
-	{
-		cur_token = journal_get(index);
-		if (token_cmp(cur_token, token) == TRUE)
-			break;
-		index++;
-	}
-	if (index < size)
-		return (cur_token);
-	return (NULL);
+	return (journal_find_first_type(token->type));
 }
 
 t_token					*journal_find_last_token(const t_token *token)
 {
-	const size_t		size = journal_size();
-	ssize_t				index;
-	t_token				*cur_token;
-
-	if (size == 0)
-		return (NULL);
-	index = size - 1;
-	while (index >= 0)
-	{
-		cur_token = journal_get(index);
-		if (token_cmp(cur_token, token) == TRUE)
-			break;
-		index--;
-	}
-	if (index >= 0)
-		return (cur_token);
-	return (NULL);
+	return (journal_find_last_type(token->type));
 }
 
 t_token					*journal_find_first_type(const e_token_type type)
@@ -135,11 +107,9 @@ t_token					*journal_find_first_type(const e_token_type type)
 	{
 		cur_token = journal_get(index);
 		if (cur_token->type == type)
-			break;
+			return (cur_token);
 		index++;
 	}
-	if (index < size)
-		return (cur_token);
 	return (NULL);
 }
 
@@ -156,38 +126,30 @@ t_token					*journal_find_last_type(const e_token_type type)
 	{
 		cur_token = journal_get(index);
 		if (cur_token->type == type)
-			break;
+			return (cur_token);
 		index--;
 	}
-	if (index >= 0)
-		return (cur_token);
 	return (NULL);
-
 }
 
-t_token					*journal_next()
+t_token					*journal_creeper_next()
 {
-	if (!g_journal__ || g_journal__->index >= journal_size())
+	if (g_journal__->index >= journal_size())
 		return (NULL);
 	return (journal_get(g_journal__->index++));
 }
 
-void					journal_reset()
+void					journal_creeper_reset()
 {
-	if (g_journal__)
-		journal_set_index(0);
+	journal_creeper_set_index(0);
 }
 
-size_t					journal_get_index()
+size_t					journal_creeper_get_index()
 {
-	if (!g_journal__)
-		return (0);
-	else
-		return(g_journal__->index);
+	return(g_journal__->index);
 }
 
-void					journal_set_index(size_t index)
+void					journal_creeper_set_index(size_t index)
 {
-	if (g_journal__)
-		g_journal__->index = index;
+	g_journal__->index = index;
 }
