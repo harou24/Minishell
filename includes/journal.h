@@ -22,7 +22,15 @@ typedef struct			s_journal
 	size_t				index;
 }						t_journal;
 
-t_token					*journal_add(t_token *token);
+/*
+** R U A FUNCTION ?
+*/
+
+t_journal				*journal_create();
+void					journal_clear();
+t_journal				*journal_destroy();
+
+t_token					*journal_push(t_token *token);
 t_token					*journal_get(size_t index);
 
 size_t					journal_size();
@@ -35,18 +43,10 @@ t_token                 *journal_find_last_token(const t_token *token);
 t_token					*journal_find_first_type(const e_token_type type);
 t_token					*journal_find_last_type(const e_token_type type);
 
-t_token					*journal_next();
-void					journal_reset();
+t_token					*journal_creeper_next();
+void					journal_creeper_reset();
 
-size_t					journal_get_index();
-void					journal_set_index(size_t index);
-
-
-/* some ..._for functions not written yet */
-
-t_journal				*journal_create(size_t size);
-t_journal				*journal_create_for(size_t size);
-t_journal				*journal_destroy();
-t_journal				*journal_destroy_for(t_journal *journal);
+size_t					journal_creeper_get_index();
+void					journal_creeper_set_index(size_t index);
 
 #endif

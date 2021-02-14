@@ -36,7 +36,7 @@ t_lex		*lex_create_for()
 	lex = ft_calloc(sizeof(t_lex), 1);
 	if (lex)
 	{
-		lex->journal = journal_create(TOKEN_TYPE_INDEX + 1);
+		lex->journal = journal_create();
 		if  (!lex->journal)
 			return (lex_destroy(lex));
 	}
