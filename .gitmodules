@@ -7,3 +7,6 @@
 [submodule "lib/libhashmap"]
 	path = extern/libhashmap
 	url = git@github.com:harou24/libhashmap.git
+[submodule "extern/get_next_line_lib"]
+	path = extern/get_next_line_lib
+	url = git@github.com:harou24/get_next_line_lib.git
