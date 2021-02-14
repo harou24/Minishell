@@ -6,11 +6,12 @@
 
 typedef struct	s_prompt
 {
-	char	*buffer;
+		char *username;
+		char *hostname;
+		char *current_path;
 }		t_prompt;
 
-void	*new_prompt(const char *_prompt_str);
-void	set_prompt(void *_prompt, char *_prompt_str);
+void	*new_prompt(const char *_username, const char *_hostname);
 void	print_prompt(void *_prompt);
 
 #endif
