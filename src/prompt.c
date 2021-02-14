@@ -1,6 +1,7 @@
 #include "prompt.h"
+#include "stdio.h"
 
-void	*prompt_create(const char *_username, const char *_hostname)
+t_prompt 	*prompt_create(const char *_username, const char *_hostname)
 {
 	t_prompt *prompt;
 
@@ -11,35 +12,27 @@ void	*prompt_create(const char *_username, const char *_hostname)
 	prompt->hostname = ft_strdup(_hostname);
 	if (!prompt->username || !prompt->hostname)
 	{
-		prompt->destroy((void *)prompt);
+		prompt_destroy(prompt);
 		return (NULL);
 	}
-	return ((void *) prompt);
+	return (prompt);
 }
 
-void	prompt_print(void *_prompt)
+void 	prompt_print(t_prompt *_prompt)
 {
-	t_prompt *prompt;
 
-	prompt = (t_prompt *)_prompt;
-	ft_putstr_fd(prompt->username, 1);
-	ft_putchar_fd('@', 1);
-	ft_putstr(prompt->hostname, 1);
-	ft_putchar_fd('>', 1)
-	ft_putchar_fd('\n', 1);
+	printf("%s@%s >", _prompt->username, _prompt->hostname);
 }
 
-void	prompt_destroy(void *_prompt)
+void	prompt_destroy(t_prompt *_prompt)
 {
-	t_prompt *prompt;
 
-	prompt = (t_prompt *)_prompt;
-	if (prompt->username)
-		free(prompt->username)
-	if (prompt->hostname)
-		free(prompt->hostname);
-	if (prompt->current_directory)
-		free(prompt->current_directory);
-	if (prompt)
-		free(prompt);
+	if (_prompt->username)
+		free(_prompt->username);
+	if (_prompt->hostname)
+		free(_prompt->hostname);
+	if (_prompt->current_dir)
+		free(_prompt->current_dir);
+	if (_prompt)
+		free(_prompt);
 }

@@ -18,11 +18,15 @@
  * }
  */
 
+extern "C" {
 #include "prompt.h"
 
+}
+
  TEST_CASE( "Prompt basic testing", "[prompt]" ) {
- 
- void	*prompt = new_prompt("user", "hostname");
- print_prompt(prompt);
+
+t_prompt *prompt;
+ prompt = prompt_create("user", "hostname");
+ prompt_print(prompt);
      REQUIRE(1) ;
  }
