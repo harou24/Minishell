@@ -4,11 +4,15 @@
 #include "libft.h"
 #include <stdlib.h>
 
+#define BUFFER_SIZE 255
+
 typedef struct	s_prompt
 {
-		char *username;
-		char *hostname;
-		char *current_dir;
+		char 	*username;
+		char 	*hostname;
+		char 	*current_dir;
+		int	error_code;
+		char 	*buffer;
 }		t_prompt;
 
 t_prompt	*prompt_create(const char *_username, const char *_hostname);
