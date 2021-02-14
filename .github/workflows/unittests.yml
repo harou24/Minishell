@@ -1,7 +1,15 @@
 name: Unittests
 
-on: [pull_request, workflow_dispatch]
+#on: [pull_request, workflow_dispatch]
 #on: [push, pull_request, workflow_dispatch]
+
+on:
+  push:
+    branches:
+      - master
+      - develop
+  pull_request:
+  workflow_dispatch:
 
 jobs:
   ubuntu:
@@ -11,10 +19,11 @@ jobs:
     steps:
     - name: Checkout repository and submodules
       uses: actions/checkout@v2
+# submodule retreival here should be removed when harou24/libhashmap#2 is merged (anonymous access)
       with:
         submodules: recursive
 
-    - name: Unittest lexer
+    - name: Run all unittests
       run: |
         cmake .
         make
