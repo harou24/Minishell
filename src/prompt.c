@@ -10,7 +10,9 @@ t_prompt 	*prompt_create(const char *_username, const char *_hostname)
 		return (NULL);
 	prompt->username = ft_strdup(_username);
 	prompt->hostname = ft_strdup(_hostname);
-	if (!prompt->username || !prompt->hostname)
+	prompt->buffer = ft_calloc(sizeof(char), BUFFER_SIZE);
+
+	if (!prompt->buffer || !prompt->username || !prompt->hostname)
 	{
 		prompt_destroy(prompt);
 		return (NULL);
