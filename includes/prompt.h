@@ -11,7 +11,8 @@ typedef struct	s_prompt
 		char *current_path;
 }		t_prompt;
 
-void	*new_prompt(const char *_username, const char *_hostname);
-void	print_prompt(void *_prompt);
+void	*prompt_create(const char *_username, const char *_hostname);
+void	prompt_print(void *_prompt);
+void	prompt_destroy(void *_prompt);
 
 #endif
