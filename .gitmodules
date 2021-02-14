@@ -7,3 +7,9 @@
 [submodule "lib/libhashmap"]
 	path = extern/libhashmap
 	url = git@github.com:harou24/libhashmap.git
+[submodule "extern/libprintf"]
+	path = extern/libprintf
+	url = https://github.com/s-t-a-n/libprintf.git
+[submodule "extern/libgnl"]
+	path = extern/libgnl
+	url = https://github.com/s-t-a-n/libgnl.git
