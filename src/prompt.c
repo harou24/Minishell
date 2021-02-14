@@ -16,12 +16,35 @@ t_prompt 	*prompt_create(const char *_username, const char *_hostname)
 		prompt_destroy(prompt);
 		return (NULL);
 	}
-	ft_strlcat(prompt->buffer, prompt->username, ft_strlen(prompt->username));
-	ft_strlcat(prompt->buffer, "@", 1);
-	ft_strlcat(prompt->buffer, prompt->hostname, ft_strlen(prompt->hostname));
-	ft_strlcat(prompt->buffer, ":", 1);
-
+	prompt->current_dir = directory_get_current_dir();
+	prompt->error_code = 0;
+	prompt_init_buffer(prompt);
 	return (prompt);
+}
+
+void	prompt_init_buffer(t_prompt *_prompt)
+{
+	ft_strlcat(_prompt->buffer, _prompt->username, ft_strlen(_prompt->username));
+	ft_strlcat(_prompt->buffer, "@", 1);
+	ft_strlcat(_prompt->buffer, _prompt->hostname, ft_strlen(_prompt->hostname));
+	ft_strlcat(_prompt->buffer, ": [", 1);
+	ft_strlcat(_prompt->buffer, _prompt->current_dir);
+	ft_strlcat(_prompt->buffer, "] %");
+}
+
+void	prompt_update_current_path(t_prompt *_prompt)
+{
+	_prompt->current_path = directory_get_current_dir();	
+}
+
+void	prompt_set_error_code(t_prompt *_prompt, int _error_code)
+{
+	_prompt->error_code = _error_code;
+}
+
+void	set_current_path(t_prompt *_prompt, const char *_path)
+{
+	_prompt->current_path = _path;
 }
 
 void 	prompt_print(t_prompt *_prompt)
