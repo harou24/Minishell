@@ -1,8 +1,11 @@
 #ifndef DIRECTORY_H
 # define DIRECTORY_H
 
-#include "unistd.h"
+#include "libft.h"
+#include <unistd.h>
 
-char	*directory_get_current_dir(void);
+#define BUFFER_SIZE 255
+
+const char	*directory_get_current_dir(void);
 
 #endif
