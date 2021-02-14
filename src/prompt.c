@@ -11,19 +11,23 @@ t_prompt 	*prompt_create(const char *_username, const char *_hostname)
 	prompt->username = ft_strdup(_username);
 	prompt->hostname = ft_strdup(_hostname);
 	prompt->buffer = ft_calloc(sizeof(char), BUFFER_SIZE);
-
 	if (!prompt->buffer || !prompt->username || !prompt->hostname)
 	{
 		prompt_destroy(prompt);
 		return (NULL);
 	}
+	ft_strlcat(prompt->buffer, prompt->username, ft_strlen(prompt->username));
+	ft_strlcat(prompt->buffer, "@", 1);
+	ft_strlcat(prompt->buffer, prompt->hostname, ft_strlen(prompt->hostname));
+	ft_strlcat(prompt->buffer, ":", 1);
+
 	return (prompt);
 }
 
 void 	prompt_print(t_prompt *_prompt)
 {
-
 	printf("%s@%s >", _prompt->username, _prompt->hostname);
+	printf("%s", _prompt->buffer);
 }
 
 void	prompt_destroy(t_prompt *_prompt)
