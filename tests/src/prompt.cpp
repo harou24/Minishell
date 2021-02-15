@@ -22,10 +22,13 @@ extern "C" {
 # include "prompt.h"
 }
 
+#include <stdio.h>
+
 TEST_CASE( "create_destroy prompt", "[prompt]" ) {
 	t_prompt *prompt;
-	prompt = prompt_create("username", "hostname");
+	prompt = prompt_create("user", "host");
 	REQUIRE(prompt != NULL);
+	printf("---------------PRONT-----------------\n");
 	prompt_print(prompt);
 	prompt_destroy(prompt);
 }
