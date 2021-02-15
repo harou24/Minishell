@@ -1,10 +1,16 @@
 #include "directory.h"
+#include "libft.h"
+#include <unistd.h>
+#include <stdlib.h>
 
-#define __DIR_BUFF_SIZE 255
+#define __DIR_BUFF_SIZE 1024
 
-const char	*directory_get_current_dir(void)
+char	*directory_get_current_dir(void)
 {
-	char	buffer[__DIR_BUFF_SIZE];
+	char	*buffer = ft_calloc(sizeof(char), __DIR_BUFF_SIZE);
 
-	return (getcwd(buffer, sizeof(buffer)));
+	if (getcwd(buffer, __DIR_BUFF_SIZE))
+		return(buffer);
+	free(buffer);
+	return (NULL);
 }

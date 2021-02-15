@@ -21,7 +21,13 @@ extern "C" {
 # include "directory.h"
 }
 
+#include <string.h>
+#include <unistd.h>
+
  TEST_CASE( "directory", "[dir]" ) {
- printf("%s\n", directory_get_current_dir());
-     REQUIRE(1) ;
+	 char *cur_dir = directory_get_current_dir();
+	 char buffer[1024];
+	 getcwd(buffer, 1024);
+	 REQUIRE(strcmp(cur_dir, buffer) == 0);
+	 free(cur_dir);
  }
