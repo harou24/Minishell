@@ -16,7 +16,7 @@ t_prompt 	*prompt_create(const char *_username, const char *_hostname)
 		prompt_destroy(prompt);
 		return (NULL);
 	}
-	prompt->current_dir = directory_get_current_dir();
+	/*prompt->current_path = directory_get_current_path();  -> first need to merge directory branch*/
 	prompt->error_code = 0;
 	prompt_init_buffer(prompt);
 	return (prompt);
@@ -24,19 +24,18 @@ t_prompt 	*prompt_create(const char *_username, const char *_hostname)
 
 void	prompt_init_buffer(t_prompt *_prompt)
 {
-	ft_strlcat(_prompt->buffer, _prompt->username, ft_strlen(_prompt->username));
-	ft_strlcat(_prompt->buffer, "@", 1);
-	ft_strlcat(_prompt->buffer, _prompt->hostname, ft_strlen(_prompt->hostname));
-	ft_strlcat(_prompt->buffer, ": [", 1);
-	ft_strlcat(_prompt->buffer, _prompt->current_dir);
-	ft_strlcat(_prompt->buffer, "] %");
+	if (_prompt->error_code != 0)
+		snprintf(_prompt->buffer, ERROR_LENGTH, "%d", _prompt->error_code);
+	else
+		snprintf(_prompt->buffer, ERROR_LENGTH, "   ");
+	snprintf(_prompt->buffer, PROMPT_LENGTH, " %s@%s:[%s]>", _prompt->username, _prompt->hostname, _prompt->current_path);		
 }
-
+/*
 void	prompt_update_current_path(t_prompt *_prompt)
 {
-	_prompt->current_path = directory_get_current_dir();	
+	_prompt->current_path = directory_get_current_path();	
 }
-
+*/
 void	prompt_set_error_code(t_prompt *_prompt, int _error_code)
 {
 	_prompt->error_code = _error_code;
@@ -44,7 +43,7 @@ void	prompt_set_error_code(t_prompt *_prompt, int _error_code)
 
 void	set_current_path(t_prompt *_prompt, const char *_path)
 {
-	_prompt->current_path = _path;
+	_prompt->current_path = (char *)_path;
 }
 
 void 	prompt_print(t_prompt *_prompt)
@@ -60,8 +59,6 @@ void	prompt_destroy(t_prompt *_prompt)
 		free(_prompt->username);
 	if (_prompt->hostname)
 		free(_prompt->hostname);
-	if (_prompt->current_dir)
-		free(_prompt->current_dir);
-	if (_prompt)
-		free(_prompt);
+	if (_prompt->current_path)
+		free(_prompt->current_path);
 }

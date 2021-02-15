@@ -26,7 +26,7 @@ TEST_CASE( "create_destroy prompt", "[prompt]" ) {
 	t_prompt *prompt;
 	prompt = prompt_create("username", "hostname");
 	REQUIRE(prompt != NULL);
-	prompt_print();
+	prompt_print(prompt);
 	prompt_destroy(prompt);
 }
 
