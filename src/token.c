@@ -51,3 +51,26 @@ t_token		*token_destroy(t_token *token)
 	free(token);
 	return (NULL);
 }
+
+const char	*token_dump_type(e_token_type type)
+{
+	switch (type)
+	{
+		case WORD:
+			return ("WORD");
+		case STRING:
+			return ("STRING");
+		case VARIABLE:
+			return ("VARIABLE");
+		case SPACE:
+			return ("SPACE");
+		case PIPE:
+			return ("PIPE");
+		case NEWLINE:
+			return ("NEWLINE");
+		case NO_TYPE:
+			return ("NO_TYPE");
+		default:
+			return ("UNKNOWN");
+	}
+}
