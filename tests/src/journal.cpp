@@ -30,7 +30,7 @@ TEST_CASE( "create_destroy journal", "[journal]" ) {
 
 	CHECK((journal_static = journal_create()));
 	CHECK(memcmp(journal_static, journal_create(), sizeof(t_journal)) == 0);
-	CHECK((journal_static = journal_destroy()) == NULL);
+	CHECK((journal_static = journal_destroy(NULL)) == NULL);
 }
 
 TEST_CASE("push_get_size_clear", "[journal]") {
@@ -47,7 +47,7 @@ TEST_CASE("push_get_size_clear", "[journal]") {
 	journal_clear();
 	CHECK(journal_size() == 0);
 	
-	journal_destroy();
+	journal_destroy(NULL);
 }
 
 TEST_CASE("has_token/type", "[journal]") {
@@ -64,7 +64,7 @@ TEST_CASE("has_token/type", "[journal]") {
 	CHECK_FALSE(journal_has_tokentype(token_b->type));
 
 	token_destroy(token_b);
-	journal_destroy();
+	journal_destroy(NULL);
 }
 
 TEST_CASE("find_first_last_token_type", "[journal]") {
@@ -91,7 +91,7 @@ TEST_CASE("find_first_last_token_type", "[journal]") {
 	CHECK(journal_find_last_token(t) == t);
 	CHECK(journal_find_last_type(t->type)->type == t->type);
 
-	journal_destroy();
+	journal_destroy(NULL);
 }
 
 TEST_CASE("creeper_next_reset_set_get", "[journal]") {
@@ -125,13 +125,13 @@ TEST_CASE("creeper_next_reset_set_get", "[journal]") {
 	journal_creeper_set_index(SPACE);
 	CHECK(journal_creeper_get_index() == (size_t)SPACE);
 	
-	journal_destroy();
+	journal_destroy(NULL);
 }
 
 /*
 TEST_CASE("", "[journal]") {
 	journal_create();
 	
-	journal_destroy();
+	journal_destroy(NULL);
 }
 */

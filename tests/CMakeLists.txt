@@ -47,3 +47,14 @@ target_link_libraries(${TEST}.bin PRIVATE Catch2::Catch2WithMain)
 target_link_libraries(${TEST}.bin PRIVATE minishell ft vector hashmap)
 add_test(NAME ${TEST}
 		COMMAND ${TEST}.bin)
+
+## bash_sym unittest
+set (TEST "test-bash_sym")
+set (SRC_LIST "src/bash_sym.cpp")
+
+add_executable(${TEST}.bin ${MAIN} ${SRC_LIST})
+target_compile_features(${TEST}.bin PRIVATE cxx_std_14)
+target_link_libraries(${TEST}.bin PRIVATE Catch2::Catch2WithMain)
+target_link_libraries(${TEST}.bin PRIVATE minishell ft vector hashmap)
+add_test(NAME ${TEST}
+		COMMAND ${TEST}.bin)
