@@ -1,6 +1,10 @@
 #ifndef COMMAND_H
 # define COMMAND_H
 
+#include <stdlib.h>
+#include <stdio.h>
+#include "libft.h"
+
 typedef struct	s_command
 {
 		int	code_error;
