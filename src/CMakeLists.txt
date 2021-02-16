@@ -2,7 +2,7 @@
 # show up in IDEs unless they are listed in add_library.
 
 # Optionally glob, but only for CMake 3.12 or later:
-file(GLOB HEADER_LIST CONFIGURE_DEPENDS "${minishell_SOURCE_DIR}/inc/*.h")
+file(GLOB HEADER_LIST CONFIGURE_DEPENDS "${minishell_SOURCE_DIR}/includes/*.h")
 file(GLOB SRC_LIST CONFIGURE_DEPENDS "${minishell_SOURCE_DIR}/src/*.c")
 
 # Make an automatic library - will be static or dynamic based on user setting
