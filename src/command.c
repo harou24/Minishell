@@ -24,15 +24,21 @@ char		*command_get_input()
 {
 	char	*input;
 	char	*line;
-	int 	size;
+	int size;
+	int 	input_size;
 
 	input = NULL;
 	line = NULL;
 	size = 0;
+	input_size = 0;
 	while (get_next_line(STDIN, &line) > 0)
 	{
-		size = ft_strlen(input) + ft_strlen(line);
-		if (ft_realloc(input, 1, size))
+		if (input)
+			input_size = ft_strlen(input);
+		size = input_size + ft_strlen(line);
+		if (!input)
+			ft_strjoin(input, line);
+		else if (ft_realloc(input, 1, size))
 			ft_strlcat(input, line, size);
 	}
 	return (input);
