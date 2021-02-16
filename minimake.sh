@@ -5,7 +5,9 @@ build_dir=build
 if [ $# -eq 1 ] && [ "$1" == "test" ]; then
 	# compile and test
 	cmake -S . -B $build_dir -DBUILD_TESTING=ON && ( cd $build_dir && make ) \
-	&& ( cd $build_dir && ctest --output-on-failure ./)
+	&& ( cd $build_dir && ctest --output-on-failure ./) \
+	&& echo -e "Tests ran: \e[92mok\e[39m." \
+	|| echo -e "Tests ran: \e[91mNOPE\e[39m."
 elif [ $# -eq 1 ] && [ "$1" == "clean" ]; then
 	# clean all files which are specified in .gitignore 
 	git clean -d -f -X
@@ -14,7 +16,8 @@ elif [ $# -eq 0 ]; then
 	cmake -S . -B $build_dir -DBUILD_TESTING=OFF && ( cd $build_dir && make ) \
 	&& cp $build_dir/apps/minishell ./ \
 	&& cp $build_dir/src/libminishell.a ./ \
-	&& echo -e "You can run ./\e[92mminishell\e[39m now or include \e[92mlibminishell.a\e[39m in your library."
+	&& echo -e "You can run ./\e[92mminishell\e[39m now or include \e[92mlibminishell.a\e[39m in your library." \
+	|| echo -e "Compilation ran: \e[91mNOPE\e[39m."
 else
 	cat<<-EOF
 	usage:
