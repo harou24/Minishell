@@ -1,4 +1,5 @@
 #include <catch2/catch.hpp>
+
 /*
  * Catch2: examples
  * for more examples checkout:
@@ -16,14 +17,17 @@
  *     REQUIRE( [BOOLEAN CONDITION] ) ;
  * }
  */
-
-/*
 extern "C" {
-#include "[YOUR_C_LIBRARY]"
+# include "directory.h"
 }
-*/
 
-TEST_CASE( "Title here", "[short name]" ) {
-	const bool condition = true;
-	REQUIRE(condition) ;
-}
+#include <string.h>
+#include <unistd.h>
+
+ TEST_CASE( "directory", "[dir]" ) {
+	 char *cur_dir = directory_get_current_dir();
+	 char buffer[1024];
+	 getcwd(buffer, 1024);
+	 REQUIRE(strcmp(cur_dir, buffer) == 0);
+	 free(cur_dir);
+ }
