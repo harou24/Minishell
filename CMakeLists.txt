@@ -17,9 +17,11 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
 	set(CMAKE_CXX_STANDARD 98)
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -Wextra -pedantic")
 
-	include(CTest)
+	option(BUILD_TESTING "Build unittests and standlone torture 'apps' " OFF)
 
 	if(BUILD_TESTING)
+		include(CTest)
+
 		set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -fsanitize=address")
 		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -fsanitize=address")
 	endif()
