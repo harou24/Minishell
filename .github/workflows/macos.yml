@@ -24,6 +24,6 @@ jobs:
 
     - name: Minimake.sh check
       run: |
-		./minimake.sh clean
-		./minimake.sh
-		./minimake.sh test
+        ./minimake.sh clean
+        ./minimake.sh
+        ./minimake.sh test
