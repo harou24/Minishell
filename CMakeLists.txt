@@ -17,7 +17,7 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
 	set(CMAKE_CXX_STANDARD 98)
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -Wextra -pedantic")
 
-	option(BUILD_TESTING "Build unittests and standlone torture 'apps' " OFF)
+	option(BUILD_TESTING "Build unittests and standlone torture 'apps' " ON)
 
 	if(BUILD_TESTING)
 		include(CTest)
@@ -45,7 +45,6 @@ include(FetchContent)
 if(${CMAKE_VERSION} VERSION_LESS 3.14)
 	include(cmake/add_FetchContent_MakeAvailable.cmake)
 endif()
-
 
 add_subdirectory(extern)
 add_subdirectory(src)
