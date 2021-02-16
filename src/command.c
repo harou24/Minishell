@@ -3,17 +3,20 @@
 #include "get_next_line.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <errno.h>
+#include <string.h>
+#include <sys/wait.h>
 
-t_command	*command_create(const char *_input)
+t_command	*command_create()
 {
 	t_command *command;
 
 	command = ft_calloc(sizeof(t_command), 1);
 	if (!command)
 		return (NULL);
-	command->input = ft_strdup(_input);
-	/*allocate command->output to store the result of command_execute() ??*/
-	command->code_error = command_execute(command);
+	command->input = command_get_input();
+	command->code_error = 0;
+	command_execute(command);
 	return(command);
 }
 
@@ -26,11 +29,11 @@ char		*command_get_input()
 	input = NULL;
 	line = NULL;
 	size = 0;
-	while (get_next_line(stdin, &line) > 0)
+	while (get_next_line(STDIN, &line) > 0)
 	{
 		size = ft_strlen(input) + ft_strlen(line);
 		if (ft_realloc(input, 1, size))
-			input = ft_strlcat(input, line, size);
+			ft_strlcat(input, line, size);
 	}
 	return (input);
 }
@@ -43,7 +46,7 @@ void		command_execute(t_command *_command)
 	pid = fork();
 	if (pid == -1)
 	{
-		_command->error_code = errno;
+		_command->code_error = errno;
 		printf(strerror(errno));
 	}
 	else if (pid > 0)
@@ -55,7 +58,7 @@ void		command_execute(t_command *_command)
 	{
 		if (execve(_command->binary_path, _command->argv, _command->env) == -1)
 		{
-			_command->error_code = errno;
+			_command->code_error = errno;
 			printf(strerror(errno));
 			exit(EXIT_FAILURE);
 		}
@@ -81,7 +84,7 @@ void		command_destroy(t_command *_command)
 	if (_command->binary_path)
 		free(_command->binary_path);
 	if (_command->argv)
-		ft_destroy_array(_command->argv, sizeof(char *), _command->argc);
+		ft_destroy_array((void **)_command->argv, sizeof(char *), _command->argc);
 	if (_command->env)
 		free(_command->env);
 	free(_command);
