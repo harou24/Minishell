@@ -9,25 +9,30 @@ typedef void * t_vector;
 #include <stddef.h>
 #include <stdlib.h>
 #include "libft.h"
+#include "hashmap.h"
 #include "journal.h"
+
+#ifndef __HASHMAP_TYPEDEF
+# define __HASHMAP_TYPEDEF
+typedef void * t_hashmap;
+#endif
 
 typedef struct	s_lex
 {
+	char		*input;
+	size_t		input_len;
+	size_t		index;
 	t_journal	*journal;
+	t_hashmap	key_store;
 }				t_lex;
 
-static const size_t g_lex_default_size = 128;
-
 t_journal	*lex(const char *str);
-t_journal	*lex_for(t_lex *lex, const char *str);
 
+t_token		*lex_get_next_token();
+t_journal	*lex_build_journal();
+
+void		lex_clear();
 t_lex     	*lex_create();
-t_lex     	*lex_create_for();
-
-t_lex     	*lex_destroy();
-t_lex     	*lex_destroy_for(t_lex *lex);
-
-/* internal */
-
+t_lex     	*lex_destroy(t_lex **lex);
 
 #endif

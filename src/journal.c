@@ -15,7 +15,7 @@ t_journal        *journal_create()
 		g_journal__->counter = ft_calloc(sizeof(t_journal_storetype), TOKEN_TYPE_SIZE);
 		if (!g_journal__->counter
 			|| !vector(&g_journal__->tokens, V_CREATE, V_DEF_SIZE, NULL))
-			return (journal_destroy(g_journal__));
+			return (journal_destroy(&g_journal__));
 	}
 	return (g_journal__);
 }
@@ -28,10 +28,10 @@ void			journal_clear()
 		token_destroy(vector(&g_journal__->tokens, V_PEEKBACK, 0, 0));
 		vector(&g_journal__->tokens, V_POPBACK, 0, 0);
 	}
-	g_journal__->index = 0;
+	journal_creeper_reset();
 }
 
-t_journal        *journal_destroy()
+t_journal        *journal_destroy(t_journal **journal)
 {
 	if (!g_journal__)
 		return (NULL);
@@ -43,6 +43,8 @@ t_journal        *journal_destroy()
 	vector(&g_journal__->tokens, V_DESTROY, FALSE, 0);
 	free(g_journal__->counter);
 	free(g_journal__);
+	if (journal)
+		*journal = NULL;
 	return ((g_journal__ = NULL));
 }
 
@@ -74,6 +76,25 @@ size_t					journal_size()
 		return (0);
 	else
 		return (*(size_t *)vector(&g_journal__->tokens, V_SIZE, 0, 0));
+}
+
+char					*journal_dump_tokens()
+{
+	char		*buf;
+	const int	buflen = 1024;
+	t_token		*token;
+	size_t		i;
+
+	i = 0;
+	buf = ft_calloc(sizeof(char), buflen);
+	while (i < *(size_t *)vector(&g_journal__->tokens, V_SIZE, 0, 0))
+	{
+		token = vector(&g_journal__->tokens, V_PEEKAT, i, 0);
+		ft_strlcat(buf, " ", buflen);
+		ft_strlcat(buf, token_dump_type(token->type), buflen);
+		i++;
+	}
+	return (buf);
 }
 
 t_bool					journal_has_token(const t_token *token)

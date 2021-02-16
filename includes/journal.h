@@ -28,12 +28,14 @@ typedef struct			s_journal
 
 t_journal				*journal_create();
 void					journal_clear();
-t_journal				*journal_destroy();
+t_journal				*journal_destroy(t_journal **journal);
 
 t_token					*journal_push(t_token *token);
 t_token					*journal_get(size_t index);
 
 size_t					journal_size();
+
+char					*journal_dump_tokens();
 
 t_bool					journal_has_token(const t_token *token);
 t_bool					journal_has_tokentype(const e_token_type type);
