@@ -68,6 +68,14 @@ const char	*token_dump_type(e_token_type type)
 			return ("PIPE");
 		case NEWLINE:
 			return ("NEWLINE");
+		case SEMICOLON:
+			return ("SEMICOLON");
+		case OP_READ:
+			return ("OP_READ");
+		case OP_APPEND:
+			return ("OP_APPEND");
+		case OP_WRITE:
+			return ("OP_WRITE");
 		case NO_TYPE:
 			return ("NO_TYPE");
 		default:

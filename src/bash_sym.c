@@ -5,16 +5,25 @@
 #define FUZZY FALSE
 
 static const t_bash_sym bash_sym_list[] =	{
-													{WORD, FUZZY,		"0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ@%^()-_+=\\]}[{:/?.,<>"},
+													{WORD, FUZZY,		"0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ@%^()-_+=\\]}[{:/?.,&"},
 													{STRING, EXACT,		"\""},
 													{VARIABLE, EXACT,	"$"},
 													{SPACE, FUZZY,		" \a\b\r\n\t\f\v"},
 													{PIPE, EXACT,		"|"},
-													{NEWLINE, EXACT,	"\n"}
+													{NEWLINE, EXACT,	"\n"},
+													{SEMICOLON, EXACT,	";"},
+													{OP_READ, EXACT,	"<"},
+													{OP_APPEND, EXACT,	">>"},
+													{OP_WRITE, EXACT,	">"}
 												};
 
 t_bool		is_bash_sym_exact(char *str, size_t len, const t_bash_sym *token)
 {
+	/* this could be done staticly */
+	const size_t tokenkeylen = ft_strlen(token->key);
+
+	if (tokenkeylen > len)
+		len = tokenkeylen;
 	return (ft_strncmp(str, token->key, len) == 0);
 }
 
@@ -45,17 +54,20 @@ t_bool		is_bash_sym(char *str, size_t len, const t_bash_sym *token)
 
 e_token_type	bash_match(char *str, size_t len)
 {
-	size_t i;
-	/* const int token_count = 6; // sizeof ? */
-	const size_t token_count = sizeof(bash_sym_list)/sizeof(bash_sym_list[0]);
-	assert(token_count == 6);
+	const size_t	token_count = sizeof(bash_sym_list)/sizeof(bash_sym_list[0]);
+	t_bash_sym		*candidate;
+	size_t			i;
 
 	i = 0;
+	candidate = NULL;
 	while(i < token_count)
 	{
 		if (is_bash_sym(str, len, &bash_sym_list[i]))
-			return (bash_sym_list[i].type);
+		{
+			if (candidate == NULL || ft_strlen(bash_sym_list[i].key) > ft_strlen(candidate->key))
+				candidate = (t_bash_sym *)&bash_sym_list[i];
+		}
 		i++;
 	}
-	return (NO_TYPE);
+	return ((candidate == NULL) ? NO_TYPE : candidate->type);
 }
