@@ -1,8 +1,5 @@
 name: MacOS
 
-#on: [pull_request, workflow_dispatch]
-#on: [push, pull_request, workflow_dispatch]
-
 on:
   push:
     branches:
@@ -18,25 +15,15 @@ jobs:
     steps:
     - name: Checkout repository and submodules
       uses: actions/checkout@v2
-# submodule retreival here should be removed when harou24/libhashmap#2 is merged (anonymous access)
-      with:
-        submodules: recursive
-
-# norminette rules
-#    - name: Norme check make
-#      run: make
-#
-#    - name: Norme check make clean
-#      run: make clean
-#
-#    - name: Norme check make fclean
-#      run: make fclean
-#
-#    - name: Norme check make re
-#      run: make re
 
     - name: Compilation check
       run: |
         cmake .
         make clean
         make
+
+    - name: Minimake.sh check
+      run: |
+		./minimake.sh clean
+		./minimake.sh
+		./minimake.sh test
