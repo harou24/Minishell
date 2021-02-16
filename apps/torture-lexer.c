@@ -7,20 +7,23 @@
 
 int main (int argc, char **argv)
 {
-	if (argc == 2)
+	if (argc >=  2)
 	{
 		bool err = FALSE;
 		t_lex *lexer = lex_create();
-		if (lex(argv[1]))
-		{
-			char *for_human = journal_dump_tokens();
-			printf("TOKENS : %s\n", for_human);
-			free(for_human);
-		}
-		else
-		{
-			printf("ERROR\n");
-			err = TRUE;
+		for (int i = 1; i < argc; i++) {
+			if (lex(argv[i]))
+			{
+				char *for_human = journal_dump_tokens();
+				printf("TOKENS : %s\n", for_human);
+				free(for_human);
+			}
+			else
+			{
+				printf("ERROR\n");
+				err = TRUE;
+				break;
+			}
 		}
 		lex_destroy(&lexer);
 		return (err);
