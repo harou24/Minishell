@@ -32,7 +32,7 @@ t_bool		is_bash_sym_fuzzy(char *str, size_t len, const t_bash_sym *token)
 	size_t i;
 
 	i = 0;
-	while (i < len)
+	while (i < len && str[i] != '\0')
 	{
 		if (ft_strcount(token->key, str[i]) == 0)
 			return (FALSE);
