@@ -14,34 +14,25 @@ t_command	*command_create()
 	command = ft_calloc(sizeof(t_command), 1);
 	if (!command)
 		return (NULL);
-	command->input = command_get_input();
+	if (command_read_input(command) < 1)
+		return (NULL);
+	command->argv = ft_split(command->input, ' ');
+	if (!command->argv)
+		return (NULL);
 	command->code_error = 0;
-	command_execute(command);
+	command->env = NULL;
+	command->argc = 1;
 	return(command);
 }
 
-char		*command_get_input()
+int		command_read_input(t_command *_command)
 {
-	char	*input;
-	char	*line;
-	int size;
-	int 	input_size;
+	return (get_next_line(STDIN, &_command->input));
+}
 
-	input = NULL;
-	line = NULL;
-	size = 0;
-	input_size = 0;
-	while (get_next_line(STDIN, &line) > 0)
-	{
-		if (input)
-			input_size = ft_strlen(input);
-		size = input_size + ft_strlen(line);
-		if (!input)
-			ft_strjoin(input, line);
-		else if (ft_realloc(input, 1, size))
-			ft_strlcat(input, line, size);
-	}
-	return (input);
+char 		*command_get_input(t_command *_command)
+{
+	return (_command->input);
 }
 
 void		command_execute(t_command *_command)
@@ -62,7 +53,7 @@ void		command_execute(t_command *_command)
 	}
 	else
 	{
-		if (execve(_command->binary_path, _command->argv, _command->env) == -1)
+		if (execve(_command->argv[0], _command->argv, _command->env) == -1)
 		{
 			_command->code_error = errno;
 			printf(strerror(errno));
@@ -87,8 +78,6 @@ void		command_destroy(t_command *_command)
 		free(_command->input);
 	if (_command->output)
 		free(_command->output);
-	if (_command->binary_path)
-		free(_command->binary_path);
 	if (_command->argv)
 		ft_destroy_array((void **)_command->argv, sizeof(char *), _command->argc);
 	if (_command->env)

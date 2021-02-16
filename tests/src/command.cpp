@@ -26,8 +26,10 @@ extern "C" {
 
 TEST_CASE( "command_get_input", "[command]" ) {
 	
-	char *input = command_get_input();
+	t_command *command = command_create();
+	
 	printf("---------------COMMAND-----------------\n");
-	printf("%si\n", input);
+	command_execute(command);
+	command_destroy(command);
 }
 
