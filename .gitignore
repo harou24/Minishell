@@ -92,6 +92,7 @@ compile_commands.json
 CTestTestfile.cmake
 _deps
 CMakeUserPresets.json
+DartConfiguration.tcl
 
 ### CMake Patch ###
 # External projects
@@ -505,8 +506,9 @@ CMakeDoxygenDefaults.cmake
 Doxyfile.docs
 # End of Doxygen rules
 
-DartConfiguration.tcl
 Makefile
 build
 obj
+*.bin
+*.a
 minishell
