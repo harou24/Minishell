@@ -86,3 +86,38 @@ int		command_run_builtins(t_command *_command)
 		return (command_run_exit(_command));
 	return (0);
 }
+
+int	command_run_echo(t_command *_command)
+{
+	return (0);
+}
+
+int	command_run_cd(t_command *_command)
+{
+	return (0);
+}
+
+int	command_run_pwd(t_command *_command)
+{
+	return (0);
+}
+
+int	command_run_unset(t_command *_command)
+{
+	return (0);
+}
+
+int	command_run_export(t_command *_command)
+{
+	return (0);
+}
+
+int	command_run_env(t_command *_command)
+{
+	return (0);
+}
+
+int	command_run_exit(t_command *_command)
+{
+	return (0);
+}
