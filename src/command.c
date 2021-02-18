@@ -21,7 +21,7 @@ t_command	*command_create(const char *_input)
 	if (!command->argv)
 		return (NULL);
 	command->code_error = 0;
-	command->argc = ft_str_array_length();
+	command->argc = ft_arraylen();
 	return(command);
 }
 
