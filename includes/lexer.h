@@ -12,10 +12,12 @@ typedef void * t_vector;
 #include "hashmap.h"
 #include "journal.h"
 
+/*
 #ifndef __HASHMAP_TYPEDEF
 # define __HASHMAP_TYPEDEF
 typedef void * t_hashmap;
 #endif
+*/
 
 typedef struct	s_lex
 {
@@ -23,7 +25,6 @@ typedef struct	s_lex
 	size_t		input_len;
 	size_t		index;
 	t_journal	*journal;
-	t_hashmap	key_store;
 }				t_lex;
 
 t_journal	*lex(const char *str);

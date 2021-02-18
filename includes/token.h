@@ -13,6 +13,10 @@ typedef enum		s_token_type
 					SPACE,
 					PIPE,
 					NEWLINE,
+					SEMICOLON,
+					OP_READ,
+					OP_APPEND,
+					OP_WRITE,
 					NO_TYPE,
 					TOKEN_TYPE_SIZE
 }					e_token_type;

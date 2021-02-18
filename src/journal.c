@@ -22,13 +22,25 @@ t_journal        *journal_create()
 
 void			journal_clear()
 {
+	size_t i;
+
 	/* this de-allocs all token elements in vector, which could be costly #40 */
-	while (*(size_t *)vector(&g_journal__->tokens, V_SIZE, 0, 0) > 0)
+	if (g_journal__)
 	{
-		token_destroy(vector(&g_journal__->tokens, V_PEEKBACK, 0, 0));
-		vector(&g_journal__->tokens, V_POPBACK, 0, 0);
+		while (*(size_t *)vector(&g_journal__->tokens, V_SIZE, 0, 0) > 0)
+		{
+			token_destroy(vector(&g_journal__->tokens, V_PEEKBACK, 0, 0));
+			vector(&g_journal__->tokens, V_POPBACK, 0, 0);
+		}
+		assert(*(size_t *)vector(&g_journal__->tokens, V_SIZE, 0, 0) == 0);
+		i = 0;
+		while(i < TOKEN_TYPE_SIZE)
+		{
+			g_journal__->counter[i] = 0;
+			i++;
+		}
+		journal_creeper_reset();
 	}
-	journal_creeper_reset();
 }
 
 t_journal        *journal_destroy(t_journal **journal)
@@ -90,8 +102,8 @@ char					*journal_dump_tokens()
 	while (i < *(size_t *)vector(&g_journal__->tokens, V_SIZE, 0, 0))
 	{
 		token = vector(&g_journal__->tokens, V_PEEKAT, i, 0);
-		ft_strlcat(buf, " ", buflen);
 		ft_strlcat(buf, token_dump_type(token->type), buflen);
+		ft_strlcat(buf, " ", buflen);
 		i++;
 	}
 	return (buf);
