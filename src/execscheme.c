@@ -1,5 +1,6 @@
-#include "exec_scheme.h"
-
+#include <stdlib.h>
+#include "libft.h"
+#include "execscheme.h"
 
 t_execscheme	*execscheme_create()
 {

@@ -1,3 +1,5 @@
+#include <stdlib.h>
+#include "libft.h"
 #include "parser.h"
 
 static t_parser *g_parser__;
