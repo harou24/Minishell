@@ -9,8 +9,7 @@ t_journal	*lex(const char *str)
 {
 	if (!g_lex__)
 		return (NULL);
-	if (g_lex__->input)
-		free(g_lex__->input);
+	lex_clear();
 	g_lex__->input = ft_strdup(str);
 	g_lex__->input_len = ft_strlen(str);
 	return (lex_build_journal());
@@ -53,8 +52,9 @@ void		lex_clear()
 {
 	if (g_lex__)
 	{
-		g_lex__->index = 0;
 		free(g_lex__->input);
+		g_lex__->input = NULL;
+		g_lex__->index = 0;
 		journal_clear();
 	}
 }

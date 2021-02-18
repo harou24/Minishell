@@ -36,6 +36,13 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
 	else()
 		message(STATUS "Doxygen not found, not building docs")
 	endif()
+
+	# Add custom rule to dispose of generateable files from .gitignore
+	add_custom_target(distclean
+	  COMMAND ${CMAKE_COMMAND} -E echo "Cleaning all files not in source control."
+	  COMMAND git clean -d -f -X
+	    WORKING_DIRECTORY ${vector_SOURCE_DIR}
+	)
 endif()
 
 # FetchContent added in CMake 3.11, downloads during the configure step
@@ -49,12 +56,6 @@ endif()
 add_subdirectory(extern)
 add_subdirectory(src)
 add_subdirectory(apps)
-
-ADD_CUSTOM_TARGET(distclean
-  COMMAND ${CMAKE_COMMAND} -E echo "Cleaning all files not in source control."
-  COMMAND git clean -d -f -X
-    WORKING_DIRECTORY ${minishell_SOURCE_DIR}
-)
 
 # Testing only available if this is the main app
 # Emergency override MODERN_CMAKE_BUILD_TESTING provided as well
