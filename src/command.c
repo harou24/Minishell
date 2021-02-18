@@ -35,6 +35,7 @@ char 		*command_get_input(t_command *_command)
 	return (_command->input);
 }
 
+
 void		command_execute(t_command *_command)
 {
 	pid_t	pid;
@@ -67,10 +68,6 @@ int		command_get_code_error(t_command *_command)
 	return (_command->code_error);
 }
 
-void		command_print_output(t_command *_command)
-{
-	printf("%s/n", _command->output);
-}
 
 void		command_destroy(t_command *_command)
 {
@@ -79,7 +76,12 @@ void		command_destroy(t_command *_command)
 	if (_command->output)
 		free(_command->output);
 	if (_command->argv)
-		ft_destroy_array((void **)_command->argv, sizeof(char *), _command->argc);
+	{
+	/*	ft_destroy_array((void **)_command->argv, sizeof(void*), _command->argc);*/
+	free(_command->argv[0]);
+	free(_command->argv);
+
+	}
 	if (_command->env)
 		free(_command->env);
 	free(_command);
