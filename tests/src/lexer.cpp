@@ -33,22 +33,24 @@ TEST_CASE( "construction/destruction", "[lexer]" ) {
 	CHECK(lexer == NULL);
 }
 
-TEST_CASE( "", "[lexer]" ) {
+TEST_CASE( "basic lexing", "[lexer]" ) {
 	struct s_tst {
 		const char *key;
 		const char *tokens;
 	};
 	static const s_tst tests[] =	{
-										{ "", "" },
-										{ "a", "WORD " },
-										{ " \a\b\r\t\f\v", "SPACE " },
-										{ "echo a", "WORD SPACE WORD " },
-										{ "a   \n b", "WORD SPACE NEWLINE SPACE WORD " },
-										{ "echo a | cat", "WORD SPACE WORD SPACE PIPE SPACE WORD " },
-										{ "echo a ; echo b", "WORD SPACE WORD SPACE SEMICOLON SPACE WORD SPACE WORD " },
-										{ "echo a >> f", "WORD SPACE WORD SPACE OP_APPEND SPACE WORD " },
-										{ "echo a > f", "WORD SPACE WORD SPACE OP_WRITE SPACE WORD " },
-										{ "cat < f", "WORD SPACE OP_READ SPACE WORD " }
+										{ "",						"" },
+										{ "a",						"WORD " },
+										{ " \a\b\r\t\f\v",			"SPACE " },
+										{ "echo a",					"WORD SPACE WORD " },
+										{ "\"\"",					"STRING STRING " },
+										{ "\"\\\"\"",				"STRING ESCAPE STRING STRING " },
+										{ "a   \n b",				"WORD SPACE NEWLINE SPACE WORD " },
+										{ "echo a | cat",			"WORD SPACE WORD SPACE PIPE SPACE WORD " },
+										{ "echo a ; echo b",		"WORD SPACE WORD SPACE SEMICOLON SPACE WORD SPACE WORD " },
+										{ "echo a >> f",			"WORD SPACE WORD SPACE OP_APPEND SPACE WORD " },
+										{ "echo a > f",				"WORD SPACE WORD SPACE OP_WRITE SPACE WORD " },
+										{ "cat < f",				"WORD SPACE OP_READ SPACE WORD " }
 									};
 	lex_create();
 	const size_t testslen = sizeof(tests)/sizeof(s_tst);
