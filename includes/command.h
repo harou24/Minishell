@@ -7,11 +7,13 @@ typedef struct	s_command
 		int	code_error;
 		char	**argv;
 		int	argc;
+		char	**env;
 }		t_command;
 
-t_command	*command_create(const char *_input);
+t_command	*command_create(const char *_input, const char **env);
 void		command_execute(t_command *_command);
 int		command_get_code_error(t_command *_command);
+void		command_strerror_print(t_command *_command);
 void		command_destroy(t_command *_command);
 
 /*builtins*/

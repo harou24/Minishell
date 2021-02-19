@@ -3,11 +3,12 @@
 #include "get_next_line.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include <errno.h>
 #include <string.h>
 #include <sys/wait.h>
 
-t_command	*command_create(const char *_input)
+t_command	*command_create(const char *_input, const char ***_env)
 {
 	t_command *command;
 
@@ -22,6 +23,7 @@ t_command	*command_create(const char *_input)
 		return (NULL);
 	command->code_error = 0;
 	command->argc = ft_arraylen((void **)command->argv);
+	command->env = &_env;
 	return(command);
 }
 
@@ -57,6 +59,11 @@ int		command_get_code_error(t_command *_command)
 	return (_command->code_error);
 }
 
+void		command_strerror_print(t_command *_command)
+{
+	printf("%s\n", strerror(_command->code_error));
+}
+
 void		command_destroy(t_command *_command)
 {
 	if (_command->input)
@@ -70,12 +77,12 @@ void		command_destroy(t_command *_command)
 	free(_command);
 }
 
-int		command_run_builtins(t_command *_command)
+int		command_run_builtins(t_command *_command, char **_env)
 {
 	if (ft_strcmp(_command->argv[0], "echo") == 0)
 		return (command_run_echo(_command));
 	if (ft_strcmp(_command->argv[0], "cd") == 0)
-		return (command_run_cd(_command));
+		return (command_run_cd(_command, _env));
 	if (ft_strcmp(_command->argv[0], "pwd") == 0)
 		return (command_run_pwd(_command));
 	if (ft_strcmp(_command->argv[0], "export") == 0)
@@ -92,8 +99,25 @@ int	command_run_echo(t_command *_command)
 	return (0);
 }
 
-int	command_run_cd(t_command *_command)
+int	command_run_cd(t_command *_command, char **_env)
 {
+	char	*home;
+	char	*pwd;
+
+	if (_command->argc == 1)
+	{
+		home = env_get_env_path("HOME");
+		_command->code_error = directory_change_dir(home);
+	}
+	else if (_command->argc == 2)
+	{
+		pwd = env_get_env_path("PWD");
+		if (ft_strcmp(_command->argv[1], ".") == 0)
+			_command->code_error = directory_change_dir(pwd);
+		else
+
+	}
+		
 	return (0);
 }
 
