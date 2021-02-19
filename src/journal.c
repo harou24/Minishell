@@ -20,6 +20,18 @@ t_journal        *journal_create()
 	return (g_journal__);
 }
 
+void			journal_set_input_str(char *str)
+{
+	journal_clear_input_str();
+	g_journal__->str = ft_strdup(str);
+}
+
+void			journal_clear_input_str()
+{
+	free(g_journal__->str);
+	g_journal__->str = NULL;
+}
+
 void			journal_clear()
 {
 	size_t i;
@@ -109,14 +121,40 @@ char					*journal_dump_tokens()
 	return (buf);
 }
 
-t_bool					journal_has_token(const t_token *token)
+int						journal_has_token(const t_token *token)
 {
 	return (journal_has_tokentype(token->type));
 }
 
-t_bool					journal_has_tokentype(const e_token_type type)
+int						journal_has_tokentype(const e_token_type type)
 {
-	return (g_journal__->counter[type] > 0 );
+	return (g_journal__->counter[type]);
+}
+
+t_token					*journal_find_nth_token(const t_token *token, int n)
+{
+	return (journal_find_nth_type(token->type, n));
+}
+
+t_token					*journal_find_nth_type(const e_token_type type, int n)
+{
+	const size_t		size = journal_size();
+	size_t				index;
+	t_token				*cur_token;
+
+	index = 0;
+	while (index < size)
+	{
+		cur_token = journal_get(index);
+		if (cur_token->type == type)
+		{
+			if (n == 0)
+				return (cur_token);
+			n--;
+		}
+		index++;
+	}
+	return (NULL);
 }
 
 t_token					*journal_find_first_token(const t_token *token)
@@ -131,19 +169,7 @@ t_token					*journal_find_last_token(const t_token *token)
 
 t_token					*journal_find_first_type(const e_token_type type)
 {
-	const size_t		size = journal_size();
-	size_t				index;
-	t_token				*cur_token;
-
-	index = 0;
-	while (index < size)
-	{
-		cur_token = journal_get(index);
-		if (cur_token->type == type)
-			return (cur_token);
-		index++;
-	}
-	return (NULL);
+	return (journal_find_nth_type(type, 0));
 }
 
 t_token					*journal_find_last_type(const e_token_type type)
@@ -185,4 +211,39 @@ size_t					journal_creeper_get_index()
 void					journal_creeper_set_index(size_t index)
 {
 	g_journal__->index = index;
+}
+
+t_vector				journal_get_token_vector()
+{
+	return (g_journal__->tokens);
+}
+
+void                    journal_build_linked_list()
+{
+	const size_t		size = journal_size();
+	ssize_t				index;
+	t_token				*cur_token;
+	t_token				*last_token;
+
+	if (size == 0)
+		return ;
+	index = size - 1;
+	while (index >= 0)
+	{
+		cur_token = journal_get(index);
+		if ((size_t)index < size - 1)
+		{
+			cur_token->next = last_token;
+			last_token = cur_token;
+		}
+		else
+		{
+			/* only for last token */
+			cur_token->next = NULL;
+			last_token = cur_token;
+		}
+		cur_token->index = index;
+		index--;
+	}
+	return ;
 }

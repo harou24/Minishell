@@ -12,7 +12,7 @@ t_journal	*lex(const char *str)
 	lex_clear();
 	g_lex__->input = ft_strdup(str);
 	g_lex__->input_len = ft_strlen(str);
-	return (lex_build_journal());
+	return (lex_build_journal(str));
 }
 
 t_token     *lex_get_next_token()
@@ -35,16 +35,16 @@ t_token     *lex_get_next_token()
 	return (token_create(range(g_lex__->index, g_lex__->index + slen), og_type));
 }
 
-t_journal   *lex_build_journal()
+t_journal   *lex_build_journal(char *str)
 {
 	t_token *token;
-
-
-
+	
+	journal_set_input_str(str);
 	while ((token = lex_get_next_token()))
 	{
 		journal_push(token);
 	}
+	journal_build_linked_list();
 	return (g_lex__->journal);
 }
 
@@ -69,7 +69,6 @@ t_lex		*lex_create()
 	if (lex)
 	{
 		lex->journal = journal_create();
-		/* lex->keystore = hm_new(1024); */
 		if  (!lex->journal /*|| !lex->keystore */)
 			return (lex_destroy(&lex));
 	}
