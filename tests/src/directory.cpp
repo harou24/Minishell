@@ -24,10 +24,14 @@ extern "C" {
 #include <string.h>
 #include <unistd.h>
 
- TEST_CASE( "directory", "[dir]" ) {
+ TEST_CASE( "directory_get_current_dir", "[dir]" ) {
 	 char *cur_dir = directory_get_current_dir();
 	 char buffer[1024];
 	 getcwd(buffer, 1024);
 	 REQUIRE(strcmp(cur_dir, buffer) == 0);
 	 free(cur_dir);
+ }
+
+ TEST_CASE( "directory_change_dir", "[dir]" ) {
+	REQUIRE(directory_change_dir("non_existing_dir") != 0);
  }
