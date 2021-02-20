@@ -63,4 +63,6 @@ t_vector				journal_get_token_vector();
 
 void					journal_build_linked_list();
 
+char					*journal_get_string_for_token(t_token *token);
+
 #endif

@@ -3,6 +3,8 @@
 
 # define V_DEF_SIZE	128
 
+#include <stdio.h>
+
 static t_journal *g_journal__;
 
 t_journal        *journal_create()
@@ -146,7 +148,9 @@ t_token					*journal_find_nth_type(const e_token_type type, int n)
 	index = 0;
 	while (index < size)
 	{
+		printf("find nth: size: %lu, index: %lu\n", size, index);
 		cur_token = journal_get(index);
+		assert(cur_token);
 		if (cur_token->type == type)
 		{
 			if (n == 0)
@@ -247,4 +251,9 @@ void                    journal_build_linked_list()
 		index--;
 	}
 	return ;
+}
+
+char					*journal_get_string_for_token(t_token *token)
+{
+	return (ft_substr(g_journal__->str, token->range.begin, token->range.end - token->range.begin));
 }
