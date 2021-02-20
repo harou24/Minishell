@@ -64,6 +64,7 @@ t_journal        *journal_destroy(t_journal **journal)
 		token_destroy(vector(&g_journal__->tokens, V_PEEKBACK, 0, 0));
 		vector(&g_journal__->tokens, V_POPBACK, 0, 0);
 	}
+	journal_clear_input_str();
 	vector(&g_journal__->tokens, V_DESTROY, FALSE, 0);
 	free(g_journal__->counter);
 	free(g_journal__);
