@@ -1,8 +1,11 @@
+#include <assert.h>
 #include <stdlib.h>
 #include "libft.h"
 #include "parser.h"
 
 # define V_DEF_SIZE 128
+
+#include <stdio.h>
 
 static t_parser *g_parser__;
 
@@ -18,13 +21,15 @@ t_vector		parse_get_subtokens(t_token *first, t_token *last)
 {
 	t_vector	subtokens;
 	
-	subtokens = vector(&subtokens, V_CREATE, V_DEF_SIZE, NULL);
+	printf("parse get subtokens called!\n");
+	vector(&subtokens, V_CREATE, V_DEF_SIZE, NULL);
 	if (!subtokens)
 		return (NULL);
 	while(first->next && first->next != last)
 	{
 		vector(&subtokens, V_PUSHBACK, 0, first->next);
 		first = first->next;
+		printf("parse get subtokens : loop\n");
 	}
 	return (subtokens);	
 }
@@ -39,31 +44,37 @@ int				has_variable_token(void *obj)
 }
 
 /* helper function for parse_expand_first_string */
-void			parse_remove_subtokens(t_vector tokens, t_token *first, t_token *last)
+void			parse_replace_tokens_with_token(t_vector tokens, t_token *first, t_token *last, t_token *token)
 {
-	const size_t index_of_first = first->index;
-	size_t index;
+	const ssize_t index_of_first = first->index;
+	ssize_t index;
 
+	printf("parse_replacE_tokens_with_token called!\n");
 	index = last->index;
 	while(index >= index_of_first)
 	{
-		vector(&tokens, V_POPAT, index, NULL);
+		printf("parse_replacE_tokens_with_token called! : loop index : %li\n", index);
+		vector(&tokens, V_POPAT, index, NULL); /* should free stuff ? */
 		index--;
 	}
+	vector(&tokens, V_PUSHAT, first->index, token);
 }
 
-/*
 void			parse_perform_string_substitution(	t_vector tokens,
 													t_token *first,
 													t_token *last,
 													t_vector subtokens)
 {
 	char		*string;
-	char		*extra;
 	char		*tmp_string;
 	t_token		*tmp_token;
 	size_t		index;
 	t_token		*token;
+
+	assert(first);
+	assert(last);
+	assert(tokens);
+	assert(subtokens);
 
 	token = token_create(range(first->range.begin, last->range.end), STRING);
 
@@ -73,17 +84,22 @@ void			parse_perform_string_substitution(	t_vector tokens,
 	{
 		tmp_token = vector(&subtokens, V_PEEKAT, index, NULL);
 		tmp_string = string;
-		extra = ft_strsub()
-		string = ft_strjoin(string, );
+		string = ft_strjoin(string, journal_get_string_for_token(tmp_token));
+		free(tmp_string);
+		index++;
 	}
-
-	parse_remove_subtokens(tokens, first, last);
+	token->string = string;
+	parse_replace_tokens_with_token(tokens, first, last, token);
 }
-*/
 
 t_bool			parse_expand_first_string(t_journal *journal, t_vector tokens, t_token *first, t_token *last)
 {
 	t_vector subtokens;
+
+	assert(journal);
+	assert(tokens);
+	assert(first);
+	assert(last);
 
 	subtokens = parse_get_subtokens(first, last);
 
@@ -94,7 +110,7 @@ t_bool			parse_expand_first_string(t_journal *journal, t_vector tokens, t_token 
 	else
 	{
 		/* stitch everything together */
-		/* parse_perform_string_substitution(tokens, first, last, subtokens); */
+		parse_perform_string_substitution(tokens, first, last, subtokens);
 	}
 	
 	vector(&subtokens, V_DESTROY, 0, NULL);
@@ -109,11 +125,16 @@ t_bool			parse_expand_strings(t_journal *journal)
 
 	if (journal_has_tokentype(QUOTE) == 0)
 		return (TRUE);
-	if (!journal_has_tokentype(QUOTE) % 2 != 0)
+
+	printf("parse_expand_strings: journal_has_token_type(QUOTE) : %i\n", journal_has_tokentype(QUOTE));
+	if (!(journal_has_tokentype(QUOTE) % 2 == 0))
 		return (FALSE);
 	tokens = journal_get_token_vector();
 	while (journal_has_tokentype(QUOTE) > 0)
+	{
+		printf("parse_expand_strings : loop, still has : %i tokens\n", journal_has_tokentype(QUOTE));
 		parse_expand_first_string(journal, tokens, journal_find_nth_type(QUOTE, 0), journal_find_nth_type(QUOTE, 1));	
+	}
 	return (TRUE);
 }
 
