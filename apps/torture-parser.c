@@ -17,10 +17,19 @@ int main (int argc, char **argv)
 			if (lex(argv[i]))
 			{
 				char *for_human = journal_dump_tokens();
-				printf("LEX TOKENS : %s\n", for_human);
+				printf("%30s : %s\n", "LEX TOKENS", for_human);
 				free(for_human);
 
-				parse_expand_strings(journal_create());
+				//parse_expand_strings(journal_create());
+				parse(journal_create());
+
+				for_human = journal_dump_tokens();
+				printf("%30s : %s\n", "AFTER STRING EXPAND TOKENS", for_human);
+				free(for_human);
+
+				for_human = journal_reconstruct_string();
+				printf("RECONSTRUCTED STRING : \'%s\'\n", for_human);
+				free(for_human);
 			}
 			else
 			{
