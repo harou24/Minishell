@@ -38,6 +38,7 @@ t_token		*token_create(t_range range, e_token_type type)
 
 t_token		*token_destroy(t_token *token)
 {
+	free(token->string);
 	free(token);
 	return (NULL);
 }
