@@ -36,8 +36,6 @@ void			journal_clear_input_str()
 
 void			journal_clear()
 {
-	size_t i;
-
 	/* this de-allocs all token elements in vector, which could be costly #40 */
 	if (g_journal__)
 	{
@@ -47,13 +45,36 @@ void			journal_clear()
 			vector(&g_journal__->tokens, V_POPBACK, 0, 0);
 		}
 		assert(*(size_t *)vector(&g_journal__->tokens, V_SIZE, 0, 0) == 0);
-		i = 0;
-		while(i < TOKEN_TYPE_SIZE)
-		{
-			g_journal__->counter[i] = 0;
-			i++;
-		}
-		journal_creeper_reset();
+		journal_reset_counters();
+	}
+}
+
+void			journal_reset_counters()
+{
+	size_t i;
+
+	i = 0;
+	while(i < TOKEN_TYPE_SIZE)
+	{
+		g_journal__->counter[i] = 0;
+		i++;
+	}
+	journal_creeper_reset();
+}
+
+void			journal_recount_tokens()
+{
+	const size_t	count = *(size_t *)vector(&g_journal__->tokens, V_SIZE, 0, 0);
+	size_t			i;
+	t_token			*token;
+
+	journal_reset_counters();
+	i = 0;
+	while (i < count)
+	{
+		token = vector(&g_journal__->tokens, V_PEEKBACK, 0, 0);
+		(g_journal__->counter)[token->type]++;
+		i++;
 	}
 }
 

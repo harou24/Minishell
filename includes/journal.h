@@ -34,6 +34,8 @@ void					journal_set_input_str(char *str);
 void					journal_clear_input_str();
 
 void					journal_clear();
+void					journal_reset_counters();
+void					journal_recount_tokens();
 
 t_token					*journal_push(t_token *token);
 t_token					*journal_get(size_t index);
