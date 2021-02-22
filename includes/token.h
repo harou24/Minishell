@@ -4,6 +4,7 @@
 #include <stddef.h>
 #include <stdlib.h>
 #include "libft.h"
+#include "range.h"
 
 typedef enum		s_token_type
 {
@@ -22,14 +23,6 @@ typedef enum		s_token_type
 					NO_TYPE,
 					TOKEN_TYPE_SIZE
 }					e_token_type;
-
-typedef struct		s_range
-{
-	size_t			begin;
-	size_t			end;
-}					t_range;
-
-t_range				range(size_t begin, size_t end);
 
 struct				s_token;
 typedef struct		s_token

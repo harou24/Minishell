@@ -1,14 +1,5 @@
 #include "token.h"
 
-t_range             range(size_t begin, size_t end)
-{
-	t_range range;
-
-	range.begin = begin;
-	range.end = end;
-	return (range);
-}
-
 int			token_cmp(const t_token *a, const t_token *b)
 {
 	return ((a->type == b->type) ? 0 : 1);
@@ -38,8 +29,11 @@ t_token		*token_create(t_range range, e_token_type type)
 
 t_token		*token_destroy(t_token *token)
 {
-	free(token->string);
-	free(token);
+	if (token)
+	{
+		free(token->string);
+		free(token);
+	}
 	return (NULL);
 }
 
