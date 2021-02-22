@@ -2,6 +2,8 @@
 #include "env.h"
 #include <stdlib.h>
 
+#define HASHMAP_SIZE 1000
+
 static void	*load_env(t_env *_this_env, const char **_env)
 {
 	void		*hm_store;
@@ -9,7 +11,7 @@ static void	*load_env(t_env *_this_env, const char **_env)
 	int		equal_sign_index;
 	int		count;
 
-	hm_store = hm_new(_this_env->store_size);
+	hm_store = hm_new(HASHMAP_SIZE);
 	if (!hm_store)
 		return (NULL);
 	count = 0;
