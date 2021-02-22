@@ -2,35 +2,31 @@
 #include "env.h"
 #include <stdlib.h>
 
-static void	*get_hm_store(t_env *_this_env, const char **_env)
+static void	*load_env(t_env *_this_env, const char **_env)
 {
 	void		*hm_store;
-	char		*key;
-	char		*value;
+	t_kv_pair	pair;
 	int		equal_sign_index;
 	int		count;
 
 	hm_store = hm_new(_this_env->store_size);
 	if (!hm_store)
 		return (NULL);
-	key = NULL;
-	value = NULL;
 	count = 0;
 	equal_sign_index = 0;
 	while(_env[count])
 	{
 		equal_sign_index = ft_strclen(_env[count], '=');
-		key = ft_strsub(_env[count], 0, equal_sign_index);
-		value = ft_strsub(_env[count], equal_sign_index + 1, ft_strlen(_env[count]) - equal_sign_index);
-		if (!key || !value || !hm_set(hm_store, key, value))
+		pair.key = ft_strsub(_env[count], 0, equal_sign_index);
+		pair.value = ft_strsub(_env[count], equal_sign_index + 1, ft_strlen(_env[count]) - equal_sign_index);
+		if (!pair.key || !pair.value || !hm_set(hm_store, pair.key, pair.value))
 		{
-			if (key)
-				free(key);
-			if (value)
-				free(value);
+			free(pair.key);
+			free(pair.value);
 			env_destroy(_this_env);
 			return (NULL);
 		}
+		free(pair.key);
 		count++;
 	}
 	return (hm_store);
@@ -45,7 +41,7 @@ t_env	*env_create(const char **_env)
 	if (!env)
 		return (NULL);
 	env->store_size = ft_arraylen((const void**)_env);
-	env->hm_store = get_hm_store(env, _env);
+	env->hm_store = load_env(env, _env);
 	if (!env->hm_store)
 		return (NULL);
 	return (env);
