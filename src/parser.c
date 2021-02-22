@@ -54,10 +54,11 @@ void			parse_replace_tokens_with_token(t_vector tokens, t_token *first, t_token 
 	while(index >= index_of_first)
 	{
 		printf("parse_replacE_tokens_with_token called! : loop index : %li\n", index);
-		vector(&tokens, V_POPAT, index, NULL); /* should free stuff ? */
+		token_destroy(vector(&tokens, V_POPAT, index, NULL));
 		index--;
 	}
-	vector(&tokens, V_PUSHAT, first->index, token);
+	vector(&tokens, V_PUSHAT, index_of_first, token);
+	journal_recount_tokens();
 }
 
 void			parse_perform_string_substitution(	t_vector tokens,
@@ -66,7 +67,6 @@ void			parse_perform_string_substitution(	t_vector tokens,
 													t_vector subtokens)
 {
 	char		*string;
-	char		*tmp_string;
 	t_token		*tmp_token;
 	size_t		index;
 	t_token		*token;
@@ -79,13 +79,11 @@ void			parse_perform_string_substitution(	t_vector tokens,
 	token = token_create(range(first->range.begin, last->range.end), STRING);
 
 	index = 0;
-	string = ft_strdup("");
+	string = NULL;
 	while (vector(&subtokens, V_PEEKAT, index, NULL))
 	{
 		tmp_token = vector(&subtokens, V_PEEKAT, index, NULL);
-		tmp_string = string;
-		string = ft_strjoin(string, journal_get_string_for_token(tmp_token));
-		free(tmp_string);
+		string = ft_strjoin_noreuse(string, journal_get_string_for_token(tmp_token));
 		index++;
 	}
 	token->string = string;
@@ -115,8 +113,6 @@ t_bool			parse_expand_first_string(t_journal *journal, t_vector tokens, t_token 
 	
 	vector(&subtokens, V_DESTROY, 0, NULL);
 	return (FALSE);
-	(void)journal; /* needed for substr*/
-	(void)tokens; /* substitution */
 }
 
 t_bool			parse_expand_strings(t_journal *journal)
@@ -135,6 +131,7 @@ t_bool			parse_expand_strings(t_journal *journal)
 		printf("parse_expand_strings : loop, still has : %i tokens\n", journal_has_tokentype(QUOTE));
 		parse_expand_first_string(journal, tokens, journal_find_nth_type(QUOTE, 0), journal_find_nth_type(QUOTE, 1));	
 	}
+
 	return (TRUE);
 }
 
