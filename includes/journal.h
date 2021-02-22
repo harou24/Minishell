@@ -31,11 +31,12 @@ t_journal				*journal_create();
 t_journal				*journal_destroy(t_journal **journal);
 
 void					journal_set_input_str(char *str);
+char					*journal_get_input_str();
 void					journal_clear_input_str();
 
 void					journal_clear();
 void					journal_reset_counters();
-void					journal_recount_tokens();
+void					journal_rebuild_tokens();
 
 t_token					*journal_push(t_token *token);
 t_token					*journal_get(size_t index);
@@ -66,5 +67,5 @@ t_vector				journal_get_token_vector();
 void					journal_build_linked_list();
 
 char					*journal_get_string_for_token(t_token *token);
-
+char					*journal_reconstruct_string();
 #endif

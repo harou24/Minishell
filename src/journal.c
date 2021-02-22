@@ -3,8 +3,6 @@
 
 # define V_DEF_SIZE	128
 
-#include <stdio.h>
-
 static t_journal *g_journal__;
 
 t_journal        *journal_create()
@@ -28,6 +26,11 @@ void			journal_set_input_str(char *str)
 	g_journal__->str = ft_strdup(str);
 }
 
+char			*journal_get_input_str()
+{
+	return (g_journal__->str);
+}
+
 void			journal_clear_input_str()
 {
 	free(g_journal__->str);
@@ -39,12 +42,12 @@ void			journal_clear()
 	/* this de-allocs all token elements in vector, which could be costly #40 */
 	if (g_journal__)
 	{
-		while (*(size_t *)vector(&g_journal__->tokens, V_SIZE, 0, 0) > 0)
+		while (journal_size() > 0)
 		{
 			token_destroy(vector(&g_journal__->tokens, V_PEEKBACK, 0, 0));
 			vector(&g_journal__->tokens, V_POPBACK, 0, 0);
 		}
-		assert(*(size_t *)vector(&g_journal__->tokens, V_SIZE, 0, 0) == 0);
+		assert(journal_size() == 0);
 		journal_reset_counters();
 	}
 }
@@ -62,9 +65,9 @@ void			journal_reset_counters()
 	journal_creeper_reset();
 }
 
-void			journal_recount_tokens()
+void			journal_rebuild_tokens()
 {
-	const size_t	count = *(size_t *)vector(&g_journal__->tokens, V_SIZE, 0, 0);
+	const size_t	count = journal_size();
 	size_t			i;
 	t_token			*token;
 
@@ -72,7 +75,8 @@ void			journal_recount_tokens()
 	i = 0;
 	while (i < count)
 	{
-		token = vector(&g_journal__->tokens, V_PEEKBACK, 0, 0);
+		token = vector(&g_journal__->tokens, V_PEEKAT, i, 0);
+		token->index = i;
 		(g_journal__->counter)[token->type]++;
 		i++;
 	}
@@ -82,7 +86,7 @@ t_journal        *journal_destroy(t_journal **journal)
 {
 	if (!g_journal__)
 		return (NULL);
-	while (*(size_t *)vector(&g_journal__->tokens, V_SIZE, 0, 0) > 0)
+	while (journal_size() > 0)
 	{
 		token_destroy(vector(&g_journal__->tokens, V_PEEKBACK, 0, 0));
 		vector(&g_journal__->tokens, V_POPBACK, 0, 0);
@@ -135,11 +139,38 @@ char					*journal_dump_tokens()
 
 	i = 0;
 	buf = ft_calloc(sizeof(char), buflen);
-	while (i < *(size_t *)vector(&g_journal__->tokens, V_SIZE, 0, 0))
+	while (i < journal_size())
 	{
 		token = vector(&g_journal__->tokens, V_PEEKAT, i, 0);
 		ft_strlcat(buf, token_dump_type(token->type), buflen);
+		if (token->string)
+		{
+			ft_strlcat(buf, "{", buflen);
+			ft_strlcat(buf, token->string, buflen);
+			ft_strlcat(buf, "}", buflen);
+		}
 		ft_strlcat(buf, " ", buflen);
+		i++;
+	}
+	return (buf);
+}
+
+char					*journal_reconstruct_string()
+{
+	char		*buf;
+	char		*str;
+	const int	buflen = 1024;
+	t_token		*token;
+	size_t		i;
+
+	i = 0;
+	buf = ft_calloc(sizeof(char), buflen);
+	while (i < journal_size())
+	{
+		token = vector(&g_journal__->tokens, V_PEEKAT, i, 0);
+		str = journal_get_string_for_token(token);
+		ft_strlcat(buf, str, buflen);
+		free(str);
 		i++;
 	}
 	return (buf);
@@ -169,7 +200,6 @@ t_token					*journal_find_nth_type(const e_token_type type, int n)
 	index = 0;
 	while (index < size)
 	{
-		printf("find nth: size: %lu, index: %lu\n", size, index);
 		cur_token = journal_get(index);
 		assert(cur_token);
 		if (cur_token->type == type)
@@ -276,5 +306,8 @@ void                    journal_build_linked_list()
 
 char					*journal_get_string_for_token(t_token *token)
 {
-	return (ft_substr(g_journal__->str, token->range.begin, token->range.end - token->range.begin));
+	if (token->string)
+		return (ft_strdup(token->string));
+	else
+		return (ft_strsub(g_journal__->str, token->range.begin, 1 + token->range.end - token->range.begin));
 }
