@@ -1,52 +1,54 @@
 #include "libft.h"
 #include "env.h"
+#include <stdlib.h>
 
-t_env	env_create(void)
+static void	*get_hm_store(t_env *_this_env, const char **_env)
+{
+	void		*hm_store;
+	char		*key;
+	char		*value;
+	int		equal_sign_index;
+	int		count;
+
+	hm_store = hm_new(_this_env->store_size);
+	if (!hm_store)
+		return (NULL);
+	key = NULL;
+	value = NULL;
+	count = 0;
+	equal_sign_index = 0;
+	while(_env[count])
+	{
+		equal_sign_index = ft_strclen(_env[count], '=');
+		key = ft_strsub(_env[count], 0, equal_sign_index);
+		value = ft_strsub(_env[count], equal_sign_index + 1, ft_strlen(_env[count]) - equal_sign_index);
+		if (!key || !value || !hm_set(hm_store, key, value))
+		{
+			if (key)
+				free(key);
+			if (value)
+				free(value);
+			env_destroy(_this_env);
+			return (NULL);
+		}
+		count++;
+	}
+	return (hm_store);
+}
+
+
+t_env	*env_create(const char **_env)
 {
 	t_env	*env;
 
 	env = ft_calloc(sizeof(t_env), 1);
 	if (!env)
 		return (NULL);
-	env->hm_store = get_hm_store();
+	env->store_size = ft_arraylen((const void**)_env);
+	env->hm_store = get_hm_store(env, _env);
 	if (!env->hm_store)
 		return (NULL);
 	return (env);
-}
-
-/*this should be internal function */
-static t_hashmap	*get_hm_store(void)
-{
-	void		*hm_store;
-	extern char	**environ;
-	char		**env;
-	char		*key;
-	char		*value;
-	int		equal_sign_index;
-	int		count;
-
-	hm_store = hm_new(ft_arraylen((const void **)env));
-	if (!hm_store)
-		return (NULL);
-	env = environ;
-	key = NULL;
-	value = NULL;
-	count = 0;
-	equal_sign_index = 0;
-	while(env[count])
-	{
-		equal_sign_index = ft_strclen(env[i], '=');
-		key = ft_strsub(env[i], 0, equal_sign_index);
-		if (!key)
-			return (NULL);
-		value = ft_strsub(env[i], equal_sing_index + 1, ft_strlen(env[i]) - equal_sign_index);
-		if (!value)
-			return (NULL);
-		if (!hm_set(hm_store, key, value))
-			return (NULL);
-		count++;
-	}
-	return (hm_store);
 }
 
 char	*env_get(t_env *env, const char *_var)
@@ -54,23 +56,27 @@ char	*env_get(t_env *env, const char *_var)
 	return ((char *)hm_get(env->hm_store, _var));
 }
 
-void	*env_update(t_env *_env, const char *_var, const char *_new_value)
+void	*env_set(t_env *_env, char *_var, char *_value)
 {
-	return (hm_set(env->hm_store, _var, _new_value));
-}
-
-void	*env_add(t_env *_env, const char *_var, const char *_value)
-{
-	return (hm_set(env->hm_store, _var, _value));
+	return (hm_set(_env->hm_store, _var, _value));
 }
 
 void	*env_remove(t_env *_env, const char *_var)
 {
 	/* NEED TO UPDATE LIBHASHMAP TO ADD REMOVE FUNTCION */
+	(void)_env;
+	(void)_var;
 	return (NULL);
 }
 
-void	env_destroy(t_env *env)
+size_t	env_size(t_env *_env)
 {
-	hm_destroy(env->hm_store, free);
+	return (_env->store_size);
+}
+
+void	env_destroy(t_env *_env)
+{
+	if (_env->hm_store)
+		hm_destroy(_env->hm_store, free);
+	free(_env);
 }

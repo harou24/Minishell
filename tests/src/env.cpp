@@ -25,7 +25,9 @@ extern "C" {
 #include <stdio.h>
 
 TEST_CASE( "create_destroy env", "[env]" ) {
-	t_env *env = env_create();
+	extern char **environ;
+
+	t_env *env = env_create((const char **)environ);
 	REQUIRE(env != NULL);
 	env_destroy(env);
 }
