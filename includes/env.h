@@ -15,5 +15,6 @@ void	*env_remove(t_env *env, const char *_var);
 size_t	env_size(t_env *env);
 void	env_destroy(t_env *env);
 void	*load_env(t_env *_this_env, const char **_env);
+int	store_set_at_index(t_env *_env, const char *_env_line, void *_hm_store);
 
 #endif

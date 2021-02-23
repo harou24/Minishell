@@ -4,31 +4,38 @@
 
 #define HASHMAP_SIZE 1000
 
+int	store_set_at_index(t_env *_env, const char *_env_line, void *_hm_store)
+{
+	t_kv_pair	pair;
+	int		equal_sign_index;
+
+	equal_sign_index = ft_strclen(_env_line, '=');
+	pair.key = ft_strsub(_env_line, 0, equal_sign_index);
+	pair.value = ft_strsub(_env_line, equal_sign_index + 1, ft_strlen(_env_line) - equal_sign_index);
+	if (!pair.key || !pair.value || !hm_set(_hm_store, pair.key, pair.value))
+	{
+		free(pair.key);
+		free(pair.value);
+		env_destroy(_env);
+		return (0);
+	}
+	free(pair.key);
+	return (1);
+}
+
 void	*load_env(t_env *_this_env, const char **_env)
 {
 	void		*hm_store;
-	t_kv_pair	pair;
-	int		equal_sign_index;
 	int		count;
 
 	hm_store = hm_new(HASHMAP_SIZE);
 	if (!hm_store)
 		return (NULL);
 	count = 0;
-	equal_sign_index = 0;
 	while(_env[count])
 	{
-		equal_sign_index = ft_strclen(_env[count], '=');
-		pair.key = ft_strsub(_env[count], 0, equal_sign_index);
-		pair.value = ft_strsub(_env[count], equal_sign_index + 1, ft_strlen(_env[count]) - equal_sign_index);
-		if (!pair.key || !pair.value || !hm_set(hm_store, pair.key, pair.value))
-		{
-			free(pair.key);
-			free(pair.value);
-			env_destroy(_this_env);
+		if (!store_set_at_index(_this_env, _env[count], hm_store))
 			return (NULL);
-		}
-		free(pair.key);
 		count++;
 	}
 	return (hm_store);
