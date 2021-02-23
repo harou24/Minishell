@@ -4,7 +4,7 @@
 
 #define HASHMAP_SIZE 1000
 
-static void	*load_env(t_env *_this_env, const char **_env)
+void	*load_env(t_env *_this_env, const char **_env)
 {
 	void		*hm_store;
 	t_kv_pair	pair;

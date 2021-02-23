@@ -14,5 +14,6 @@ void	*env_set(t_env *env, char *_var, char *_value);
 void	*env_remove(t_env *env, const char *_var);
 size_t	env_size(t_env *env);
 void	env_destroy(t_env *env);
+void	*load_env(t_env *_this_env, const char **_env);
 
 #endif
