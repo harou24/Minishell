@@ -9,36 +9,6 @@
 
 static t_parser *g_parser__;
 
-char			*parse_get_variable_for_token(t_token *token)
-{
-	char *key;
-	char *var;
-
-	key = ft_strsub(journal_get_input_str(), token->range.begin, 1 + token->range.end - token->range.begin);
-	assert(key);
-
-	/* env call here */
-	var = ft_strdup("PLACEHOLDER");
-
-	free(key);
-	return(var);
-}
-
-void			parse_perform_var_substitution(t_vector tokens, t_token *var_sym, t_token *var_name)
-{
-	t_token *token;
-	
-	assert(var_sym->index == var_name->index - 1);
-
-	token = token_create(range(var_name->range.begin - 1, var_name->range.end), WORD);
-	assert(token);
-
-	token->string = parse_get_variable_for_token(var_name);
-	assert(token->string);
-
-	parse_replace_tokens_with_token(tokens, var_sym, var_name, token);
-}
-
 /* helper function for parse_expand_first_string */
 t_vector		parse_get_subtokens(t_token *first, t_token *last)
 {
@@ -76,10 +46,7 @@ void			parse_replace_tokens_with_token(t_vector tokens, t_token *first, t_token 
 	journal_rebuild_tokens();
 }
 
-void			parse_perform_string_substitution(	t_vector tokens,
-													t_token *first,
-													t_token *last,
-													t_vector subtokens)
+void			parse_perform_string_substitution(t_vector tokens, t_token *first, t_token *last, t_vector subtokens)
 {
 	char		*string;
 	t_token		*cur_token;
@@ -137,6 +104,36 @@ t_bool			parse_expand_strings(e_token_type string_type)
 	return (TRUE);
 }
 
+char			*parse_retreive_var_from_env_for_token(t_token *token)
+{
+	char *key;
+	char *var;
+
+	key = ft_strsub(journal_get_input_str(), token->range.begin, 1 + token->range.end - token->range.begin);
+	assert(key);
+
+	/* env call here */
+	var = ft_strdup("PLACEHOLDER");
+
+	free(key);
+	return(var);
+}
+
+void			parse_perform_var_substitution(t_vector tokens, t_token *var_sym, t_token *var_name)
+{
+	t_token *token;
+	
+	assert(var_sym->index == var_name->index - 1);
+
+	token = token_create(range(var_name->range.begin - 1, var_name->range.end), WORD);
+	assert(token);
+
+	token->string = parse_retreive_var_from_env_for_token(var_name);
+	assert(token->string);
+
+	parse_replace_tokens_with_token(tokens, var_sym, var_name, token);
+}
+
 t_bool			parse_is_variable(t_token *var_name)
 {
 	return (var_name && var_name->type == WORD);
@@ -188,12 +185,13 @@ t_bool			parse_should_expand_literals()
 	return (string && literal && string->index > literal->index);
 }
 
-void			parse_expand()
+t_bool			parse_expand()
 {
 	if (parse_should_expand_literals())
 		parse_expand_strings(LITERAL);
 	parse_expand_variables();
 	parse_expand_strings(STRING);
+	return (TRUE);
 }
 
 t_execscheme	*parse()
