@@ -9,9 +9,9 @@ typedef struct		s_parser
 	t_execscheme	*scheme;
 }					t_parser;
 
-t_execscheme		*parse(t_journal *journal);
+t_execscheme		*parse();
 
-t_bool				parse_expand_strings(t_journal *journal);
+t_bool				parse_expand_strings(e_token_type string_type);
 
 t_parser			*parser_create();
 t_parser			*parser_destroy();

@@ -108,7 +108,7 @@ void			parse_perform_string_substitution(	t_vector tokens,
 	assert(tokens);
 	assert(subtokens);
 
-	token = token_create(range(first->range.begin, last->range.end), STRING);
+	token = token_create(range(first->range.begin, last->range.end), WORD);
 
 	index = 0;
 	string = NULL;
@@ -126,11 +126,10 @@ void			parse_perform_string_substitution(	t_vector tokens,
 	parse_replace_tokens_with_token(tokens, first, last, token);
 }
 
-t_bool			parse_expand_first_string(t_journal *journal, t_vector tokens, t_token *first, t_token *last)
+t_bool			parse_expand_first_string(t_vector tokens, t_token *first, t_token *last)
 {
 	t_vector subtokens;
 
-	assert(journal);
 	assert(tokens);
 	assert(first);
 	assert(last);
@@ -146,22 +145,22 @@ t_bool			parse_expand_first_string(t_journal *journal, t_vector tokens, t_token 
 	return (FALSE);
 }
 
-t_bool			parse_expand_strings(t_journal *journal)
+t_bool			parse_expand_strings(e_token_type string_type)
 {
 	t_vector *tokens;
 
-	if (journal_has_tokentype(QUOTE) == 0)
+	if (journal_has_tokentype(string_type) == 0)
 		return (TRUE);
 
 	/* printf("parse_expand_strings: journal_has_token_type(QUOTE) : %i\n", journal_has_tokentype(QUOTE)); */
-	if (!(journal_has_tokentype(QUOTE) % 2 == 0))
+	if (!(journal_has_tokentype(string_type) % 2 == 0))
 		return (FALSE);
 	tokens = journal_get_token_vector();
-	while (journal_has_tokentype(QUOTE) > 0)
+	while (journal_has_tokentype(string_type) > 0)
 	{
 		/* printf("parse_expand_strings : loop, still has : %i tokens\n", journal_has_tokentype(QUOTE)); */
-		assert(journal_has_tokentype(QUOTE) % 2 == 0);
-		parse_expand_first_string(journal, tokens, journal_find_nth_type(QUOTE, 0), journal_find_nth_type(QUOTE, 1));	
+		assert(journal_has_tokentype(string_type) % 2 == 0);
+		parse_expand_first_string(tokens, journal_find_nth_type(string_type, 0), journal_find_nth_type(string_type, 1));	
 	}
 
 	return (TRUE);
@@ -188,7 +187,7 @@ t_bool			parse_expand_first_variable(t_vector tokens, t_token *var_sym)
 	return (TRUE);
 }
 
-t_bool			parse_expand_variables(t_journal *journal)
+t_bool			parse_expand_variables()
 {
 	t_vector *tokens;
 
@@ -205,14 +204,30 @@ t_bool			parse_expand_variables(t_journal *journal)
 		parse_expand_first_variable(tokens, journal_find_nth_type(VARIABLE, 0));	
 	}
 	return (TRUE);
-	(void)journal;
 }
 
-t_execscheme	*parse(t_journal *journal)
+t_bool			parse_should_expand_literals()
 {
-	parse_expand_variables(journal);
-	parse_expand_strings(journal);
-	(void)journal;
+	t_token		*string;
+	t_token		*literal;
+	
+	string = journal_find_nth_type(STRING, 0);
+	literal = journal_find_nth_type(LITERAL, 0);
+
+	return (string && literal && string->index > literal->index);
+}
+
+void			parse_expand()
+{
+	if (parse_should_expand_literals())
+		parse_expand_strings(LITERAL);
+	parse_expand_variables();
+	parse_expand_strings(STRING);
+}
+
+t_execscheme	*parse()
+{
+	parse_expand();
 	return (NULL);
 }
 
