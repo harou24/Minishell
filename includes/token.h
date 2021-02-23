@@ -4,11 +4,14 @@
 #include <stddef.h>
 #include <stdlib.h>
 #include "libft.h"
+#include "range.h"
 
 typedef enum		s_token_type
 {
 					WORD,
 					STRING,
+					QUOTE,
+					ESCAPE,
 					VARIABLE,
 					SPACE,
 					PIPE,
@@ -21,18 +24,14 @@ typedef enum		s_token_type
 					TOKEN_TYPE_SIZE
 }					e_token_type;
 
-typedef struct		s_range
-{
-	size_t			begin;
-	size_t			end;
-}					t_range;
-
-t_range				range(size_t begin, size_t end);
-
+struct				s_token;
 typedef struct		s_token
 {
 	e_token_type	type;
 	t_range			range;
+	char			*string;
+	size_t			index;
+	struct s_token	*next;
 }					t_token;
 
 /*

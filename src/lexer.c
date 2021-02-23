@@ -12,11 +12,12 @@ t_journal	*lex(const char *str)
 	lex_clear();
 	g_lex__->input = ft_strdup(str);
 	g_lex__->input_len = ft_strlen(str);
-	return (lex_build_journal());
+	return (lex_build_journal(str));
 }
 
 t_token     *lex_get_next_token()
 {
+	const size_t	og_index = g_lex__->index;
 	size_t			slen;
 	e_token_type	og_type;
 	e_token_type	type;
@@ -31,20 +32,22 @@ t_token     *lex_get_next_token()
 		slen++;
 		type = bash_match(&g_lex__->input[g_lex__->index], slen);
 	}
-	g_lex__->index += slen - ((slen > 1) ? 1 : 0);
-	return (token_create(range(g_lex__->index, g_lex__->index + slen), og_type));
+	slen -= ((slen > 1) ? 1 : 0);
+	g_lex__->index += slen;
+	slen -= ((slen > 0) ? 1 : 0); /* wtf is going on here */
+	return (token_create(range(og_index, og_index + slen), og_type));
 }
 
-t_journal   *lex_build_journal()
+t_journal   *lex_build_journal(char *str)
 {
 	t_token *token;
-
-
-
+	
+	journal_set_input_str(str);
 	while ((token = lex_get_next_token()))
 	{
 		journal_push(token);
 	}
+	journal_build_linked_list();
 	return (g_lex__->journal);
 }
 
@@ -69,7 +72,6 @@ t_lex		*lex_create()
 	if (lex)
 	{
 		lex->journal = journal_create();
-		/* lex->keystore = hm_new(1024); */
 		if  (!lex->journal /*|| !lex->keystore */)
 			return (lex_destroy(&lex));
 	}

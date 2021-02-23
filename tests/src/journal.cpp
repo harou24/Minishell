@@ -63,6 +63,10 @@ TEST_CASE("has_token/type", "[journal]") {
 	CHECK_FALSE(journal_has_token(token_b));
 	CHECK_FALSE(journal_has_tokentype(token_b->type));
 
+	/* check if counter increases*/
+	journal_push(token_create(sample_range, SPACE)); // same as token a
+	CHECK(journal_has_token(token_a) == 2);
+
 	token_destroy(token_b);
 	journal_destroy(NULL);
 }
