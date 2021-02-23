@@ -23,7 +23,7 @@ int	store_set_at_index(t_env *_env, const char *_env_line, void *_hm_store)
 	return (1);
 }
 
-void	*load_env(t_env *_this_env, const char **_env)
+void	*set_env_array(t_env *_this_env, const char **_env)
 {
 	void		*hm_store;
 	int		count;
@@ -50,7 +50,7 @@ t_env	*env_create(const char **_env)
 	if (!env)
 		return (NULL);
 	env->store_size = ft_arraylen((const void**)_env);
-	env->hm_store = load_env(env, _env);
+	env->hm_store = set_env_array(env, _env);
 	if (!env->hm_store)
 		return (NULL);
 	return (env);
