@@ -26,6 +26,17 @@ target_link_libraries(${TEST}.bin PRIVATE minishell ft vector hashmap gnl printf
 add_test(NAME ${TEST}
 		COMMAND ${TEST}.bin)
 
+## Parser unittest
+set (TEST "test-parser")
+set (SRC_LIST "src/parser.cpp")
+
+add_executable(${TEST}.bin ${MAIN} ${SRC_LIST})
+target_compile_features(${TEST}.bin PRIVATE cxx_std_14)
+target_link_libraries(${TEST}.bin PRIVATE Catch2::Catch2WithMain)
+target_link_libraries(${TEST}.bin PRIVATE minishell ft vector hashmap gnl printf)
+add_test(NAME ${TEST}
+		COMMAND ${TEST}.bin)
+
 ## Journal unittest
 set (TEST "test-journal")
 set (SRC_LIST "src/journal.cpp")
