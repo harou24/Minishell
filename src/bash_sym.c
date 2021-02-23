@@ -65,7 +65,7 @@ e_token_type	bash_match(char *str, size_t len)
 	{
 		if (is_bash_sym(str, len, &bash_sym_list[i]))
 		{
-			if (candidate == NULL || ft_strlen(bash_sym_list[i].key) > ft_strlen(candidate->key))
+			if (candidate == NULL || ft_strlen(bash_sym_list[i].key) > ft_strlen(candidate->key)) /* assume longer matches are more accurate */
 				candidate = (t_bash_sym *)&bash_sym_list[i];
 		}
 		i++;

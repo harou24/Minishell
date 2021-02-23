@@ -80,6 +80,7 @@ void			journal_rebuild_tokens()
 		(g_journal__->counter)[token->type]++;
 		i++;
 	}
+	journal_build_linked_list();
 }
 
 t_journal        *journal_destroy(t_journal **journal)
