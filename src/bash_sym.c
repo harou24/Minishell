@@ -6,7 +6,8 @@
 
 static const t_bash_sym bash_sym_list[] =	{
 													{WORD, FUZZY,		"0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ@%^()-_+=]}[{:/?.,&"},
-													{QUOTE, EXACT,		"\""},
+													{LITERAL, EXACT,	"\'"},
+													{STRING, EXACT,		"\""},
 													{ESCAPE, EXACT,		"\\"},
 													{VARIABLE, EXACT,	"$"},
 													{SPACE, FUZZY,		" \a\b\r\t\f\v"},

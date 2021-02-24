@@ -10,7 +10,7 @@ typedef enum		s_token_type
 {
 					WORD,
 					STRING,
-					QUOTE,
+					LITERAL,
 					ESCAPE,
 					VARIABLE,
 					SPACE,

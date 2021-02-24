@@ -24,11 +24,11 @@ int main (int argc, char **argv)
 				parse(journal_create());
 
 				for_human = journal_dump_tokens();
-				printf("%30s : %s\n", "AFTER STRING EXPAND TOKENS", for_human);
+				printf("%30s : %s\n", "POST-PARSE TOKENS", for_human);
 				free(for_human);
 
 				for_human = journal_reconstruct_string();
-				printf("RECONSTRUCTED STRING : \'%s\'\n", for_human);
+				printf("%30s : %s\n", "RECONSTRUCTED STRING", for_human);
 				free(for_human);
 			}
 			else
