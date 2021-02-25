@@ -42,36 +42,36 @@ TEST_CASE("ranges", "[lexer]") {
 
 	/* get every token and manually verify range*/
 	t_token *token;
-	t_range	range;
+	t_range	r;
 	char	*notre_r_str;
 	char	*votre_r_str;
 
 	token = journal_creeper_next();
 	REQUIRE(token != NULL);
-	range = {0, 2};
-	notre_r_str = range_dump(range);
+	r = range(0, 2);
+	notre_r_str = range_dump(r);
 	votre_r_str = range_dump(token->range);
 	printf("range : notre %s votre %s\n", notre_r_str, votre_r_str);
 	free(notre_r_str); free(votre_r_str);
-	CHECK(range_cmp(range, token->range) == 0);
+	CHECK(range_cmp(r, token->range) == 0);
 	
 	token = journal_creeper_next();
 	REQUIRE(token != NULL);
-	range = {3, 3};
-	notre_r_str = range_dump(range);
+	r = range(3, 3);
+	notre_r_str = range_dump(r);
 	votre_r_str = range_dump(token->range);
 	printf("range : notre %s votre %s\n", notre_r_str, votre_r_str);
 	free(notre_r_str); free(votre_r_str);
-	CHECK(range_cmp(range, token->range) == 0);
+	CHECK(range_cmp(r, token->range) == 0);
 
 	token = journal_creeper_next();
 	REQUIRE(token != NULL);
-	range = {4, 6};
-	notre_r_str = range_dump(range);
+	r = range(4, 6);
+	notre_r_str = range_dump(r);
 	votre_r_str = range_dump(token->range);
 	printf("range : notre %s votre %s\n", notre_r_str, votre_r_str);
 	free(notre_r_str); free(votre_r_str);
-	CHECK(range_cmp(range, token->range) == 0);
+	CHECK(range_cmp(r, token->range) == 0);
 	
 	CHECK(lex_destroy(&lexer) == NULL);
 	CHECK(lexer == NULL);
