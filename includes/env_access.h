@@ -5,6 +5,6 @@
 
 char	*env_get_user(t_env *_env);
 char	*env_get_host(t_env *_env);
-char	*env_get_working_dir(t_env *_env);
+char	*env_get_current_dir(t_env *_env);
 
 #endif
