@@ -28,6 +28,6 @@ typedef struct					s_bash_pattern
 	const e_token_type			fuzzy_types[B_PAT_MAXLEN];
 }								t_bash_pattern;
 
-t_bash_pattern_type				batch_match_pattern(t_journal *journal, t_range range);
+t_bash_pattern_type				batch_match_pattern(t_range range);
 
 #endif
