@@ -20,7 +20,7 @@ static const t_bash_sym bash_sym_list[] =	{
 													{OP_WRITE, EXACT,	">"}
 												};
 
-t_bool		is_bash_sym_exact(char *str, size_t len, const t_bash_sym *token)
+t_bool		is_bash_sym_exact(const char *str, size_t len, const t_bash_sym *token)
 {
 	/* this could be done staticly */
 	const size_t tokenkeylen = ft_strlen(token->key);
@@ -30,7 +30,7 @@ t_bool		is_bash_sym_exact(char *str, size_t len, const t_bash_sym *token)
 	return (ft_strncmp(str, token->key, len) == 0);
 }
 
-t_bool		is_bash_sym_fuzzy(char *str, size_t len, const t_bash_sym *token)
+t_bool		is_bash_sym_fuzzy(const char *str, size_t len, const t_bash_sym *token)
 {
 	size_t i;
 
@@ -44,7 +44,7 @@ t_bool		is_bash_sym_fuzzy(char *str, size_t len, const t_bash_sym *token)
 	return (TRUE);
 }
 
-t_bool		is_bash_sym(char *str, size_t len, const t_bash_sym *token)
+t_bool		is_bash_sym(const char *str, size_t len, const t_bash_sym *token)
 {
 	/* this doesnt follow open/closed principles */
 
@@ -55,7 +55,7 @@ t_bool		is_bash_sym(char *str, size_t len, const t_bash_sym *token)
 	return (FALSE);
 }
 
-e_token_type	bash_match(char *str, size_t len)
+e_token_type	bash_match(const char *str, size_t len)
 {
 	const size_t	token_count = sizeof(bash_sym_list)/sizeof(bash_sym_list[0]);
 	t_bash_sym		*candidate;

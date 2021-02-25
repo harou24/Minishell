@@ -10,6 +10,6 @@ typedef struct					s_bash_sym
 	const char					*key;
 }								t_bash_sym;
 
-e_token_type					bash_match(char *str, size_t len);
+e_token_type					bash_match(const char *str, size_t len);
 
 #endif
