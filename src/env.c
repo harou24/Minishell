@@ -66,12 +66,9 @@ void	*env_set(t_env *_env, char *_var, char *_value)
 	return (hm_set(_env->hm_store, _var, _value));
 }
 
-void	*env_remove(t_env *_env, const char *_var)
+void	env_unset(t_env *_env, char *_var)
 {
-	/* NEED TO UPDATE LIBHASHMAP TO ADD REMOVE FUNTCION */
-	(void)_env;
-	(void)_var;
-	return (NULL);
+	hm_remove(_env->hm_store, _var, free);
 }
 
 size_t	env_size(t_env *_env)
