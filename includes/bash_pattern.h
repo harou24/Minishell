@@ -30,4 +30,11 @@ typedef struct					s_bash_pattern
 
 t_bash_pattern_type				batch_match_pattern(t_range range);
 
+/* sub functions */
+t_bool                  match_token_to_type(t_token *token, const e_token_type type);
+t_bool                  match_token_to_any_type(t_token *token, const e_token_type *types, size_t types_len);
+t_bool                  match_fuzzy(t_range range, const e_token_type *fuzzy_types, size_t fuzzy_types_len);
+t_bool                  match_fixed(t_range range, const e_token_type *fixed_types, size_t fixed_types_len);
+t_bool                  is_bash_pattern(t_range r, const t_bash_pattern *pattern);
+
 #endif
