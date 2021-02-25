@@ -5,9 +5,10 @@
 #define FUZZY FALSE
 
 static const t_bash_sym bash_sym_list[] =	{
-													{WORD, FUZZY,		"0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ@%^()-_+=]}[{:/?.,&"},
+													{WORD, FUZZY,		"0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ@%^()-_+]}[{:/?.,&"},
 													{LITERAL, EXACT,	"\'"},
 													{STRING, EXACT,		"\""},
+													{ASSIGNMENT, EXACT,	"="},
 													{ESCAPE, EXACT,		"\\"},
 													{VARIABLE, EXACT,	"$"},
 													{SPACE, FUZZY,		" \a\b\r\t\f\v"},
