@@ -3,7 +3,8 @@
 #include "bash_pattern.h"
 
 static const t_bash_pattern pat_list[] =	{
-												{ P_COMMAND, 2, {WORD, SPACE}, 3, {WORD, SPACE, ASSIGNMENT} },
+												{ P_COMMAND, 2, {WORD, SPACE}, 4, {WORD, SPACE, ASSIGNMENT, NULLBYTE} },
+												{ P_COMMAND, 2, {WORD, NULLBYTE}, 0, {} },
 												{ P_ASSIGNMENT, 3, {WORD, ASSIGNMENT, WORD}, 0, {} }
 											};
 
@@ -69,7 +70,7 @@ t_bool					is_bash_pattern(t_range r, const t_bash_pattern *pattern)
 **   tokens to match on
 */
 
-t_bash_pattern_type		batch_match_pattern(t_range range)
+t_bash_pattern_type		bash_match_pattern(t_range range)
 {
 	const size_t		pat_list_size = sizeof(pat_list)/sizeof(pat_list[0]);
 	t_bash_pattern		*candidate;

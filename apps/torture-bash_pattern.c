@@ -37,7 +37,7 @@ int main (int argc, char **argv)
 			assert(*endptr == '\0');
 			assert(match_len > 0);
 
-			t_bash_pattern_type pattern = batch_match_pattern(range(0, match_len - 1));
+			t_bash_pattern_type pattern = bash_match_pattern(range(0, match_len - 1));
 			for_human = pattern_dump_type(pattern);
 			printf("%30s : %s\n", "MATCHED COMMAND", for_human);
 		}
