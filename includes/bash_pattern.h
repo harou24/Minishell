@@ -12,7 +12,7 @@ typedef void * t_vector;
 
 #define B_PAT_MAXLEN			128
 
-typedef enum					s_bash_pattern_type
+typedef enum					e_bash_pattern_type
 {
 	P_COMMAND,
 	P_ASSIGNMENT,
