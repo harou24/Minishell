@@ -12,10 +12,10 @@ project(
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
 	# global compilation standards
 	set(CMAKE_C_STANDARD 99)
-	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Werror -Wextra -pedantic")
+	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Werror -Wextra")
 	
 	set(CMAKE_CXX_STANDARD 98)
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -Wextra -pedantic")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -Wextra")
 
 	option(BUILD_TESTING "Build unittests and standlone torture 'apps' " ON)
 
