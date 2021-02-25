@@ -20,7 +20,7 @@ typedef struct	s_prompt
 t_prompt	*prompt_create(const char *_username, const char *_hostname);
 void		prompt_init_buffer(t_prompt *_prompt);
 void		prompt_init_indexes(t_prompt *_prompt);
-void		prompt_update_path(t_prompt *_prompt);
+void		prompt_update_current_path(t_prompt *_prompt);
 void		prompt_set_current_path(const char *_path);
 void 		prompt_set_error_code(t_prompt *_prompt, int _error_code);
 void		prompt_print(t_prompt *_prompt);
