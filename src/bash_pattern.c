@@ -3,8 +3,8 @@
 #include "bash_pattern.h"
 
 static const t_bash_pattern pat_list[] =	{
-												{ P_COMMAND, 2, {WORD, SPACE}, 2, {WORD, SPACE} },
-												{ P_ASSIGNMENT, 4, {WORD, SPACE, ASSIGNMENT, WORD}, 0, {} }
+												{ P_COMMAND, 2, {WORD, SPACE}, 3, {WORD, SPACE, ASSIGNMENT} },
+												{ P_ASSIGNMENT, 3, {WORD, ASSIGNMENT, WORD}, 0, {} }
 											};
 
 t_bool					match_token_to_type(t_token *token, const e_token_type type)
@@ -74,7 +74,8 @@ t_bash_pattern_type		batch_match_pattern(t_range range)
 	const size_t		pat_list_size = sizeof(pat_list)/sizeof(pat_list[0]);
 	t_bash_pattern		*candidate;
 	size_t				i;
-
+	
+	assert(range.end >= range.begin);
 	candidate = NULL;
 	i = 0;
 	while (i < pat_list_size)
@@ -91,4 +92,17 @@ t_bash_pattern_type		batch_match_pattern(t_range range)
 		i++;
 	}
 	return ((candidate == NULL) ? P_NO_TYPE : candidate->pattern_type);
+}
+
+char					*pattern_dump_type(t_bash_pattern_type type)
+{
+	switch (type)
+	{
+		case P_COMMAND:
+			return ("COMMAND");
+		case P_ASSIGNMENT:
+			return ("ASSIGNMENT");
+		default:
+			return (NULL);
+	}
 }
