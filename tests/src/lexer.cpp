@@ -83,22 +83,22 @@ TEST_CASE( "basic lexing", "[lexer]" ) {
 		const char *tokens;
 	};
 	static const s_tst tests[] =	{
-										{ "",						"" },
-										{ "a",						"WORD " },
-										{ " \a\b\r\t\f\v",			"SPACE " },
-										{ "echo a",					"WORD SPACE WORD " },
-										{ "\"\"",					"STRING STRING " },
-										{ "\'\'",					"LITERAL LITERAL " },
-										{ "a=5",					"WORD ASSIGNMENT WORD " },
-										{ "$a$",					"VARIABLE WORD VARIABLE " },
-										{ "a\n",					"WORD NEWLINE " },
-										{ "\"\\\"\"",				"STRING ESCAPE STRING STRING " },
-										{ "a   \n b",				"WORD SPACE NEWLINE SPACE WORD " },
-										{ "echo a | cat",			"WORD SPACE WORD SPACE PIPE SPACE WORD " },
-										{ "echo a ; echo b",		"WORD SPACE WORD SPACE SEMICOLON SPACE WORD SPACE WORD " },
-										{ "echo a >> f",			"WORD SPACE WORD SPACE OP_APPEND SPACE WORD " },
-										{ "echo a > f",				"WORD SPACE WORD SPACE OP_WRITE SPACE WORD " },
-										{ "cat < f",				"WORD SPACE OP_READ SPACE WORD " }
+										{ "",						"NULLBYTE " },
+										{ "a",						"WORD NULLBYTE " },
+										{ " \a\b\r\t\f\v",			"SPACE NULLBYTE " },
+										{ "echo a",					"WORD SPACE WORD NULLBYTE " },
+										{ "\"\"",					"STRING STRING NULLBYTE " },
+										{ "\'\'",					"LITERAL LITERAL NULLBYTE " },
+										{ "a=5",					"WORD ASSIGNMENT WORD NULLBYTE " },
+										{ "$a$",					"VARIABLE WORD VARIABLE NULLBYTE " },
+										{ "a\n",					"WORD NEWLINE NULLBYTE " },
+										{ "\"\\\"\"",				"STRING ESCAPE STRING STRING NULLBYTE " },
+										{ "a   \n b",				"WORD SPACE NEWLINE SPACE WORD NULLBYTE " },
+										{ "echo a | cat",			"WORD SPACE WORD SPACE PIPE SPACE WORD NULLBYTE " },
+										{ "echo a ; echo b",		"WORD SPACE WORD SPACE SEMICOLON SPACE WORD SPACE WORD NULLBYTE " },
+										{ "echo a >> f",			"WORD SPACE WORD SPACE OP_APPEND SPACE WORD NULLBYTE " },
+										{ "echo a > f",				"WORD SPACE WORD SPACE OP_WRITE SPACE WORD NULLBYTE " },
+										{ "cat < f",				"WORD SPACE OP_READ SPACE WORD NULLBYTE " }
 									};
 	lex_create();
 	const size_t testslen = sizeof(tests)/sizeof(s_tst);
