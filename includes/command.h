@@ -3,28 +3,16 @@
 
 typedef struct	s_command
 {
-		char	*input;
-		int	code_error;
+		char	*path;
 		char	**argv;
-		int	argc;
-		char	**env;
+		int		argc;
+		int		fd_in;
+		int		fd_out;
 }		t_command;
 
-t_command	*command_create(const char *_input, const char **env);
-void		command_execute(t_command *_command);
-int		command_get_code_error(t_command *_command);
-void		command_strerror_print(t_command *_command);
-void		command_destroy(t_command *_command);
+t_command	*command_create(const char *path, const char **argv, int argc);
+t_command	*command_destroy(t_command *_command);
 
-/*builtins*/
-
-int		command_run_builtins(t_command *_command);
-int		command_run_echo(t_command *_command);
-int		command_run_cd(t_command *_command);
-int		command_run_pwd(t_command *_command);
-int		command_run_unset(t_command *_command);
-int		command_run_export(t_command *_command);
-int		command_run_env(t_command *_command);
-int		command_run_exit(t_command *_command);
+void		command_set_fds(t_command *cmd, int fd_in, int fd_out);
 
 #endif

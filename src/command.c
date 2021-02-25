@@ -1,147 +1,37 @@
-#include "command.h"
-#include "libft.h"
-#include "get_next_line.h"
+#include <assert.h>
 #include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <errno.h>
-#include <string.h>
-#include <sys/wait.h>
+#include "libft.h"
+#include "command.h"
 
-t_command	*command_create(const char *_input, const char ***_env)
+t_command	*command_create(const char *path, const char **argv, int argc)
 {
-	t_command *command;
+	t_command *cmd;
 
-	command->input = ft_strdup(_input);
-	if (!command->input)
-		return (NULL);
-	command = ft_calloc(sizeof(t_command), 1);
-	if (!command)
-		return (NULL);
-	command->argv = ft_split(command->input, ' ');
-	if (!command->argv)
-		return (NULL);
-	command->code_error = 0;
-	command->argc = ft_arraylen((void **)command->argv);
-	command->env = &_env;
-	return(command);
-}
-
-void		command_execute(t_command *_command, char **_env)
-{
-	pid_t	pid;
-	int	status;
-
-	pid = fork();
-	if (pid == -1)
+	cmd = ft_calloc(sizeof(t_command), 1);
+	if (cmd)
 	{
-		_command->code_error = errno;
-		printf(strerror(errno));
+		cmd->path = (char *)path;
+		cmd->argv = (char **)argv;
+		cmd->argc = argc;
+		cmd->fd_in = STDIN;
+		cmd->fd_out = STDOUT;
 	}
-	else if (pid > 0)
+	return (cmd);
+}
+
+t_command	*command_destroy(t_command *cmd)
+{
+	if (cmd)
 	{
-		waitpid(pid, &status, 0);
-		kill(pid, SIGTERM);
+		free(cmd->path);
+		ft_array_destroy((void **)cmd->argv, cmd->argc);
 	}
-	else
-	{
-		if (execve(_command->argv[0], _command->argv, _env) == -1)
-		{
-			_command->code_error = errno;
-			printf(strerror(errno));
-			exit(EXIT_FAILURE);
-		}
-	}
+	return (NULL);
 }
 
-int		command_get_code_error(t_command *_command)
+void		command_set_fds(t_command *cmd, int fd_in, int fd_out)
 {
-	return (_command->code_error);
-}
-
-void		command_strerror_print(t_command *_command)
-{
-	printf("%s\n", strerror(_command->code_error));
-}
-
-void		command_destroy(t_command *_command)
-{
-	if (_command->input)
-		free(_command->input);
-	if (_command->output)
-		free(_command->output);
-	if (_command->argv)
-		ft_destroy_array((void **)_command->argv, sizeof(void*), _command->argc);
-	if (_command->env)
-		free(_command->env);
-	free(_command);
-}
-
-int		command_run_builtins(t_command *_command, char **_env)
-{
-	if (ft_strcmp(_command->argv[0], "echo") == 0)
-		return (command_run_echo(_command));
-	if (ft_strcmp(_command->argv[0], "cd") == 0)
-		return (command_run_cd(_command, _env));
-	if (ft_strcmp(_command->argv[0], "pwd") == 0)
-		return (command_run_pwd(_command));
-	if (ft_strcmp(_command->argv[0], "export") == 0)
-		return (command_run_export(_command));
-	if (ft_strcmp(_command->argv[0], "env") == 0)
-		return (command_run_env(_command));
-	if (ft_strcmp(_command->argv[0], "exit") == 0)
-		return (command_run_exit(_command));
-	return (0);
-}
-
-int	command_run_echo(t_command *_command)
-{
-	return (0);
-}
-
-int	command_run_cd(t_command *_command, char **_env)
-{
-	char	*home;
-	char	*pwd;
-
-	if (_command->argc == 1)
-	{
-		home = env_get_env_path("HOME");
-		_command->code_error = directory_change_dir(home);
-	}
-	else if (_command->argc == 2)
-	{
-		pwd = env_get_env_path("PWD");
-		if (ft_strcmp(_command->argv[1], ".") == 0)
-			_command->code_error = directory_change_dir(pwd);
-		else
-
-	}
-		
-	return (0);
-}
-
-int	command_run_pwd(t_command *_command)
-{
-	return (0);
-}
-
-int	command_run_unset(t_command *_command)
-{
-	return (0);
-}
-
-int	command_run_export(t_command *_command)
-{
-	return (0);
-}
-
-int	command_run_env(t_command *_command)
-{
-	return (0);
-}
-
-int	command_run_exit(t_command *_command)
-{
-	return (0);
+	assert(cmd);
+	cmd->fd_in = fd_in;
+	cmd->fd_out = fd_out;
 }
