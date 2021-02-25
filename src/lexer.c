@@ -1,3 +1,4 @@
+#include <assert.h>
 #include "vector.h"
 #include "lexer.h"
 #include "token.h"
@@ -38,6 +39,16 @@ t_token     *lex_get_next_token()
 	return (token_create(range(og_index, og_index + slen), og_type));
 }
 
+void		lex_add_nullbyte()
+{
+	t_token *token;
+
+	assert(g_lex__->input[g_lex__->index] == '\0');
+	token = token_create(range(g_lex__->index, g_lex__->index), NULLBYTE);
+	assert(token);
+	journal_push(token);
+}
+
 t_journal   *lex_build_journal(char *str)
 {
 	t_token *token;
@@ -47,6 +58,7 @@ t_journal   *lex_build_journal(char *str)
 	{
 		journal_push(token);
 	}
+	lex_add_nullbyte();
 	journal_build_linked_list();
 	return (g_lex__->journal);
 }
