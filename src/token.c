@@ -47,6 +47,8 @@ const char	*token_dump_type(e_token_type type)
 			return ("STRING");
 		case LITERAL:
 			return ("LITERAL");
+		case ASSIGNMENT:
+			return ("ASSIGNMENT");
 		case ESCAPE:
 			return ("ESCAPE");
 		case VARIABLE:

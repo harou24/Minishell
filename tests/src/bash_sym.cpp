@@ -29,7 +29,7 @@ TEST_CASE( "basics", "[bash_sym]" ) {
 	str = (char *)"word";
 	CHECK(bash_match(str, strlen(str)) == WORD);
 
-	str = (char *)"echo@%^()-=";
+	str = (char *)"echo@%^()-+_[]{}:,./?";
 	CHECK(bash_match(str, strlen(str)) == WORD);
 
 	str = (char *)"$";
@@ -40,4 +40,34 @@ TEST_CASE( "basics", "[bash_sym]" ) {
 
 	str = (char *)" ";
 	CHECK(bash_match(str, strlen(str)) == SPACE);
+
+	str = (char *)"\"";
+	CHECK(bash_match(str, strlen(str)) == STRING);
+
+	str = (char *)"\'";
+	CHECK(bash_match(str, strlen(str)) == LITERAL);
+
+	str = (char *)"=";
+	CHECK(bash_match(str, strlen(str)) == ASSIGNMENT);
+
+	str = (char *)"\\";
+	CHECK(bash_match(str, strlen(str)) == ESCAPE);
+
+	str = (char *)"|";
+	CHECK(bash_match(str, strlen(str)) == PIPE);
+
+	str = (char *)"\n";
+	CHECK(bash_match(str, strlen(str)) == NEWLINE);
+
+	str = (char *)";";
+	CHECK(bash_match(str, strlen(str)) == SEMICOLON);
+
+	str = (char *)"<";
+	CHECK(bash_match(str, strlen(str)) == OP_READ);
+
+	str = (char *)">>";
+	CHECK(bash_match(str, strlen(str)) == OP_APPEND);
+
+	str = (char *)">";
+	CHECK(bash_match(str, strlen(str)) == OP_WRITE);
 }

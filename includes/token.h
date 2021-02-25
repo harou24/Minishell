@@ -11,6 +11,7 @@ typedef enum		s_token_type
 					WORD,
 					STRING,
 					LITERAL,
+					ASSIGNMENT,
 					ESCAPE,
 					VARIABLE,
 					SPACE,
