@@ -48,9 +48,9 @@ t_bool		is_bash_sym(char *str, size_t len, const t_bash_sym *token)
 {
 	/* this doesnt follow open/closed principles */
 
-	if (token->style == EXACT)
+	if (token->match_style == EXACT)
 		return (is_bash_sym_exact(str, len, token));
-	if (token->style == FUZZY)
+	if (token->match_style == FUZZY)
 		return (is_bash_sym_fuzzy(str, len, token));
 	return (FALSE);
 }

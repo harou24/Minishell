@@ -6,7 +6,7 @@
 typedef struct					s_bash_sym
 {
 	const e_token_type			type;
-	const t_bool				style;
+	const int					match_style;
 	const char					*key;
 }								t_bash_sym;
 
