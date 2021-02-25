@@ -6,7 +6,10 @@
 typedef struct		s_range
 {
 	size_t			begin;
+	union {
 	size_t			end;
+	size_t			len;
+	};
 }					t_range;
 
 t_range				range(size_t begin, size_t end);
