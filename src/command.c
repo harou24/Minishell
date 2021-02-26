@@ -19,14 +19,16 @@ t_command	*command_create(const char *path, const char **argv, int argc)
 	return (cmd);
 }
 
-t_command	*command_destroy(t_command *cmd)
+t_command	*command_destroy(t_command **cmd)
 {
-	if (cmd)
+	if (!cmd)
+		return (NULL);
+	if (*cmd)
 	{
-		free(cmd->path);
-		ft_array_destroy((void **)cmd->argv, cmd->argc);
+		free((*cmd)->path);
+		ft_array_destroy((void **)(*cmd)->argv, (*cmd)->argc);
 	}
-	return (NULL);
+	return ((*cmd = NULL));
 }
 
 void		command_set_fds(t_command *cmd, int fd_in, int fd_out)

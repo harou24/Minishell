@@ -11,7 +11,7 @@ typedef struct	s_command
 }		t_command;
 
 t_command	*command_create(const char *path, const char **argv, int argc);
-t_command	*command_destroy(t_command *_command);
+t_command	*command_destroy(t_command **_command);
 
 void		command_set_fds(t_command *cmd, int fd_in, int fd_out);
 
