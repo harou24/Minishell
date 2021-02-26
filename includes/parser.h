@@ -1,12 +1,14 @@
 #ifndef PARSER_H
 # define PARSER_H
 
+#include "range.h"
 #include "journal.h"
 #include "execscheme.h"
 
 typedef struct		s_parser
 {
 	t_execscheme	*scheme;
+	t_range			matcharea;
 }					t_parser;
 
 t_execscheme		*parse();

@@ -1,6 +1,8 @@
 #include <assert.h>
 #include <stdlib.h>
 #include "libft.h"
+
+#include "bash_pattern.h"
 #include "parser.h"
 
 # define VEC_SIZE 128
@@ -188,16 +190,77 @@ t_bool			parse_should_expand_literals()
 t_bool			parse_expand()
 {
 	if (parse_should_expand_literals())
-		parse_expand_strings(LITERAL);
-	parse_expand_variables();
-	parse_expand_strings(STRING);
+	{
+		if (!parse_expand_strings(LITERAL))
+			return (FALSE);
+	}
+	if (!parse_expand_variables())
+		return (FALSE);
+	if (!parse_expand_strings(STRING))
+		return (FALSE);
 	return (TRUE);
+}
+
+t_bool			parse_keep_matching()
+{
+	return (g_parser__->matcharea.begin < g_parser__->matcharea.end);
+}
+
+t_execscheme	*parse_build_execscheme(t_range area)
+{
+	/* check for pipe, etc. -> set rel_type */
+	/* check if builtin / assignment / command -> set op_type */
+	/* build cmd / argv / argc */
+	(void)area;
+	return (NULL);
+}
+
+t_execscheme	*parse_get_next_scheme()
+{
+	t_range		my_area;
+
+	my_area = g_parser__->matcharea;
+
+	while (my_area.end > 0)
+	{
+		if (bash_match_pattern(range(my_area.begin, my_area.end - 1)) != P_NO_TYPE)
+		{
+			/* found a match */
+			g_parser__->matcharea.begin = my_area.end - 1;
+			return (parse_build_execscheme(my_area));
+		}
+		my_area.end--;
+	}
+	return (NULL);
+}
+
+void			parse_reset_match_area()
+{
+	g_parser__->matcharea = range(0, journal_size());
+}
+
+t_execscheme	*parse_generate_execschemes()
+{
+	t_execscheme *root;
+	t_execscheme *scheme;
+
+	root = NULL;
+	parse_reset_match_area();
+	while((scheme = parse_get_next_scheme()))
+	{
+		if (!root)
+			root = scheme;
+		else
+			execscheme_attach(root, scheme);
+	}
+	return (root);
 }
 
 t_execscheme	*parse()
 {
-	parse_expand();
-	return (NULL);
+	if (!parse_expand())
+		return (NULL);
+	return (parse_generate_execschemes());
 }
 
 t_parser	*parser_create()
