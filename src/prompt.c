@@ -105,12 +105,14 @@ char	*prompt_read(void)
 	return (command_line);
 }
 
-void	prompt_loop(void)
+void	prompt_loop(t_prompt *_prompt)
 {
 	char	*command_line;
 
 	while(1)
 	{
+		prompt_update(_prompt);
+		prompt_print(_prompt);
 		command_line = prompt_read();
 		if (ft_strcmp(command_line, "exit") == 0)
 			break ;
