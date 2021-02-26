@@ -3,6 +3,7 @@
 #include "directory.h"
 #include "prompt.h"
 #include "libft.h"
+#include "get_next_line.h"
 
 #define __PROMPT_BUFF_SIZE 255
 #define	__PROMPT_MAX_LENGTH 1024
@@ -26,7 +27,7 @@ t_prompt 	*prompt_create(const char *_username, const char *_hostname)
 		return (NULL);
 	}
 	prompt_init_indexes(prompt);
-	prompt_init_buffer(prompt);
+	prompt_prepare_buffer(prompt);
 	return (prompt);
 }
 
@@ -41,7 +42,7 @@ void	prompt_init_indexes(t_prompt *_prompt)
 	_prompt->bracket_index = _prompt->path_index + ft_strlen(_prompt->current_path);
 }
 
-void	prompt_init_buffer(t_prompt *_prompt)
+void	prompt_prepare_buffer(t_prompt *_prompt)
 {
 	if (_prompt->error_code != 0)
 		snprintf(_prompt->buffer, __ERROR_LENGTH, "%d", _prompt->error_code);
@@ -87,4 +88,32 @@ void	prompt_destroy(t_prompt *_prompt)
 	if (_prompt->buffer)
 		free(_prompt->buffer);
 	free(_prompt);
+}
+
+void	prompt_update(t_prompt *_prompt)
+{
+	prompt_update_current_path(_prompt);
+	prompt_prepare_buffer(_prompt);
+}
+
+char	*prompt_read(void)
+{
+	char	*command_line;
+
+	if (!(get_next_line(STDIN, &command_line) > 0))
+		return (NULL);
+	return (command_line);
+}
+
+void	prompt_loop(void)
+{
+	char	*command_line;
+
+	while(1)
+	{
+		command_line = prompt_read();
+		if (ft_strcmp(command_line, "exit") == 0)
+			break ;
+	}
+	free(command_line);
 }
