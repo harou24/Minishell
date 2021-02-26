@@ -1,6 +1,17 @@
+#include <assert.h>
 #include <stdlib.h>
 #include "libft.h"
 #include "execscheme.h"
+
+void			execscheme_attach(t_execscheme *root, t_execscheme *scheme)
+{
+	assert(root);
+	assert(scheme);
+
+	while (root->next)
+		root = root->next;
+	root->next = scheme;
+}
 
 t_execscheme	*execscheme_create()
 {
@@ -18,6 +29,10 @@ t_execscheme	*execscheme_destroy(t_execscheme **execscheme)
 {
 	if (!execscheme)
 		return (NULL);
-	free(*execscheme);
+	if (*execscheme)
+	{
+		command_destroy(&(*execscheme)->cmd);
+		free(*execscheme);
+	}
 	return ((*execscheme = NULL));
 }
