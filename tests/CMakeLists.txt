@@ -4,16 +4,22 @@ FetchContent_Declare(
   GIT_TAG        v2.13.4)
 FetchContent_MakeAvailable(Catch2)
 
-## All unittests
-set (TEST "test-all")
-file(GLOB SRC_LIST CONFIGURE_DEPENDS "src/*.cpp")
 
-add_executable(${TEST}.bin ${SRC_LIST})
-target_compile_features(${TEST}.bin PRIVATE cxx_std_14)
-target_link_libraries(${TEST}.bin PRIVATE Catch2::Catch2WithMain)
-target_link_libraries(${TEST}.bin PRIVATE minishell ft vector hashmap gnl printf)
-add_test(NAME ${TEST}
-		COMMAND ${TEST}.bin)
+#### Combined unittest
+
+if((CMAKE_PROJECT_NAME STREQUAL minishell OR MODERN_CMAKE_BUILD_TESTING))
+  set (TEST "test-all")
+  file(GLOB SRC_LIST CONFIGURE_DEPENDS "src/*.cpp")
+  
+  add_executable(${TEST}.bin ${SRC_LIST})
+  target_compile_features(${TEST}.bin PRIVATE cxx_std_14)
+  target_link_libraries(${TEST}.bin PRIVATE Catch2::Catch2WithMain)
+  target_link_libraries(${TEST}.bin PRIVATE minishell ft vector hashmap gnl printf)
+  add_test(NAME ${TEST}
+  		COMMAND ${TEST}.bin)
+endif()
+
+#### Individual unittests
 
 ## Lexer unittest
 set (TEST "test-lexer")
@@ -62,6 +68,17 @@ add_test(NAME ${TEST}
 ## Bash symbols unittest
 set (TEST "test-bash_sym")
 set (SRC_LIST "src/bash_sym.cpp")
+
+add_executable(${TEST}.bin ${MAIN} ${SRC_LIST})
+target_compile_features(${TEST}.bin PRIVATE cxx_std_14)
+target_link_libraries(${TEST}.bin PRIVATE Catch2::Catch2WithMain)
+target_link_libraries(${TEST}.bin PRIVATE minishell ft vector hashmap gnl printf)
+add_test(NAME ${TEST}
+		COMMAND ${TEST}.bin)
+
+## Bash pattern unittest
+set (TEST "test-bash_pattern")
+set (SRC_LIST "src/bash_pattern.cpp")
 
 add_executable(${TEST}.bin ${MAIN} ${SRC_LIST})
 target_compile_features(${TEST}.bin PRIVATE cxx_std_14)

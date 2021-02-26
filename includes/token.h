@@ -21,6 +21,7 @@ typedef enum		s_token_type
 					OP_READ,
 					OP_APPEND,
 					OP_WRITE,
+					NULLBYTE,
 					NO_TYPE,
 					TOKEN_TYPE_SIZE
 }					e_token_type;

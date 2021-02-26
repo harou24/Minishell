@@ -12,4 +12,7 @@ if(BUILD_TESTING)
 
 	add_executable(torture-parser.bin torture-parser.c)
 	target_link_libraries(torture-parser.bin PRIVATE minishell ft hashmap vector)
+
+	add_executable(torture-bash_pattern.bin torture-bash_pattern.c)
+	target_link_libraries(torture-bash_pattern.bin PRIVATE minishell ft hashmap vector)
 endif()

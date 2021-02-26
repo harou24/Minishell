@@ -42,36 +42,36 @@ TEST_CASE("ranges", "[lexer]") {
 
 	/* get every token and manually verify range*/
 	t_token *token;
-	t_range	range;
+	t_range	r;
 	char	*notre_r_str;
 	char	*votre_r_str;
 
 	token = journal_creeper_next();
 	REQUIRE(token != NULL);
-	range = {0, 2};
-	notre_r_str = range_dump(range);
+	r = range(0, 2);
+	notre_r_str = range_dump(r);
 	votre_r_str = range_dump(token->range);
 	printf("range : notre %s votre %s\n", notre_r_str, votre_r_str);
 	free(notre_r_str); free(votre_r_str);
-	CHECK(range_cmp(range, token->range) == 0);
+	CHECK(range_cmp(r, token->range) == 0);
 	
 	token = journal_creeper_next();
 	REQUIRE(token != NULL);
-	range = {3, 3};
-	notre_r_str = range_dump(range);
+	r = range(3, 3);
+	notre_r_str = range_dump(r);
 	votre_r_str = range_dump(token->range);
 	printf("range : notre %s votre %s\n", notre_r_str, votre_r_str);
 	free(notre_r_str); free(votre_r_str);
-	CHECK(range_cmp(range, token->range) == 0);
+	CHECK(range_cmp(r, token->range) == 0);
 
 	token = journal_creeper_next();
 	REQUIRE(token != NULL);
-	range = {4, 6};
-	notre_r_str = range_dump(range);
+	r = range(4, 6);
+	notre_r_str = range_dump(r);
 	votre_r_str = range_dump(token->range);
 	printf("range : notre %s votre %s\n", notre_r_str, votre_r_str);
 	free(notre_r_str); free(votre_r_str);
-	CHECK(range_cmp(range, token->range) == 0);
+	CHECK(range_cmp(r, token->range) == 0);
 	
 	CHECK(lex_destroy(&lexer) == NULL);
 	CHECK(lexer == NULL);
@@ -83,22 +83,22 @@ TEST_CASE( "basic lexing", "[lexer]" ) {
 		const char *tokens;
 	};
 	static const s_tst tests[] =	{
-										{ "",						"" },
-										{ "a",						"WORD " },
-										{ " \a\b\r\t\f\v",			"SPACE " },
-										{ "echo a",					"WORD SPACE WORD " },
-										{ "\"\"",					"STRING STRING " },
-										{ "\'\'",					"LITERAL LITERAL " },
-										{ "a=5",					"WORD ASSIGNMENT WORD " },
-										{ "$a$",					"VARIABLE WORD VARIABLE " },
-										{ "a\n",					"WORD NEWLINE " },
-										{ "\"\\\"\"",				"STRING ESCAPE STRING STRING " },
-										{ "a   \n b",				"WORD SPACE NEWLINE SPACE WORD " },
-										{ "echo a | cat",			"WORD SPACE WORD SPACE PIPE SPACE WORD " },
-										{ "echo a ; echo b",		"WORD SPACE WORD SPACE SEMICOLON SPACE WORD SPACE WORD " },
-										{ "echo a >> f",			"WORD SPACE WORD SPACE OP_APPEND SPACE WORD " },
-										{ "echo a > f",				"WORD SPACE WORD SPACE OP_WRITE SPACE WORD " },
-										{ "cat < f",				"WORD SPACE OP_READ SPACE WORD " }
+										{ "",						"NULLBYTE " },
+										{ "a",						"WORD NULLBYTE " },
+										{ " \a\b\r\t\f\v",			"SPACE NULLBYTE " },
+										{ "echo a",					"WORD SPACE WORD NULLBYTE " },
+										{ "\"\"",					"STRING STRING NULLBYTE " },
+										{ "\'\'",					"LITERAL LITERAL NULLBYTE " },
+										{ "a=5",					"WORD ASSIGNMENT WORD NULLBYTE " },
+										{ "$a$",					"VARIABLE WORD VARIABLE NULLBYTE " },
+										{ "a\n",					"WORD NEWLINE NULLBYTE " },
+										{ "\"\\\"\"",				"STRING ESCAPE STRING STRING NULLBYTE " },
+										{ "a   \n b",				"WORD SPACE NEWLINE SPACE WORD NULLBYTE " },
+										{ "echo a | cat",			"WORD SPACE WORD SPACE PIPE SPACE WORD NULLBYTE " },
+										{ "echo a ; echo b",		"WORD SPACE WORD SPACE SEMICOLON SPACE WORD SPACE WORD NULLBYTE " },
+										{ "echo a >> f",			"WORD SPACE WORD SPACE OP_APPEND SPACE WORD NULLBYTE " },
+										{ "echo a > f",				"WORD SPACE WORD SPACE OP_WRITE SPACE WORD NULLBYTE " },
+										{ "cat < f",				"WORD SPACE OP_READ SPACE WORD NULLBYTE " }
 									};
 	lex_create();
 	const size_t testslen = sizeof(tests)/sizeof(s_tst);
