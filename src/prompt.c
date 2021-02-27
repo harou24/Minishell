@@ -53,7 +53,7 @@ void	prompt_prepare_buffer(t_prompt *_prompt)
 	snprintf(_prompt->buffer + _prompt->host_index, ft_strlen(_prompt->hostname) + 1, "%s", _prompt->hostname);
 	snprintf(_prompt->buffer + _prompt->colon_index, 2, ":");
 	snprintf(_prompt->buffer + _prompt->path_index, ft_strlen(_prompt->current_path) + 1, "%s", _prompt->current_path);
-	snprintf(_prompt->buffer + _prompt->bracket_index, 2, ">");
+	snprintf(_prompt->buffer + _prompt->bracket_index, 3, "> ");
 }
 
 void	prompt_update_current_path(t_prompt *_prompt)
@@ -73,7 +73,7 @@ void	set_current_path(t_prompt *_prompt, const char *_path)
 
 void 	prompt_print(t_prompt *_prompt)
 {
-	printf("%s", _prompt->buffer);
+	dprintf(2, "%s", _prompt->buffer);
 }
 
 void	prompt_destroy(t_prompt *_prompt)
@@ -92,7 +92,7 @@ void	prompt_destroy(t_prompt *_prompt)
 
 void	prompt_update(t_prompt *_prompt)
 {
-	prompt_update_current_path(_prompt);
+/*prompt_update_current_path(_prompt);*/
 	prompt_prepare_buffer(_prompt);
 }
 
@@ -105,17 +105,27 @@ char	*prompt_read(void)
 	return (command_line);
 }
 
+void	prompt_clear_buffer(t_prompt *_prompt)
+{
+	free(_prompt->buffer);
+}
+
 void	prompt_loop(t_prompt *_prompt)
 {
 	char	*command_line;
-
+	
+	command_line = NULL;
 	while(1)
 	{
 		prompt_update(_prompt);
 		prompt_print(_prompt);
 		command_line = prompt_read();
 		if (ft_strcmp(command_line, "exit") == 0)
-			break ;
+		{	free(command_line);
+			break;
+		}
+		else
+			dprintf(2, "%s\n", command_line);/*execute the command ??*/
+		free(command_line);
 	}
-	free(command_line);
 }
