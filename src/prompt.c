@@ -58,7 +58,11 @@ void	prompt_prepare_buffer(t_prompt *_prompt)
 
 void	prompt_update_current_path(t_prompt *_prompt)
 {
-	_prompt->current_path = directory_get_current_dir();	
+	char *old;
+
+	old = _prompt->current_path;
+	_prompt->current_path = directory_get_current_dir();
+	free(old);
 }
 
 void	prompt_set_error_code(t_prompt *_prompt, int _error_code)
@@ -92,7 +96,7 @@ void	prompt_destroy(t_prompt *_prompt)
 
 void	prompt_update(t_prompt *_prompt)
 {
-/*prompt_update_current_path(_prompt);*/
+	prompt_update_current_path(_prompt);
 	prompt_prepare_buffer(_prompt);
 }
 
@@ -103,11 +107,6 @@ char	*prompt_read(void)
 	if (!(get_next_line(STDIN, &command_line) > 0))
 		return (NULL);
 	return (command_line);
-}
-
-void	prompt_clear_buffer(t_prompt *_prompt)
-{
-	free(_prompt->buffer);
 }
 
 void	prompt_loop(t_prompt *_prompt)

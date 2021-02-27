@@ -28,6 +28,5 @@ void		prompt_destroy(t_prompt *_prompt);
 void		prompt_update(t_prompt *_prompt);
 char		*prompt_read(void);
 void		prompt_loop(t_prompt *_prompt);
-void		prompt_clear_buffer(t_prompt *_prompt);
 
 #endif
