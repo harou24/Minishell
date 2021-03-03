@@ -208,11 +208,18 @@ t_bool			parse_keep_matching()
 
 t_execscheme	*parse_build_execscheme(t_range area)
 {
-	/* check for pipe, etc. -> set rel_type */
-	/* check if builtin / assignment / command -> set op_type */
-	/* build cmd / argv / argc */
-	(void)area;
-	return (NULL);
+	t_execscheme *scheme;
+
+	scheme = execscheme_create();
+	if (scheme)
+	{
+		scheme->relation_type = execscheme_get_relation_type_for_token(journal_get(area.end));
+		scheme->op_type = execscheme_get_op_type_for_token(journal_get(area.begin));
+		assert(scheme->relation_type == REL_PIPE);
+		assert(!"GOOD");
+		/* build cmd / argv / argc */
+	}
+	return (scheme);
 }
 
 t_execscheme	*parse_get_next_scheme()
@@ -226,7 +233,7 @@ t_execscheme	*parse_get_next_scheme()
 		if (bash_match_pattern(range(my_area.begin, my_area.end - 1)) != P_NO_TYPE)
 		{
 			/* found a match */
-			g_parser__->matcharea.begin = my_area.end - 1;
+			g_parser__->matcharea.begin = my_area.end - 1; /* .end is a length ? */
 			return (parse_build_execscheme(my_area));
 		}
 		my_area.end--;
