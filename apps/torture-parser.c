@@ -21,7 +21,10 @@ int main (int argc, char **argv)
 				free(for_human);
 
 				//parse_expand_strings(journal_create());
-				parse(journal_create());
+				if (!parse(journal_create())) {
+					printf("%30s\n", "PARSE FAILED");
+					break;
+				}
 
 				for_human = journal_dump_tokens();
 				printf("%30s : %s\n", "POST-PARSE TOKENS", for_human);
