@@ -89,10 +89,12 @@ void	prompt_destroy(t_prompt *_prompt)
 	free(_prompt);
 }
 
-void	prompt_update(t_prompt *_prompt)
+int	prompt_update(t_prompt *_prompt)
 {
-	prompt_update_current_path(_prompt);
+	if (!prompt_update_current_path(_prompt))
+		return (0);
 	prompt_prepare_buffer(_prompt);
+	return (1);
 }
 
 char	*prompt_read(void)
