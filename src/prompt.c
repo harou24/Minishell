@@ -108,23 +108,3 @@ char	*prompt_read(void)
 		return (NULL);
 	return (command_line);
 }
-
-void	prompt_loop(t_prompt *_prompt)
-{
-	char	*command_line;
-	
-	command_line = NULL;
-	while(1)
-	{
-		prompt_update(_prompt);
-		prompt_print(_prompt);
-		command_line = prompt_read();
-		if (ft_strcmp(command_line, "exit") == 0)
-		{	free(command_line);
-			break;
-		}
-		else
-			dprintf(2, "%s\n", command_line);/*execute the command ??*/
-		free(command_line);
-	}
-}
