@@ -1,4 +1,4 @@
-#include <stdio.h>
+#include <ft_printf.h>
 #include <stdlib.h>
 #include "directory.h"
 #include "prompt.h"
@@ -45,15 +45,15 @@ void	prompt_init_indexes(t_prompt *_prompt)
 void	prompt_prepare_buffer(t_prompt *_prompt)
 {
 	if (_prompt->error_code != 0)
-		snprintf(_prompt->buffer, __ERROR_LENGTH, "%d", _prompt->error_code);
+		ft_snprintf(_prompt->buffer, __ERROR_LENGTH, "%d", _prompt->error_code);
 	else
-		snprintf(_prompt->buffer, __ERROR_LENGTH, "---");
-	snprintf(_prompt->buffer + _prompt->user_index, ft_strlen(_prompt->username) + 1, "%s", _prompt->username);
-	snprintf(_prompt->buffer + _prompt->at_index , 2, "@");
-	snprintf(_prompt->buffer + _prompt->host_index, ft_strlen(_prompt->hostname) + 1, "%s", _prompt->hostname);
-	snprintf(_prompt->buffer + _prompt->colon_index, 2, ":");
-	snprintf(_prompt->buffer + _prompt->path_index, ft_strlen(_prompt->current_path) + 1, "%s", _prompt->current_path);
-	snprintf(_prompt->buffer + _prompt->bracket_index, 3, "> ");
+		ft_snprintf(_prompt->buffer, __ERROR_LENGTH, "---");
+	ft_snprintf(_prompt->buffer + _prompt->user_index, ft_strlen(_prompt->username) + 1, "%s", _prompt->username);
+	ft_snprintf(_prompt->buffer + _prompt->at_index , 2, "@");
+	ft_snprintf(_prompt->buffer + _prompt->host_index, ft_strlen(_prompt->hostname) + 1, "%s", _prompt->hostname);
+	ft_snprintf(_prompt->buffer + _prompt->colon_index, 2, ":");
+	ft_snprintf(_prompt->buffer + _prompt->path_index, ft_strlen(_prompt->current_path) + 1, "%s", _prompt->current_path);
+	ft_snprintf(_prompt->buffer + _prompt->bracket_index, 3, "> ");
 }
 
 void	prompt_update_current_path(t_prompt *_prompt)
@@ -77,7 +77,7 @@ void	set_current_path(t_prompt *_prompt, const char *_path)
 
 void 	prompt_print(t_prompt *_prompt)
 {
-	dprintf(2, "%s", _prompt->buffer);
+	ft_dprintf(2, "%s", _prompt->buffer);
 }
 
 void	prompt_destroy(t_prompt *_prompt)
