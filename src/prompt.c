@@ -56,13 +56,13 @@ void	prompt_prepare_buffer(t_prompt *_prompt)
 	ft_snprintf(_prompt->buffer + _prompt->bracket_index, 3, "> ");
 }
 
-void	prompt_update_current_path(t_prompt *_prompt)
+int	prompt_update_current_path(t_prompt *_prompt)
 {
-	char *old;
-
-	old = _prompt->current_path;
+	free(_prompt->current_path);
 	_prompt->current_path = directory_get_current_dir();
-	free(old);
+	if (!_prompt->current_path)
+		return (0);
+	return (1);
 }
 
 void	prompt_set_error_code(t_prompt *_prompt, int _error_code)
