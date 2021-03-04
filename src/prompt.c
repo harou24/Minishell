@@ -82,15 +82,10 @@ void 	prompt_print(t_prompt *_prompt)
 
 void	prompt_destroy(t_prompt *_prompt)
 {
-
-	if (_prompt->username)
-		free(_prompt->username);
-	if (_prompt->hostname)
-		free(_prompt->hostname);
-	if (_prompt->current_path)
-		free(_prompt->current_path);
-	if (_prompt->buffer)
-		free(_prompt->buffer);
+	free(_prompt->username);
+	free(_prompt->hostname);
+	free(_prompt->current_path);
+	free(_prompt->buffer);
 	free(_prompt);
 }
 
