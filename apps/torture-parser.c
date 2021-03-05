@@ -21,10 +21,13 @@ int main (int argc, char **argv)
 				free(for_human);
 
 				//parse_expand_strings(journal_create());
-				if (!parse(journal_create())) {
+				t_execscheme *rootscheme;
+				rootscheme = parse(journal_create());
+				if (!rootscheme) {
 					printf("%30s\n", "PARSE FAILED");
 					break;
 				}
+				execscheme_pretty_dump(rootscheme, 15);
 
 				for_human = journal_dump_tokens();
 				printf("%30s : %s\n", "POST-PARSE TOKENS", for_human);
