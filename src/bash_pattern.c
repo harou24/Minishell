@@ -3,9 +3,14 @@
 #include "bash_pattern.h"
 
 static const t_bash_pattern pat_list[] =	{
+												{ P_COMMAND, 3, {SPACE, WORD, SPACE}, 4, {WORD, SPACE, ASSIGNMENT, NULLBYTE} },
 												{ P_COMMAND, 2, {WORD, SPACE}, 4, {WORD, SPACE, ASSIGNMENT, NULLBYTE} },
-												{ P_COMMAND, 2, {WORD, NULLBYTE}, 0, {} },
-												{ P_ASSIGNMENT, 3, {WORD, ASSIGNMENT, WORD}, 0, {} }
+												{ P_PATH, 3, {SPACE, WORD, NULLBYTE}, 0, {} },
+												{ P_PATH, 2, {WORD, NULLBYTE}, 0, {} },
+												{ P_ASSIGNMENT, 4, {SPACE, WORD, ASSIGNMENT, WORD}, 0, {} },
+												{ P_ASSIGNMENT, 3, {WORD, ASSIGNMENT, WORD}, 0, {} },
+												{ P_ASSIGNMENT, 3, {SPACE, WORD, ASSIGNMENT}, 0, {} },
+												{ P_ASSIGNMENT, 2, {WORD, ASSIGNMENT}, 0, {} }
 											};
 
 t_bool					match_token_to_type(t_token *token, const e_token_type type)
@@ -101,8 +106,12 @@ char					*pattern_dump_type(t_bash_pattern_type type)
 	{
 		case P_COMMAND:
 			return ("COMMAND");
+		case P_PATH:
+			return ("PATH");
 		case P_ASSIGNMENT:
 			return ("ASSIGNMENT");
+		case P_NO_TYPE:
+			return ("NO_TYPE");
 		default:
 			return (NULL);
 	}
