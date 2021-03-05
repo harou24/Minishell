@@ -101,6 +101,7 @@ char	*prompt_read(void)
 {
 	char	*command_line;
 
+	command_line = NULL;
 	if (!(get_next_line(STDIN, &command_line) > 0))
 	{
 		free(command_line);
