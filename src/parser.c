@@ -206,7 +206,78 @@ t_bool			parse_keep_matching()
 	return (g_parser__->matcharea.begin < g_parser__->matcharea.end);
 }
 
-t_execscheme	*parse_build_execscheme(t_range area)
+char			*parse_build_argument(size_t index)
+{
+	t_token		*token;
+	char		*arg;
+
+	token = journal_get(index);
+	assert(token);
+	if (token && token->type != SPACE && token->type != NULLBYTE)
+	{
+		arg = journal_get_string_for_index(index);
+		assert(arg);
+		return (arg);
+	}
+	return (NULL);
+}
+
+char			*parse_build_path(t_range *area)
+{
+	if (journal_at_index_is_type(area->begin, SPACE))
+	{
+		area->begin += 1;
+		return (journal_get_string_for_index(area->begin));
+	}
+	else
+	{
+		return (journal_get_string_for_index(area->begin));
+	}
+}
+
+t_argv			*parse_build_argv(t_range area)
+{
+	char		*arg;
+	int			len;
+	t_argv		*argv;
+
+	len = range_len(area);
+	argv = argv_create(len);
+	if (argv)
+	{
+		printf("parse_build_argv, adding arg: ");
+		while (len > 0)
+		{
+			arg = parse_build_argument(area.begin);
+			if (arg)
+			{
+				printf(" \'%s\'", arg);
+				argv_push(argv, arg);
+			}
+			area.begin++;
+			len--;
+		}
+	}
+	printf(" : argc : %i\n", argv->argc);
+	return (argv);
+}
+
+t_command		*parse_build_command(t_range area)
+{
+	char		*path;
+	t_argv		*argv;
+	t_command	*command;
+
+	path = parse_build_path(&area);
+	argv = parse_build_argv(range(area.begin + 1, area.end));
+	command = command_create(path, argv);
+
+	/* handle non-default file descriptors for command */
+
+	return (command);
+}
+
+t_execscheme	*parse_build_execscheme(t_range area, t_bash_pattern_type pat_type)
 {
 	t_execscheme *scheme;
 
@@ -214,27 +285,33 @@ t_execscheme	*parse_build_execscheme(t_range area)
 	if (scheme)
 	{
 		scheme->relation_type = execscheme_get_relation_type_for_token(journal_get(area.end));
-		scheme->op_type = execscheme_get_op_type_for_token(journal_get(area.begin));
-		assert(scheme->relation_type == REL_PIPE);
-		assert(!"GOOD");
-		/* build cmd / argv / argc */
+		scheme->op_type = (pat_type == P_PATH) ? OP_PATH : execscheme_get_op_type_for_token(journal_get(area.begin));
+
+		printf("found relation type: %s\n", execscheme_dump_relation_type(scheme->relation_type));
+		scheme->cmd = parse_build_command(area);
+		assert(scheme->cmd);
 	}
 	return (scheme);
 }
 
 t_execscheme	*parse_get_next_scheme()
 {
-	t_range		my_area;
+	t_range				my_area;
+	t_bash_pattern_type	pat_type;
 
 	my_area = g_parser__->matcharea;
 
-	while (my_area.end > 0)
+	/*assert(my_area.end > my_area.begin); */
+	while (my_area.end > my_area.begin)
 	{
-		if (bash_match_pattern(range(my_area.begin, my_area.end - 1)) != P_NO_TYPE)
+		pat_type = bash_match_pattern(range(my_area.begin, my_area.end - 1));
+		if (pat_type != P_NO_TYPE) /* minus 1 ??? */
 		{
 			/* found a match */
-			g_parser__->matcharea.begin = my_area.end - 1; /* .end is a length ? */
-			return (parse_build_execscheme(my_area));
+			printf("FOUND A MATCH for ");
+			parse_dump_match_area(range(my_area.begin, my_area.end));
+			g_parser__->matcharea.begin = my_area.end + 1; /* minus 1 ???? */
+			return (parse_build_execscheme(my_area, pat_type));
 		}
 		my_area.end--;
 	}
@@ -246,6 +323,15 @@ void			parse_reset_match_area()
 	g_parser__->matcharea = range(0, journal_size());
 }
 
+void			parse_dump_match_area(t_range area)
+{
+	char *range = range_dump(area);
+	char *tokens = journal_dump_tokens_for_range(area);
+	printf("match range: %s, tokens: %s\n", range, tokens);
+	free(range);
+	free(tokens);
+}
+
 t_execscheme	*parse_generate_execschemes()
 {
 	t_execscheme *root;
@@ -253,8 +339,14 @@ t_execscheme	*parse_generate_execschemes()
 
 	root = NULL;
 	parse_reset_match_area();
+	
+	printf("initial ");
+	parse_dump_match_area(g_parser__->matcharea);
+
 	while((scheme = parse_get_next_scheme()))
 	{
+		printf("a scheme was build!, next area : ");
+		parse_dump_match_area(g_parser__->matcharea);
 		if (!root)
 			root = scheme;
 		else
@@ -267,7 +359,9 @@ t_execscheme	*parse()
 {
 	if (!parse_expand())
 		return (NULL);
-	return (parse_generate_execschemes());
+	g_parser__->rootscheme = parse_generate_execschemes();
+
+	return (g_parser__->rootscheme);
 }
 
 t_parser	*parser_create()
@@ -287,7 +381,7 @@ t_parser	*parser_destroy(t_parser **parser)
 {
 	if (!g_parser__)
 		return (NULL);
-	execscheme_destroy(&g_parser__->scheme);
+	execscheme_destroy(&g_parser__->rootscheme);
 	free(g_parser__);
 	g_parser__ = NULL;
 	if (parser)

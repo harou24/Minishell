@@ -7,7 +7,7 @@
 
 typedef struct		s_parser
 {
-	t_execscheme	*scheme;
+	t_execscheme	*rootscheme;
 	t_range			matcharea;
 }					t_parser;
 
@@ -31,5 +31,7 @@ t_bool				parse_expand_variables();
 
 t_bool				parse_should_expand_literals();
 t_bool				parse_expand();
+
+void				parse_dump_match_area(t_range area);
 
 #endif
