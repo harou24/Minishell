@@ -12,12 +12,14 @@ typedef enum				e_exec_relation_type
 	REL_APPEND,
 	REL_WRITE,
 	REL_NO_TYPE,
-	REL_TAB_SIZE
+	REL_TAB_SIZE,
+	REL_END
 }							t_exec_relation_type;
 
 typedef enum				e_exec_op_type
 {
 	OP_COMMAND,
+	OP_PATH,
 	OP_ASSIGNMENT,
 	OP_BUILTIN_ECHO,
 	OP_BUILTIN_CD,
@@ -47,4 +49,8 @@ t_execscheme				*execscheme_destroy(t_execscheme **execscheme);
 t_exec_relation_type		execscheme_get_relation_type_for_token(t_token *token);
 t_exec_op_type				execscheme_get_op_type_for_token(t_token *token);
 
+const char					*execscheme_dump_op_type(t_exec_op_type type);
+const char					*execscheme_dump_relation_type(t_exec_relation_type type);
+
+void						execscheme_pretty_dump(t_execscheme *root, int indent);
 #endif
