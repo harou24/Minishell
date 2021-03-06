@@ -6,7 +6,7 @@
 
 typedef enum				e_exec_relation_type
 {
-	REL_SIMPLE,
+	REL_SEQ,
 	REL_PIPE,
 	REL_READ,
 	REL_APPEND,

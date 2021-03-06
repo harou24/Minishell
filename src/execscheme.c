@@ -7,20 +7,20 @@
 #include "execscheme.h"
 
 static const t_exec_relation_type g_reltok_tab__[TOKEN_TYPE_SIZE] =	{
-					[WORD] = REL_SIMPLE,
-					[STRING] = REL_SIMPLE,
-					[LITERAL] = REL_SIMPLE,
-					[ASSIGNMENT] = REL_SIMPLE,
-					[ESCAPE] = REL_SIMPLE,
-					[VARIABLE] = REL_SIMPLE,
-					[SPACE] = REL_SIMPLE,
+					[WORD] = REL_SEQ,
+					[STRING] = REL_SEQ,
+					[LITERAL] = REL_SEQ,
+					[ASSIGNMENT] = REL_SEQ,
+					[ESCAPE] = REL_SEQ,
+					[VARIABLE] = REL_SEQ,
+					[SPACE] = REL_SEQ,
 					[PIPE] = REL_PIPE,
-					[NEWLINE] = REL_SIMPLE,
-					[SEMICOLON] = REL_SIMPLE,
+					[NEWLINE] = REL_SEQ,
+					[SEMICOLON] = REL_SEQ,
 					[OP_READ] = REL_READ,
 					[OP_APPEND] = REL_APPEND,
 					[OP_WRITE] = REL_WRITE,
-					[NULLBYTE] = REL_SIMPLE,
+					[NULLBYTE] = REL_SEQ,
 					[NO_TYPE] = REL_NO_TYPE
 				};
 
@@ -138,8 +138,8 @@ const char		*execscheme_dump_relation_type(t_exec_relation_type type)
 {
 	switch (type)
 	{
-		case REL_SIMPLE:
-			return ("REL_SIMPLE");
+		case REL_SEQ:
+			return ("REL_SEQ");
 		case REL_PIPE:
 			return ("REL_PIPE");
 		case REL_READ:
