@@ -3,18 +3,22 @@
 
 #include "range.h"
 #include "journal.h"
+#include "env.h"
 #include "execscheme.h"
 
 typedef struct		s_parser
 {
 	t_execscheme	*rootscheme;
 	t_range			matcharea;
+	t_env			*env;
 }					t_parser;
 
 t_execscheme		*parse();
 
 t_parser			*parser_create();
 t_parser			*parser_destroy(t_parser **parser);
+
+void				parser_set_env(t_env *env);
 
 t_vector			parse_get_subtokens(t_token *first, t_token *last);
 void				parse_replace_tokens_with_token(t_vector tokens, t_token *first, t_token *last, t_token *token);

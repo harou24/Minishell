@@ -116,8 +116,15 @@ char			*parse_retreive_var_from_env_for_token(t_token *token)
 	key = ft_strsub(journal_get_input_str(), token->range.begin, 1 + token->range.end - token->range.begin);
 	assert(key);
 
-	/* env call here */
-	var = ft_strdup("PLACEHOLDER");
+	assert(g_parser__->env);
+	var = env_get(g_parser__->env, key);
+	if (!var)
+	{
+		/*
+		ft_printf("parser: var not found for key '%s'\n", key);
+		*/
+		var = ft_strdup("");
+	}
 
 	free(key);
 	return(var);
@@ -398,4 +405,11 @@ t_parser	*parser_destroy(t_parser **parser)
 	if (parser)
 		*parser = NULL;
 	return ((g_parser__ = NULL));
+}
+
+void		parser_set_env(t_env *env)
+{
+	assert(g_parser__);
+	assert(! g_parser__->env);
+	g_parser__->env = env;
 }
