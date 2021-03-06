@@ -28,8 +28,6 @@ int main (int argc, char **argv)
 			}
 			else
 			{
-				journal_remove_tokens_with_type(SPACE);
-
 				for_human = journal_dump_tokens();
 				printf("%30s : %s\n", "POST-PARSE TOKENS", for_human);
 				free(for_human);
