@@ -15,6 +15,7 @@ typedef struct		s_range
 
 t_range				range(size_t begin, size_t end);
 t_bool				in_range(t_range range, size_t index);
+int					range_len(t_range r);
 int					range_cmp(t_range a, t_range b);
 char				*range_dump(t_range r);
 

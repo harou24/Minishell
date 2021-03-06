@@ -2,10 +2,32 @@
 #include <assert.h>
 #include "bash_pattern.h"
 
+/*
+** Bash Patterns
+** matching works as follows:
+**   - the matcher, bash_match_pattern(), takes a token vector as input
+**   - it try to find a pattern for the whole length of the vector first
+**   - if it cannot find a pattern, it will reduce it's match length by one
+**     until a pattern is matched (or a P_NO_TYPE is returned)
+**
+** the patterns are specified in the pat_list[] global table:
+**   - it has a fixed subpattern of token types which must always be found
+**     at the begining of the token stream (fixed_types[])
+**   - once it has matched such a pattern it matched as many 'fuzzy' types
+**     types which may come in any order and any number (fuzzy_types[])
+*/
+
 static const t_bash_pattern pat_list[] =	{
-												{ P_COMMAND, 2, {WORD, SPACE}, 4, {WORD, SPACE, ASSIGNMENT, NULLBYTE} },
-												{ P_COMMAND, 2, {WORD, NULLBYTE}, 0, {} },
-												{ P_ASSIGNMENT, 3, {WORD, ASSIGNMENT, WORD}, 0, {} }
+												{ P_COMMAND, 3, {WORD, SPACE, WORD}, 3, {WORD, SPACE, ASSIGNMENT} },
+												{ P_COMMAND, 4, {SPACE, WORD, SPACE, WORD}, 3, {WORD, SPACE, ASSIGNMENT} },
+												{ P_PATH, 1, {WORD}, 0, {} },
+												{ P_PATH, 2, {WORD, SPACE}, 0, {} },
+												{ P_PATH, 2, {SPACE, WORD}, 0, {} },
+												{ P_PATH, 3, {SPACE, WORD, SPACE}, 0, {} },
+												{ P_ASSIGNMENT, 4, {SPACE, WORD, ASSIGNMENT, WORD}, 0, {} },
+												{ P_ASSIGNMENT, 3, {WORD, ASSIGNMENT, WORD}, 0, {} },
+												{ P_ASSIGNMENT, 3, {SPACE, WORD, ASSIGNMENT}, 0, {} },
+												{ P_ASSIGNMENT, 2, {WORD, ASSIGNMENT}, 0, {} }
 											};
 
 t_bool					match_token_to_type(t_token *token, const e_token_type type)
@@ -101,8 +123,12 @@ char					*pattern_dump_type(t_bash_pattern_type type)
 	{
 		case P_COMMAND:
 			return ("COMMAND");
+		case P_PATH:
+			return ("PATH");
 		case P_ASSIGNMENT:
 			return ("ASSIGNMENT");
+		case P_NO_TYPE:
+			return ("NO_TYPE");
 		default:
 			return (NULL);
 	}
