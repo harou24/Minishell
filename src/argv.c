@@ -1,6 +1,7 @@
 #include <assert.h>
 #include <stdlib.h>
 
+#include "ft_printf.h"
 #include "libft.h"
 
 #include "argv.h"
@@ -61,12 +62,12 @@ void	argv_pretty_dump(t_argv *argv, int indent)
 	assert(argv);
 	if (argv->argc == 0)
 		return ;
-	printf("%*s : %i\n", indent, "Argc", argv->argc);
-	printf("%*s :\n", indent, "Argv");
+	ft_printf("%*s : %i\n", indent, "Argc", argv->argc);
+	ft_printf("%*s :\n", indent, "Argv");
 	i = 0;
 	while (i < argv->argc)
 	{
-		printf("%*s[%i] : %s\n", (int)(indent * 1.1), "", i, argv->argv[i]);
+		ft_printf("%*s[%i] : %s\n", (int)(indent * 1.1), "", i, argv->argv[i]);
 		i++;
 	}
 }

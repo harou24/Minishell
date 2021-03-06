@@ -75,4 +75,5 @@ void					journal_build_linked_list();
 char					*journal_get_string_for_token(t_token *token);
 char					*journal_get_string_for_index(size_t index);
 char					*journal_reconstruct_string();
+
 #endif

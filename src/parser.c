@@ -1,5 +1,7 @@
 #include <assert.h>
 #include <stdlib.h>
+
+#include "ft_printf.h"
 #include "libft.h"
 
 #include "bash_pattern.h"
@@ -245,20 +247,26 @@ t_argv			*parse_build_argv(t_range area)
 	argv = argv_create(len);
 	if (argv)
 	{
-		printf("parse_build_argv, adding arg: ");
+		/*
+		ft_printf("parse_build_argv, adding arg: ");
+		*/
 		while (len > 0)
 		{
 			arg = parse_build_argument(area.begin);
 			if (arg)
 			{
-				printf(" \'%s\'", arg);
+				/*
+				ft_printf(" \'%s\'", arg);
+				*/
 				argv_push(argv, arg);
 			}
 			area.begin++;
 			len--;
 		}
 	}
-	printf(" : argc : %i\n", argv->argc);
+	/*
+	ft_printf(" : argc : %i\n", argv->argc);
+	*/
 	return (argv);
 }
 
@@ -287,7 +295,7 @@ t_execscheme	*parse_build_execscheme(t_range area, t_bash_pattern_type pat_type)
 		scheme->relation_type = execscheme_get_relation_type_for_token(journal_get(area.end));
 		scheme->op_type = (pat_type == P_PATH) ? OP_PATH : execscheme_get_op_type_for_token(journal_get(area.begin));
 
-		printf("found relation type: %s\n", execscheme_dump_relation_type(scheme->relation_type));
+		/* ft_printf("found relation type: %s\n", execscheme_dump_relation_type(scheme->relation_type)); */
 		scheme->cmd = parse_build_command(area);
 		assert(scheme->cmd);
 	}
@@ -308,7 +316,7 @@ t_execscheme	*parse_get_next_scheme()
 		if (pat_type != P_NO_TYPE) /* minus 1 ??? */
 		{
 			/* found a match */
-			printf("FOUND A MATCH for ");
+			/* ft_printf("FOUND A MATCH for "); */
 			parse_dump_match_area(range(my_area.begin, my_area.end));
 			g_parser__->matcharea.begin = my_area.end + 1; /* minus 1 ???? */
 			return (parse_build_execscheme(my_area, pat_type));
@@ -327,7 +335,7 @@ void			parse_dump_match_area(t_range area)
 {
 	char *range = range_dump(area);
 	char *tokens = journal_dump_tokens_for_range(area);
-	printf("match range: %s, tokens: %s\n", range, tokens);
+	ft_printf("match range: %s, tokens: %s\n", range, tokens);
 	free(range);
 	free(tokens);
 }
@@ -340,13 +348,16 @@ t_execscheme	*parse_generate_execschemes()
 	root = NULL;
 	parse_reset_match_area();
 	
-	printf("initial ");
+	/*
+	ft_printf("initial ");
 	parse_dump_match_area(g_parser__->matcharea);
-
+	*/
 	while((scheme = parse_get_next_scheme()))
 	{
-		printf("a scheme was build!, next area : ");
+		/*
+		ft_printf("a scheme was build!, next area : ");
 		parse_dump_match_area(g_parser__->matcharea);
+		*/
 		if (!root)
 			root = scheme;
 		else

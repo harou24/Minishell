@@ -2,6 +2,7 @@
 #include <stdlib.h>
 
 #include "libft.h"
+#include "ft_printf.h"
 
 #include "command.h"
 
@@ -40,11 +41,9 @@ void		command_set_fds(t_command *cmd, int fd_in, int fd_out)
 	cmd->fd_out = fd_out;
 }
 
-#include <stdio.h>
-
 void		command_pretty_dump(t_command *cmd, int indent)
 {
 	assert(cmd);
-	printf("%*s : %s\n", indent, "Path", cmd->path);
+	ft_printf("%*s : %s\n", indent, "Path", cmd->path);
 	argv_pretty_dump(cmd->argv, indent);
 }

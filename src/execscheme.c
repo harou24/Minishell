@@ -1,6 +1,7 @@
 #include <assert.h>
 #include <stdlib.h>
 #include "libft.h"
+#include "ft_printf.h"
 
 #include "journal.h"
 #include "execscheme.h"
@@ -91,8 +92,6 @@ t_execscheme	*execscheme_create()
 	return (scheme);
 }
 
-#include <stdio.h>
-
 t_execscheme	*execscheme_destroy(t_execscheme **execscheme)
 {
 	if (!execscheme)
@@ -162,9 +161,9 @@ void			execscheme_pretty_dump(t_execscheme *root, int indent)
 	
 	while (root)
 	{
-		printf("%*s :\n", indent, "Scheme");
-		printf("%*s : %s\n", (int)(indent * 1.5), "OP", execscheme_dump_op_type(root->op_type));
-		printf("%*s : %s\n", (int)(indent * 1.5), "REL", execscheme_dump_relation_type(root->relation_type));
+		ft_printf("%*s :\n", indent, "Scheme");
+		ft_printf("%*s : %s\n", (int)(indent * 1.5), "OP", execscheme_dump_op_type(root->op_type));
+		ft_printf("%*s : %s\n", (int)(indent * 1.5), "REL", execscheme_dump_relation_type(root->relation_type));
 		command_pretty_dump(root->cmd, indent * 1.5);
 		root = root->next;
 	}	
