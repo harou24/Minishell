@@ -4,6 +4,18 @@
 #define EXACT TRUE
 #define FUZZY FALSE
 
+/*
+** Bash symbol matching for lexing:
+** The matcher, bash_match(), works as follows:
+**   - it reads from a string from left to right and attempts to match token-
+**     patterns as specified in bash_sym_list[] and returns a t_token_type
+**
+** It uses the lookup table bash_sym_list[] to accomplish this:
+**   - an EXACT type must be matched exactly by a call to strcmp()
+**   - a FUZZY type can be matched by using any symbol in it's *key in any
+**     order and number
+*/
+
 static const t_bash_sym bash_sym_list[] =	{
 													{WORD, FUZZY,		"0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ@%^()-_+]}[{:/?.,&"},
 													{LITERAL, EXACT,	"\'"},
