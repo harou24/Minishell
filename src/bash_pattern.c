@@ -18,11 +18,12 @@
 */
 
 static const t_bash_pattern pat_list[] =	{
-												{ P_COMMAND, 3, {SPACE, WORD, SPACE}, 4, {WORD, SPACE, ASSIGNMENT, NULLBYTE} },
-												{ P_COMMAND, 2, {WORD, SPACE}, 4, {WORD, SPACE, ASSIGNMENT, NULLBYTE} },
-												{ P_PATH, 3, {SPACE, WORD, NULLBYTE}, 0, {} },
-												{ P_PATH, 2, {WORD, NULLBYTE}, 0, {} },
-												{ P_PATH, 3, {WORD, SPACE, NULLBYTE}, 0, {} },
+												{ P_COMMAND, 3, {WORD, SPACE, WORD}, 3, {WORD, SPACE, ASSIGNMENT} },
+												{ P_COMMAND, 4, {SPACE, WORD, SPACE, WORD}, 3, {WORD, SPACE, ASSIGNMENT} },
+												{ P_PATH, 1, {WORD}, 0, {} },
+												{ P_PATH, 2, {WORD, SPACE}, 0, {} },
+												{ P_PATH, 2, {SPACE, WORD}, 0, {} },
+												{ P_PATH, 3, {SPACE, WORD, SPACE}, 0, {} },
 												{ P_ASSIGNMENT, 4, {SPACE, WORD, ASSIGNMENT, WORD}, 0, {} },
 												{ P_ASSIGNMENT, 3, {WORD, ASSIGNMENT, WORD}, 0, {} },
 												{ P_ASSIGNMENT, 3, {SPACE, WORD, ASSIGNMENT}, 0, {} },
