@@ -16,6 +16,9 @@ if(BUILD_TESTING)
 	add_executable(torture-bash_pattern.bin torture-bash_pattern.c)
 	target_link_libraries(torture-bash_pattern.bin PRIVATE minishell ft hashmap vector)
 
+	add_executable(torture-debugger.bin torture-debugger.c)
+	target_link_libraries(torture-debugger.bin PRIVATE minishell ft)
+
 	add_executable(prompt.bin prompt.c)
 	target_link_libraries(prompt.bin PRIVATE minishell ft hashmap vector)
 endif()
