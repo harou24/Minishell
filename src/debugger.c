@@ -61,5 +61,8 @@ t_bool				debug_init_tofd(int fd)
 void				debug_deinit()
 {
 	if (g_dbg_fd__ > 0)
+	{
 		close(g_dbg_fd__);
+		g_dbg_fd__ = 0;
+	}
 }
