@@ -15,6 +15,7 @@ void	env_unset(t_env *env, char *_var);
 size_t	env_size(t_env *env);
 void	env_destroy(t_env *env);
 void	*set_env_array(t_env *_this_env, const char **_env);
-int	store_set_at_index(t_env *_env, const char *_env_line, void *_hm_store);
+int	put_env_line_into_store(t_env *_env, const char *_env_line, void *_hm_store);
+t_pair	*split_line_into_key_value_pair(char *_line);
 
 #endif

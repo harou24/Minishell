@@ -1,25 +1,39 @@
 #include "libft.h"
 #include "env.h"
+#include "pair.h"
 #include <stdlib.h>
 
 #define HASHMAP_SIZE 1000
 
-int	store_set_at_index(t_env *_env, const char *_env_line, void *_hm_store)
+t_pair	*split_line_into_key_value_pair(char *_line)
 {
-	t_kv_pair	pair;
-	int		equal_sign_index;
+	t_pair	*pair;
+	int	equal_sign_index;
+	char	*key;
+	char	*value;
 
-	equal_sign_index = ft_strclen(_env_line, '=');
-	pair.key = ft_strsub(_env_line, 0, equal_sign_index);
-	pair.value = ft_strsub(_env_line, equal_sign_index + 1, ft_strlen(_env_line) - equal_sign_index);
-	if (!pair.key || !pair.value || !hm_set(_hm_store, pair.key, pair.value))
+	equal_sign_index = ft_strclen(_line, '=');
+	key = ft_strsub(_line, 0, equal_sign_index);
+	value = ft_strsub(_line, equal_sign_index + 1, ft_strlen(_line) - equal_sign_index);
+	pair = pair_create(key, value);
+	if (!pair)
 	{
-		free(pair.key);
-		free(pair.value);
+		pair_destroy(pair);
+		return (NULL);
+	}
+	return (pair);
+}
+
+int	put_env_line_into_store(t_env *_env, const char *_env_line, void *_hm_store)
+{
+	t_pair	*pair;
+
+	pair = split_line_into_key_value_pair(*_env_line);
+	if (!pair || !hm_set(_hm_store, pair->f.key, pair->s.value))
+	{
 		env_destroy(_env);
 		return (0);
 	}
-	free(pair.key);
 	return (1);
 }
 
