@@ -1,6 +1,7 @@
 #ifndef ENV_H
 # define ENV_H
 
+#include "pair.h"
 #include "hashmap.h"
 
 typedef struct	s_env {
@@ -16,6 +17,6 @@ size_t	env_size(t_env *env);
 void	env_destroy(t_env *env);
 void	*set_env_array(t_env *_this_env, const char **_env);
 int	put_env_line_into_store(t_env *_env, const char *_env_line, void *_hm_store);
-t_pair	*split_line_into_key_value_pair(char *_line);
+t_pair	*split_line_into_key_value_pair(const char *_line);
 
 #endif

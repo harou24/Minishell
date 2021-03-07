@@ -1,11 +1,10 @@
 #include "libft.h"
 #include "env.h"
-#include "pair.h"
 #include <stdlib.h>
 
 #define HASHMAP_SIZE 1000
 
-t_pair	*split_line_into_key_value_pair(char *_line)
+t_pair	*split_line_into_key_value_pair(const char *_line)
 {
 	t_pair	*pair;
 	int	equal_sign_index;
@@ -28,7 +27,7 @@ int	put_env_line_into_store(t_env *_env, const char *_env_line, void *_hm_store)
 {
 	t_pair	*pair;
 
-	pair = split_line_into_key_value_pair(*_env_line);
+	pair = split_line_into_key_value_pair(_env_line);
 	if (!pair || !hm_set(_hm_store, pair->f.key, pair->s.value))
 	{
 		env_destroy(_env);
@@ -48,7 +47,7 @@ void	*set_env_array(t_env *_this_env, const char **_env)
 	count = 0;
 	while(_env[count])
 	{
-		if (!store_set_at_index(_this_env, _env[count], hm_store))
+		if (!put_env_line_into_store(_this_env, _env[count], hm_store))
 			return (NULL);
 		count++;
 	}
