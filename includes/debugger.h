@@ -6,13 +6,14 @@
 #include "libft.h"
 
 #ifndef DEBUG
-# define DEBUG 0
+# define DEBUG				0
 #endif
 
 #ifdef DEBUG_FILE
-# define DEBUG_TOFILE 1
+# define DEBUG_TOFILE		1
 #else
-# define DEBUG_TOFILE 0
+# define DEBUG_TOFILE		0
+# define DEBUG_FILE			""
 #endif
 
 /* init functions return FALSE on error, handle errno at your discretion */
