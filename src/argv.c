@@ -1,8 +1,8 @@
 #include <assert.h>
 #include <stdlib.h>
 
-#include "ft_printf.h"
 #include "libft.h"
+#include "debugger.h"
 
 #include "argv.h"
 
@@ -53,8 +53,6 @@ t_argv	*argv_destroy(t_argv **argv)
 	return ((*argv = NULL));
 }
 
-#include <stdio.h>
-
 void	argv_pretty_dump(t_argv *argv, int indent)
 {
 	int	i;
@@ -62,12 +60,12 @@ void	argv_pretty_dump(t_argv *argv, int indent)
 	assert(argv);
 	if (argv->argc == 0)
 		return ;
-	ft_printf("%*s : %i\n", indent, "Argc", argv->argc);
-	ft_printf("%*s :\n", indent, "Argv");
+	dbg("%*s : %i\n", indent, "Argc", argv->argc);
+	dbg("%*s :\n", indent, "Argv");
 	i = 0;
 	while (i < argv->argc)
 	{
-		ft_printf("%*s[%i] : %s\n", (int)(indent * 1.1), "", i, argv->argv[i]);
+		dbg("%*s[%i] : %s\n", (int)(indent * 1.1), "", i, argv->argv[i]);
 		i++;
 	}
 }

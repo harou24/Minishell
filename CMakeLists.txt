@@ -30,6 +30,11 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
 
 		set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -fsanitize=address")
 		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -fsanitize=address")
+
+		add_compile_definitions(DEBUG=1)
+		add_compile_definitions(DEBUG_FILE="./minishell.log")
+	else()
+		add_compile_definitions(DEBUG=0)
 	endif()
 
 	# Let's nicely support folders in IDEs

@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 #include "libft.h"
-#include "ft_printf.h"
+#include "debugger.h"
 
 #include "command.h"
 
@@ -44,6 +44,7 @@ void		command_set_fds(t_command *cmd, int fd_in, int fd_out)
 void		command_pretty_dump(t_command *cmd, int indent)
 {
 	assert(cmd);
-	ft_printf("%*s : %s\n", indent, "Path", cmd->path);
-	argv_pretty_dump(cmd->argv, indent);
+	dbg("%*s : %s\n", indent, "Path", cmd->path);
+	if (cmd->argv)
+		argv_pretty_dump(cmd->argv, indent);
 }
