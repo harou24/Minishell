@@ -1,3 +1,4 @@
+#include <assert.h>
 #include "vector.h"
 #include "lexer.h"
 #include "token.h"
@@ -14,6 +15,10 @@ t_journal	*lex(const char *str)
 	g_lex__->input_len = ft_strlen(str);
 	return (lex_build_journal(str));
 }
+
+/*
+** this functions is totally unreadable
+*/
 
 t_token     *lex_get_next_token()
 {
@@ -38,6 +43,16 @@ t_token     *lex_get_next_token()
 	return (token_create(range(og_index, og_index + slen), og_type));
 }
 
+void		lex_add_nullbyte()
+{
+	t_token *token;
+
+	assert(g_lex__->input[g_lex__->index] == '\0');
+	token = token_create(range(g_lex__->index, g_lex__->index), NULLBYTE);
+	assert(token);
+	journal_push(token);
+}
+
 t_journal   *lex_build_journal(char *str)
 {
 	t_token *token;
@@ -47,6 +62,7 @@ t_journal   *lex_build_journal(char *str)
 	{
 		journal_push(token);
 	}
+	lex_add_nullbyte();
 	journal_build_linked_list();
 	return (g_lex__->journal);
 }
@@ -72,7 +88,7 @@ t_lex		*lex_create()
 	if (lex)
 	{
 		lex->journal = journal_create();
-		if  (!lex->journal /*|| !lex->keystore */)
+		if  (!lex->journal)
 			return (lex_destroy(&lex));
 	}
 	return (( g_lex__ = lex));
@@ -83,7 +99,6 @@ t_lex		*lex_destroy(t_lex **lex)
 	if (!g_lex__)
 		return (NULL);
 	journal_destroy(&g_lex__->journal);
-	/*hm_destroy(lex->keystore); */
 	free(g_lex__->input);
 	free(g_lex__);
 	g_lex__ = NULL;

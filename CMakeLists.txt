@@ -8,6 +8,12 @@ project(
 # CMakeLists.txt inspired by:
 # https://gitlab.com/CLIUtils/modern-cmake/tree/master/examples/extended-project
 
+set(SRC_D src)
+set(INC_D includes)
+set(EXTERN_D extern)
+set(TESTS_D tests)
+set(APPS_D apps)
+
 # Only do these if this is the main project, and not if it is included through add_subdirectory
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
 	# global compilation standards
@@ -24,6 +30,11 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
 
 		set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -fsanitize=address")
 		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -fsanitize=address")
+
+		add_compile_definitions(DEBUG=1)
+		add_compile_definitions(DEBUG_FILE="./minishell.log")
+	else()
+		add_compile_definitions(DEBUG=0)
 	endif()
 
 	# Let's nicely support folders in IDEs
@@ -53,13 +64,25 @@ if(${CMAKE_VERSION} VERSION_LESS 3.14)
 	include(cmake/add_FetchContent_MakeAvailable.cmake)
 endif()
 
-add_subdirectory(extern)
-add_subdirectory(src)
-add_subdirectory(apps)
+# Cmake dependencies 
+include(cmake/subdirlist.cmake)
+include(cmake/add_subdirectories.cmake)
+
+# Target directories
+add_subdirectory(${EXTERN_D})
+add_subdirectory(${SRC_D})
+add_subdirectory(${APPS_D})
 
 # Testing only available if this is the main app
 # Emergency override MODERN_CMAKE_BUILD_TESTING provided as well
 if((CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME OR MODERN_CMAKE_BUILD_TESTING)
    AND BUILD_TESTING)
-  add_subdirectory(tests)
+  add_subdirectory(${TESTS_D})
+
+  get_directory_property(subdir_list DIRECTORY ${EXTERN_D} SUBDIRECTORIES)
+  foreach(subdir ${subdir_list})
+    message(STATUS "${subdir}")
+	add_subdirectory(${subdir}/tests)
+  endforeach()
+
 endif()

@@ -10,6 +10,16 @@ t_range             range(size_t begin, size_t end)
 	return (range);
 }
 
+t_bool			in_range(t_range r, size_t i)
+{
+	return (r.begin + i <= r.end);
+}
+
+int				range_len(t_range r)
+{
+	return (r.end - r.begin);
+}
+
 int				range_cmp(t_range a, t_range b)
 {
 	return (!(a.begin == b.begin && a.end == b.end));

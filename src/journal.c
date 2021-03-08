@@ -123,6 +123,28 @@ t_token					*journal_get(size_t index)
 		return (vector(&g_journal__->tokens, V_PEEKAT, index, NULL));
 }
 
+t_bool					journal_remove(size_t index)
+{
+	t_token				*token;
+
+	if (index < journal_size())
+	{
+		token = vector(&g_journal__->tokens, V_POPAT, index, NULL);
+		g_journal__->counter[token->type]--;
+		token_destroy(token);
+		return (TRUE);
+	}
+	return (FALSE);
+}
+
+t_bool					journal_at_index_is_type(size_t index, e_token_type type)
+{
+	t_token				*token;
+
+	token = journal_get(index);
+	return(token && token->type == type);
+}
+
 size_t					journal_size()
 {
 	if (!g_journal__)
@@ -156,22 +178,27 @@ char					*journal_dump_tokens()
 	return (buf);
 }
 
-char					*journal_reconstruct_string()
+char					*journal_dump_tokens_for_range(t_range r)
 {
 	char		*buf;
-	char		*str;
 	const int	buflen = 1024;
 	t_token		*token;
 	size_t		i;
 
-	i = 0;
+	assert(r.end <= journal_size());
+	i = r.begin;
 	buf = ft_calloc(sizeof(char), buflen);
-	while (i < journal_size())
+	while (i < r.end)
 	{
 		token = vector(&g_journal__->tokens, V_PEEKAT, i, 0);
-		str = journal_get_string_for_token(token);
-		ft_strlcat(buf, str, buflen);
-		free(str);
+		ft_strlcat(buf, token_dump_type(token->type), buflen);
+		if (token->string)
+		{
+			ft_strlcat(buf, "{", buflen);
+			ft_strlcat(buf, token->string, buflen);
+			ft_strlcat(buf, "}", buflen);
+		}
+		ft_strlcat(buf, " ", buflen);
 		i++;
 	}
 	return (buf);
@@ -248,6 +275,18 @@ t_token					*journal_find_last_type(const e_token_type type)
 	return (NULL);
 }
 
+void					 journal_remove_tokens_with_type(e_token_type type)
+{
+	t_token				*token;
+
+	while (journal_has_tokentype(type))
+	{
+		token = journal_find_last_type(type);
+		journal_remove(token->index);
+	}
+	journal_rebuild_tokens();
+}
+
 t_token					*journal_creeper_next()
 {
 	if (g_journal__->index >= journal_size())
@@ -311,4 +350,34 @@ char					*journal_get_string_for_token(t_token *token)
 		return (ft_strdup(token->string));
 	else
 		return (ft_strsub(g_journal__->str, token->range.begin, 1 + token->range.end - token->range.begin));
+}
+
+char					*journal_get_string_for_index(size_t index)
+{
+	t_token				*token;
+
+	token = journal_get(index);
+	assert(token);
+	return (journal_get_string_for_token(token));
+}
+
+char					*journal_reconstruct_string()
+{
+	char		*buf;
+	char		*str;
+	const int	buflen = 1024;
+	t_token		*token;
+	size_t		i;
+
+	i = 0;
+	buf = ft_calloc(sizeof(char), buflen);
+	while (i < journal_size())
+	{
+		token = vector(&g_journal__->tokens, V_PEEKAT, i, 0);
+		str = journal_get_string_for_token(token);
+		ft_strlcat(buf, str, buflen);
+		free(str);
+		i++;
+	}
+	return (buf);
 }

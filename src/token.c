@@ -67,6 +67,8 @@ const char	*token_dump_type(e_token_type type)
 			return ("OP_APPEND");
 		case OP_WRITE:
 			return ("OP_WRITE");
+		case NULLBYTE:
+			return ("NULLBYTE");
 		case NO_TYPE:
 			return ("NO_TYPE");
 		default:

@@ -24,50 +24,31 @@ extern "C" {
 }
 
 TEST_CASE( "basics", "[bash_sym]" ) {
-	char *str;
+	struct					t_tst {
+		const char			*str;
+		const e_token_type	type;
+	};
 	
-	str = (char *)"word";
-	CHECK(bash_match(str, strlen(str)) == WORD);
+	const static t_tst tsts[] =	{
+									{"word", 					WORD},
+									{"echo@%^()-+_[]{}:,./?",	WORD},
+									{"$",						VARIABLE},
+									{"|",						PIPE},
+									{" ",						SPACE},
+									{"\"",						STRING},
+									{"\'",						LITERAL},
+									{"=",						ASSIGNMENT},
+									{"\\",						ESCAPE},
+									{"\n",						NEWLINE},
+									{";",						SEMICOLON},
+									{"<",						OP_READ},
+									{">>",						OP_APPEND},
+									{">",						OP_WRITE}
+								};
+	const size_t tsts_len = sizeof(tsts)/sizeof(tsts[0]);
 
-	str = (char *)"echo@%^()-+_[]{}:,./?";
-	CHECK(bash_match(str, strlen(str)) == WORD);
-
-	str = (char *)"$";
-	CHECK(bash_match(str, strlen(str)) == VARIABLE);
-
-	str = (char *)"|";
-	CHECK(bash_match(str, strlen(str)) == PIPE);
-
-	str = (char *)" ";
-	CHECK(bash_match(str, strlen(str)) == SPACE);
-
-	str = (char *)"\"";
-	CHECK(bash_match(str, strlen(str)) == STRING);
-
-	str = (char *)"\'";
-	CHECK(bash_match(str, strlen(str)) == LITERAL);
-
-	str = (char *)"=";
-	CHECK(bash_match(str, strlen(str)) == ASSIGNMENT);
-
-	str = (char *)"\\";
-	CHECK(bash_match(str, strlen(str)) == ESCAPE);
-
-	str = (char *)"|";
-	CHECK(bash_match(str, strlen(str)) == PIPE);
-
-	str = (char *)"\n";
-	CHECK(bash_match(str, strlen(str)) == NEWLINE);
-
-	str = (char *)";";
-	CHECK(bash_match(str, strlen(str)) == SEMICOLON);
-
-	str = (char *)"<";
-	CHECK(bash_match(str, strlen(str)) == OP_READ);
-
-	str = (char *)">>";
-	CHECK(bash_match(str, strlen(str)) == OP_APPEND);
-
-	str = (char *)">";
-	CHECK(bash_match(str, strlen(str)) == OP_WRITE);
+	for (size_t i = 0; i < tsts_len; i++) {
+		t_tst tst = tsts[i];
+		CHECK(bash_match(tst.str, strlen(tst.str)) == tst.type);
+	}
 }

@@ -40,10 +40,14 @@ void					journal_rebuild_tokens();
 
 t_token					*journal_push(t_token *token);
 t_token					*journal_get(size_t index);
+t_bool					journal_remove(size_t index);
+
+t_bool					journal_at_index_is_type(size_t index, e_token_type type);
 
 size_t					journal_size();
 
 char					*journal_dump_tokens();
+char					*journal_dump_tokens_for_range(t_range r);
 
 int						journal_has_token(const t_token *token);
 int						journal_has_tokentype(const e_token_type type);
@@ -56,6 +60,8 @@ t_token                 *journal_find_last_token(const t_token *token);
 t_token					*journal_find_first_type(const e_token_type type);
 t_token					*journal_find_last_type(const e_token_type type);
 
+void					journal_remove_tokens_with_type(e_token_type type);
+
 t_token					*journal_creeper_next();
 void					journal_creeper_reset();
 
@@ -67,5 +73,7 @@ t_vector				journal_get_token_vector();
 void					journal_build_linked_list();
 
 char					*journal_get_string_for_token(t_token *token);
+char					*journal_get_string_for_index(size_t index);
 char					*journal_reconstruct_string();
+
 #endif
