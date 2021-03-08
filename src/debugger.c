@@ -20,7 +20,21 @@ static int			g_dbg_fd__;
 static void			__debug_init()
 {
 	if (g_dbg_fd__ <= 0)
-		debug_init_tofd(STDERR);
+	{
+		if (DEBUG_TOFILE)
+			debug_init_tofile(DEBUG_FILE);
+		else
+			debug_init_tofd(STDERR);
+	}
+}
+
+static void			__debug_print_banner()
+{
+	ft_dprintf(g_dbg_fd__, "%-*s%*s%*s%s\n\n",
+				DBG_FILENAME_LEN, "Filename",
+				DBG_LINE_LEN, "LINE",
+				DBG_FUNCNAME_LEN + 3, "Function",
+				" Output");
 }
 
 int					debug(const char *format, ...)
@@ -43,6 +57,7 @@ t_bool				debug_init_tofile(const char *filename)
 	if (fd > 0)
 	{
 		g_dbg_fd__ = fd;
+		__debug_print_banner();
 		return (TRUE);
 	}
 	return (FALSE);
@@ -53,6 +68,7 @@ t_bool				debug_init_tofd(int fd)
 	if (fd > 0)
 	{
 		g_dbg_fd__ = fd;
+		__debug_print_banner();
 		return (TRUE);
 	}
 	return (FALSE);
