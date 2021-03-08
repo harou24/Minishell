@@ -17,7 +17,7 @@ t_pair	*split_line_into_key_value_pair(const char *_line)
 	pair = pair_create(key, value);
 	if (!pair)
 	{
-		pair_destroy(pair, free, free);
+		pair_destroy(pair);
 		return (NULL);
 	}
 	return (pair);
@@ -30,10 +30,12 @@ int	put_env_line_into_store(t_env *_env, const char *_env_line, void *_hm_store)
 	pair = split_line_into_key_value_pair(_env_line);
 	if (!pair || !hm_set(_hm_store, pair->f.key, pair->s.value))
 	{
+		free(pair->f.key);
 		env_destroy(_env);
 		return (0);
 	}
-	pair_destroy(pair, free, free);
+	free(pair->f.key);
+	pair_destroy(pair);
 	return (1);
 }
 
