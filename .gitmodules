@@ -13,3 +13,6 @@
 [submodule "extern/libgnl"]
 	path = extern/libgnl
 	url = https://github.com/s-t-a-n/libgnl.git
+[submodule "extern/libpair"]
+	path = extern/libpair
+	url = https://github.com/harou24/pair.git
