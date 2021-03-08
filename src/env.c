@@ -77,12 +77,12 @@ char	*env_get(t_env *env, const char *key)
 	return ((char *)hm_get(env->hm_store, key));
 }
 
-void	*env_set(t_env *env, char *key, char *value)
+void	*env_set(t_env *env, const char *key, char *value)
 {
 	return (hm_set(env->hm_store, key, value));
 }
 
-void	env_unset(t_env *env, char *key)
+void	env_unset(t_env *env, const char *key)
 {
 	hm_remove(env->hm_store, key, free);
 }
