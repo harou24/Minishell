@@ -16,6 +16,10 @@ t_journal	*lex(const char *str)
 	return (lex_build_journal(str));
 }
 
+/*
+** this functions is totally unreadable
+*/
+
 t_token     *lex_get_next_token()
 {
 	const size_t	og_index = g_lex__->index;
@@ -84,7 +88,7 @@ t_lex		*lex_create()
 	if (lex)
 	{
 		lex->journal = journal_create();
-		if  (!lex->journal /*|| !lex->keystore */)
+		if  (!lex->journal)
 			return (lex_destroy(&lex));
 	}
 	return (( g_lex__ = lex));
@@ -95,7 +99,6 @@ t_lex		*lex_destroy(t_lex **lex)
 	if (!g_lex__)
 		return (NULL);
 	journal_destroy(&g_lex__->journal);
-	/*hm_destroy(lex->keystore); */
 	free(g_lex__->input);
 	free(g_lex__);
 	g_lex__ = NULL;

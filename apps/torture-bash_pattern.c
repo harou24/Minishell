@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <assert.h>
 
+#define DEBUG 1
+
 #include "lexer.h"
 #include "parser.h"
 #include "bash_pattern.h"
