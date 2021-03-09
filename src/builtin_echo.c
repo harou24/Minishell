@@ -11,7 +11,7 @@ static t_bool	is_n_flag(t_command *cmd)
 	return (FALSE);
 }
 
-static	void print_output(t_command *cmd)
+static		void print_output(t_command *cmd)
 {
 	int	count;
 	t_bool	_is_n_flag;
@@ -31,7 +31,7 @@ static	void print_output(t_command *cmd)
 		ft_dprintf(cmd->fds[FD_OUT], "\n");
 }
 
-int	builtin_echo(t_command *cmd)
+int		builtin_echo(t_command *cmd)
 {
 	print_output(cmd);
 	return (0);
