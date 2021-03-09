@@ -16,6 +16,7 @@ typedef struct		s_op
 	int				(*f)(t_command *cmd);
 }					t_op;
 
+/* remove stub function when ready */
 static int			op_stub(t_command *cmd) {(void)cmd; return (-1);}
 
 static int	(*g_optab__[OP_TAB_SIZE])(t_command *cmd) =	{
@@ -45,7 +46,10 @@ int		execute(t_execscheme *scheme)
 			3. fork()
 			4. execute
 		*/
-		g_optab__[scheme->op_type](scheme->cmd);
+		error = g_optab__[scheme->op_type](scheme->cmd);
+
+		/* handle error */
+
 		scheme = scheme->next;
 	}
 	return (error);
