@@ -1,31 +1,38 @@
 #include "bash_ops.h"
-#include "env_singleton.h"
 #include "ft_printf.h"
 #include "libft.h"
 
-int	is_n_flag(t_command *cmd)
+#define N_FLAG_POS 1
+
+static t_bool	is_n_flag(t_command *cmd)
 {
-	if (ft_strcmp(cmd->argv->argv[1], "-n") == 0)
-		return 1;
-	return (0);
+	if (cmd->argv->argc > N_FLAG_POS && ft_strcmp(cmd->argv->argv[N_FLAG_POS], "-n") == 0)
+		return (TRUE);
+	return (FALSE);
+}
+
+static	void print_output(t_command *cmd)
+{
+	int	count;
+	t_bool	_is_n_flag;
+
+	count = 1;
+	_is_n_flag = is_n_flag(cmd);
+	if (_is_n_flag)
+		count++;
+	while (count < cmd->argv->argc)
+	{
+		ft_dprintf(cmd->fd_out, "%s", argv_get(cmd->argv, count));
+		if (count != cmd->argv->argc - 1)
+			ft_dprintf(cmd->fd_out, " ");
+		count++;
+	}
+	if (!_is_n_flag)
+		ft_dprintf(cmd->fd_out, "\n");
 }
 
 int	builtin_echo(t_command *cmd)
 {
-	int	count;
-
-	if (is_n_flag(cmd))
-		count = 2;
-	else
-		count = 1;
-	while (count < cmd->argv->argc)
-	{
-		ft_dprintf(STDERR, "%s", cmd->argv->argv[count]);
-		if (count != cmd->argv->argc - 1)
-			ft_dprintf(STDERR, " ");
-		if (!is_n_flag(cmd))
-			ft_dprintf(STDERR, "\n");
-		count++;
-	}
-	return (1);
+	print_output(cmd);
+	return (0);
 }
