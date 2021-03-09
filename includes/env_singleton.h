@@ -4,7 +4,7 @@
 #include "libft.h"
 #include "env.h"
 
-t_env	*env_init();
+t_env	*env_init(char **env);
 void	env_deinit(t_env **env);
 
 char	*env_get_s(const char *key);
