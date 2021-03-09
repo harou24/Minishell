@@ -289,10 +289,16 @@ t_execscheme	*parse_build_execscheme(t_range area, t_bash_pattern_type pat_type)
 	if (scheme)
 	{
 		scheme->relation_type = execscheme_get_relation_type_for_token(journal_get(area.end));
-		scheme->op_type = (pat_type == P_PATH) ? OP_PATH : execscheme_get_op_type_for_token(journal_get(area.begin));
+		scheme->op_type = execscheme_get_op_type_for_token(journal_get(area.begin));
 		scheme->cmd = parse_build_command(area);
 		assert(scheme->cmd);
 	}
+
+	/*
+	how to differentiate between path & command with pat_type??
+	*/
+	(void)pat_type;
+
 	return (scheme);
 }
 

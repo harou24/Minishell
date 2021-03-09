@@ -1,8 +1,26 @@
+#include "ft_printf.h"
 #include "minishell.h"
-#include "stdio.h"
 
-int main(void)
+int main(int argc, char *argv[], char *envp[])
 {
-	printf("Hello_world");
-	return 0;
+	int r_value;
+
+	if (argc == 1)
+	{
+		shell_interactive(envp);
+		shell_deinit();
+		return (0);
+	}
+	else if (argc >= 3 && ft_strcmp(argv[1], "-c") == 0) 
+	{
+		shell_init(envp);
+		r_value = shell_exec(argv[2]);
+		shell_deinit();
+		return (r_value);
+	}
+	else
+	{
+		ft_dprintf(STDERR, "RTFM\n");
+	}
+	return (1);
 }

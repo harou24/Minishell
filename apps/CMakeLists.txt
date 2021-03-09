@@ -1,5 +1,5 @@
 add_executable(minishell-bin minishell.c)
-target_link_libraries(minishell-bin PRIVATE minishell ft hashmap vector pair)
+target_link_libraries(minishell-bin PRIVATE minishell ft printf hashmap vector pair)
 set_target_properties(minishell-bin PROPERTIES OUTPUT_NAME minishell)
 
 # standalone test libraries
@@ -12,6 +12,9 @@ if(BUILD_TESTING)
 
 	add_executable(torture-parser.bin torture-parser.c)
 	target_link_libraries(torture-parser.bin PRIVATE minishell ft hashmap vector pair)
+
+	add_executable(torture-executor.bin torture-executor.c)
+	target_link_libraries(torture-executor.bin PRIVATE minishell ft hashmap vector pair)
 
 	add_executable(torture-bash_pattern.bin torture-bash_pattern.c)
 	target_link_libraries(torture-bash_pattern.bin PRIVATE minishell ft hashmap vector pair)

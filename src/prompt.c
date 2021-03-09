@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <stdlib.h>
 #include "directory.h"
 #include "prompt.h"
@@ -13,6 +14,8 @@ t_prompt 	*prompt_create(const char *_username, const char *_hostname)
 {
 	t_prompt *prompt;
 
+	assert(_username);
+	assert(_hostname);
 	prompt = ft_calloc(sizeof(t_prompt), 1);
 	if (!prompt)
 		return (NULL);
@@ -44,10 +47,7 @@ void	prompt_init_indexes(t_prompt *_prompt)
 
 void	prompt_prepare_buffer(t_prompt *_prompt)
 {
-	if (_prompt->error_code != 0)
-		ft_snprintf(_prompt->buffer, __ERROR_LENGTH, "%d", _prompt->error_code);
-	else
-		ft_snprintf(_prompt->buffer, __ERROR_LENGTH, "---");
+	ft_snprintf(_prompt->buffer, __ERROR_LENGTH, "%-*d", __ERROR_LENGTH,_prompt->error_code);
 	ft_snprintf(_prompt->buffer + _prompt->user_index, ft_strlen(_prompt->username) + 1, "%s", _prompt->username);
 	ft_snprintf(_prompt->buffer + _prompt->at_index , 2, "@");
 	ft_snprintf(_prompt->buffer + _prompt->host_index, ft_strlen(_prompt->hostname) + 1, "%s", _prompt->hostname);

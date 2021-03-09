@@ -5,7 +5,7 @@
 #include "prompt.h"
 
 t_prompt	*prompt_init();
-void		prompt_deinit();
+void		prompt_deinit(t_prompt **prompt);
 
 char		*prompt(int last_error);
 
