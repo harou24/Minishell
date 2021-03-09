@@ -1,3 +1,7 @@
+#include <assert.h>
+#include <stdlib.h>
+
+#include "env_access.h"
 #include "prompt_singleton.h"
 
 static t_prompt *g_prompt__;
@@ -12,14 +16,17 @@ t_prompt	*prompt_init()
 {
 	if (g_prompt__)
 		return (g_prompt__);
-	g_prompt__ = prompt_create("a", "b"); /* need singleton access to env */
+
+	g_prompt__ = prompt_create(env_get_user(), env_get_host());
 	return (g_prompt__);
 }
 
-void		prompt_deinit()
+void		prompt_deinit(t_prompt **prompt)
 {
 	if (g_prompt__)
 		prompt_destroy(g_prompt__);
+	if (prompt)
+		*prompt = NULL;
 }
 
 char		*prompt(int last_error)
