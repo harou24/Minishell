@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <stdlib.h>
 #include "directory.h"
 #include "prompt.h"
@@ -13,6 +14,8 @@ t_prompt 	*prompt_create(const char *_username, const char *_hostname)
 {
 	t_prompt *prompt;
 
+	assert(_username);
+	assert(_hostname);
 	prompt = ft_calloc(sizeof(t_prompt), 1);
 	if (!prompt)
 		return (NULL);
