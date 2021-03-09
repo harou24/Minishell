@@ -1,5 +1,6 @@
 #include "bash_ops.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 void print_command(int argc, char **_argv)
 {
@@ -29,6 +30,7 @@ int main(int argc, char **_argv)
 	print_command(argc, _argv);
 	builtin_echo(command);
 	printf("\n-------------------------\n\n");
-	command_destroy(&command);
+	exit(0);
+/*	command_destroy(&command);*/
 	return(0);
 }

@@ -22,13 +22,13 @@ static	void print_output(t_command *cmd)
 		count++;
 	while (count < cmd->argv->argc)
 	{
-		ft_dprintf(cmd->fd_out, "%s", argv_get(cmd->argv, count));
+		ft_dprintf(cmd->fds[FD_OUT], "%s", argv_get(cmd->argv, count));
 		if (count != cmd->argv->argc - 1)
-			ft_dprintf(cmd->fd_out, " ");
+			ft_dprintf(cmd->fds[FD_OUT], " ");
 		count++;
 	}
 	if (!_is_n_flag)
-		ft_dprintf(cmd->fd_out, "\n");
+		ft_dprintf(cmd->fds[FD_OUT], "\n");
 }
 
 int	builtin_echo(t_command *cmd)
