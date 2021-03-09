@@ -273,7 +273,7 @@ t_command		*parse_build_command(t_range area)
 	t_command	*command;
 
 	path = parse_build_path(&area);
-	argv = parse_build_argv(range(area.begin + 1, area.end));
+	argv = parse_build_argv(area);
 	command = command_create(path, argv);
 
 	/* handle non-default file descriptors for command */
