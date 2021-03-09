@@ -37,5 +37,5 @@ extern "C" {
  }
 
  TEST_CASE("directory_exist", "dir") {
-	REQUIRE(directory_exist("non_existing_dir") != 0);
+	REQUIRE(directory_exists("non_existing_dir") != 0);
  }
