@@ -26,7 +26,7 @@ static void		__buildpath()
 	while (dir)
 	{
 		g_path__[i++] = dir;
-		dir = ft_strtok(env_path, NULL);
+		dir = ft_strtok(NULL, ":");
 	}
 	g_path__[i] = NULL;
 }
@@ -64,6 +64,7 @@ char	*abspath(const char *execname)
 	char *_abspath;
 	size_t	i;
 
+	__buildpath();
 	i = 0;
 	while (g_path__[i])
 	{
