@@ -24,7 +24,7 @@ int	directory_change_dir(const char *path)
 	return (errno);
 }
 
-int	directory_exist(const char *path)
+int	directory_exists(const char *path)
 {
 	DIR*	dir;
 
