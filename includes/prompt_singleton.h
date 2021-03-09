@@ -7,6 +7,6 @@
 t_prompt	*prompt_init();
 void		prompt_deinit();
 
-char		*prompt();
+char		*prompt(int last_error);
 
 #endif

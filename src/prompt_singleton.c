@@ -22,9 +22,11 @@ void		prompt_deinit()
 		prompt_destroy(g_prompt__);
 }
 
-char		*prompt()
+char		*prompt(int last_error)
 {
 	__prompt_init();
+	prompt_set_error_code(g_prompt__, last_error);
+	prompt_update(g_prompt__);
 	prompt_print(g_prompt__);
 	return (prompt_read());
 }
