@@ -35,3 +35,7 @@ extern "C" {
  TEST_CASE( "directory_change_dir", "[dir]" ) {
 	REQUIRE(directory_change_dir("non_existing_dir") != 0);
  }
+
+ TEST_CASE("directory_exist", "dir") {
+	REQUIRE(directory_exist("non_existing_dir") != 0);
+ }

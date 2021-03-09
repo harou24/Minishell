@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <errno.h>
+#include <dirent.h>
 
 #define __DIR_BUFF_SIZE 1024
 
@@ -20,5 +21,18 @@ int	directory_change_dir(const char *path)
 {
 	if (chdir(path) == 0)
 		return (0);
+	return (errno);
+}
+
+int	directory_exist(const char *path)
+{
+	DIR*	dir;
+
+	dir = opendir(path);
+	if (dir)
+	{
+		closedir(dir);
+		return (0);
+	}
 	return (errno);
 }
