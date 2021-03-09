@@ -5,7 +5,8 @@
 #include "libft.h"
 
 #include "shellcore.h"
-#include "env_access.h"
+#include "env_singleton.h"
+#include "prompt_singleton.h"
 
 t_shell			*_shell_create(char **env)
 {
@@ -14,7 +15,7 @@ t_shell			*_shell_create(char **env)
 	shell = ft_calloc(sizeof(t_shell), 1);
 	if (shell)
 	{
-		shell->env = env_create((const char **)env); /* update env functions ?*/
+		shell->env = env_init(env);
 		shell->lexer = lex_create();
 		shell->parser = parser_create();
 	}
@@ -28,7 +29,8 @@ t_shell		*_shell_destroy(t_shell **shell)
 		return (NULL);
 	if (*shell)
 	{
-		env_destroy((*shell)->env);
+		env_deinit(&(*shell)->env);
+		prompt_deinit(&(*shell)->prompt);
 		lex_destroy(&(*shell)->lexer);
 		parser_destroy(&(*shell)->parser);
 		free(*shell);
@@ -46,10 +48,16 @@ int			_shell_exec(t_shell *shell, const char *command_string)
 
 t_shellerr	_shell_loop(t_shell *shell)
 {
-	/* shell->prompt = prompt_create(env_get_user(), env_get_host()); */
+	char	*line;
+	int		last_error;
+
+	shell->prompt = prompt_init();
+	last_error = 0;
 	while (1)
 	{
+		line = prompt(last_error);
+		last_error = _shell_exec(shell, line);
+		/* break out condition */
 	}
-	prompt_destroy(shell->prompt);
 	return (SHELL_ERRNO); /* stub */
 }
