@@ -22,14 +22,14 @@ void		env_deinit()
 	g_env__ = NULL;
 }
 
-void		*env_get_s(const char *key)
+char		*env_get_s(const char *key)
 {
 	assert(g_env__);
 	return (env_get(g_env__, (char *)key)); /* env.h: API -> const */
 	
 }
 
-t_bool		env_set_s(const char *key, void *value)
+t_bool		env_set_s(const char *key, char *value)
 {
 	if (g_env__)
 	{
