@@ -1,5 +1,5 @@
 add_executable(minishell-bin minishell.c)
-target_link_libraries(minishell-bin PRIVATE minishell ft hashmap vector pair)
+target_link_libraries(minishell-bin PRIVATE minishell ft printf hashmap vector pair)
 set_target_properties(minishell-bin PROPERTIES OUTPUT_NAME minishell)
 
 # standalone test libraries

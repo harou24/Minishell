@@ -1,10 +1,11 @@
 #ifndef ENV_SINGLETON_H
 # define ENV_SINGLETON_H
 
+#include "libft.h"
 #include "env.h"
 
 t_env	*env_init();
-void	env_deinit();
+void	env_deinit(t_env **env);
 
 char	*env_get_s(const char *key);
 t_bool	env_set_s(const char *key, char *value);
