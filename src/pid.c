@@ -30,9 +30,32 @@ t_bool	pid_push(pid_t *pid)
 	return (vector(&g_pidvec__, V_PUSHBACK, 0, pid) != NULL);
 }
 
+int		pid_wait(pid_t pid)
+{
+	int	status;
+
+	waitpid(pid, &status, 0);
+	if (WIFEXITED(status))
+	{
+		/* process exited */
+		return (WEXITSTATUS(status));
+	}
+	else
+	{
+		/* handle anomaly */
+		return (-1);
+	}
+}
+
+int		pid_kill(pid_t pid)
+{
+	if (kill(pid, SIGTERM) == -1)
+		return(errno);
+	return (0);
+}
+
 int		pid_wait_all()
 {
-	int		status;
 	size_t	i;
 	pid_t	*pid;
 
@@ -40,18 +63,7 @@ int		pid_wait_all()
 	i = 0;
 	while ((pid = vector(&g_pidvec__, V_PEEKAT, i++, NULL)))
 	{
-		waitpid(*pid, &status, 0);
-		if (WIFEXITED(status))
-		{
-			/* process exited */
-			if (WEXITSTATUS(status) != 0)
-				return (WEXITSTATUS(status));
-		}
-		else
-		{
-			/* handle anomaly */
-			return (-1);
-		}
+		pid_wait(*pid);
 	}
 	return (0);
 }
@@ -65,7 +77,7 @@ int		pid_kill_all()
 	_err = 0;
 	while((pid = vector(&g_pidvec__, V_POPBACK, 0, NULL)))
 	{
-		if (kill(*pid, SIGTERM) == -1)
+		if (pid_kill(*pid) != 0)
 			_err = errno;
 		free(pid);
 	}
