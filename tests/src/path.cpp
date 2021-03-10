@@ -17,25 +17,32 @@
  *     REQUIRE( [BOOLEAN CONDITION] ) ;
  * }
  */
+
 extern "C" {
-# include "directory.h"
+# include "env_singleton.h"
+# include "path.h"
 }
 
 #include <string.h>
-#include <unistd.h>
+#include <stdio.h>
 
- TEST_CASE( "directory_get_current_dir", "[dir]" ) {
-	 char *cur_dir = directory_get_current_dir();
-	 char buffer[1024];
-	 getcwd(buffer, 1024);
-	 REQUIRE(strcmp(cur_dir, buffer) == 0);
-	 free(cur_dir);
- }
+TEST_CASE( "checking for existing bins", "[path]" ) {
+	extern char **environ;
 
- TEST_CASE( "directory_change_dir", "[dir]" ) {
-	REQUIRE(directory_change_dir("non_existing_dir") != 0);
- }
+	env_init(environ);
 
- TEST_CASE("directory_exist", "dir") {
-	REQUIRE(directory_exists("non_existing_dir") != 0);
- }
+	char *_abspath = abspath("ls");
+	printf("%30s for %s : '%s'\n", "ABSPATH", "ls", _abspath);
+	REQUIRE(_abspath);
+
+	char *end = strrchr(_abspath, '/');
+	REQUIRE(end);
+	CHECK(strcmp(end + 1, "ls") == 0);
+
+	free(_abspath);
+
+	CHECK(is_in_path("ls") == true);
+
+	env_deinit(NULL);
+}
+

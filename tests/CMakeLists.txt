@@ -119,3 +119,14 @@ target_link_libraries(${TEST}.bin PRIVATE Catch2::Catch2WithMain)
 target_link_libraries(${TEST}.bin PRIVATE minishell ft vector hashmap gnl printf pair)
 add_test(NAME ${TEST}
 		COMMAND ${TEST}.bin)
+
+## Path unittest
+set (TEST "test-path")
+set (SRC_LIST "src/path.cpp")
+
+add_executable(${TEST}.bin ${MAIN} ${SRC_LIST})
+target_compile_features(${TEST}.bin PRIVATE cxx_std_14)
+target_link_libraries(${TEST}.bin PRIVATE Catch2::Catch2WithMain)
+target_link_libraries(${TEST}.bin PRIVATE minishell ft vector hashmap gnl printf pair)
+add_test(NAME ${TEST}
+		COMMAND ${TEST}.bin)
