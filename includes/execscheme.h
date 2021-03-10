@@ -12,8 +12,8 @@ typedef enum				e_exec_relation_type
 	REL_APPEND,
 	REL_WRITE,
 	REL_NO_TYPE,
-	REL_TAB_SIZE,
-	REL_END
+	REL_END,
+	REL_TAB_SIZE
 }							t_exec_relation_type;
 
 typedef enum				e_exec_op_type
