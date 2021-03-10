@@ -15,6 +15,11 @@ char	*env_get_current_dir()
 	return (env_get_s("PWD"));
 }
 
+char	*env_get_old_dir()
+{
+	return (env_get_s("OLDPWD"));
+}
+
 char	*env_get_home()
 {
 	return (env_get_s("HOME"));
