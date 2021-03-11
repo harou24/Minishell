@@ -23,7 +23,7 @@ int	builtin_cd(t_command *cmd)
 {
 	if (cmd->argv->argc == 1)
 		return(go_to_home());
-	else
+	else if (cmd->argv->argc == 2)
 	{
 		if (cmd->argv->argv[1][0] == '.')
 			return (go_to_path(cmd->argv->argv[1]));	/*check_for_real_path*/
@@ -35,5 +35,10 @@ int	builtin_cd(t_command *cmd)
 		}
 		else
 			return (go_to_path(cmd->argv->argv[1]));
+	}
+	else
+	{
+		/*handle errors*/
+		return (1);
 	}
 }
