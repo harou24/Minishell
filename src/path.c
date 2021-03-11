@@ -6,72 +6,47 @@
 
 #include "path.h"
 
-static char	**g_path__;
-
-static void		__buildpath()
+static char *__fullpath(const char *dir, const char *name)
 {
-	char		*env_path;
-	char		*dir;
-	size_t		i;
+	char *fullpath;
 
-	if (g_path__)
-		return ;
-	env_path = env_get_s("PATH");
-	assert(env_path);
-
-	g_path__ = (char **)malloc(sizeof(char *) * (ft_strcount(env_path, ':') + 2));
-	assert(g_path__);
-
-	dir = ft_strtok(env_path, ":");
-	i = 0;
-	while (dir)
+	fullpath = ft_strjoin_multi(3, dir, "/", name); /* this could be very unsafe*/
+	if (!fs_exists(fullpath))
 	{
-		g_path__[i++] = dir;
-		dir = ft_strtok(NULL, ":");
+		free(fullpath);
+		fullpath = NULL;
 	}
-	g_path__[i] = NULL;
-}
-
-static char *match_abspath(const char *execname, const char *dir)
-{
-	char *abspath;
-
-	abspath = ft_strjoin_multi(3, dir, "/", execname); /* this could be very unsafe*/
-	if (!file_is_executable(abspath))
-	{
-		free(abspath);
-		abspath = NULL;
-	}
-	return (abspath);
+	return (fullpath);
 }
 
 
-t_bool	is_in_path(const char *execname)
+t_bool	path_contains(const char *path, const char *name)
 {
-	char	*_abspath;
+	char	*fullpath;
 
-	__buildpath();
-	_abspath = abspath(execname);
-	if (_abspath)
+	if ((fullpath = path_expand(path, name)))
 	{
-		free(_abspath);
+		free(fullpath);
 		return (TRUE);
 	}
 	return (FALSE);
 }
 
-char	*abspath(const char *execname)
+char	*path_expand(const char *path, const char *name)
 {
-	char *_abspath;
-	size_t	i;
+	char	*dir;
+	char	*fullpath;
 
-	__buildpath();
-	i = 0;
-	while (g_path__[i])
+	dir = ft_strtok((char *)path, ":");
+	while (dir)
 	{
-		if ((_abspath = match_abspath(execname, g_path__[i])))
-			return (_abspath);
-		i++;
+		if ((fullpath = __fullpath(dir, name)))
+		{
+			free(dir);
+			return (fullpath);
+		}
+		free(dir);
+		dir = ft_strtok(NULL, ":");
 	}
 	return (NULL);
 }
