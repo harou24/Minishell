@@ -30,7 +30,7 @@ int	builtin_cd(t_command *cmd)
 		else if (ft_strcmp(cmd->argv->argv[1], "-"))
 		{
 			int ret = go_to_prev_dir();
-			ft_dprintf(STDERR, "%s\n", env_get_current_dir());
+			ft_dprintf(cmd->fds[FD_OUT], "%s\n", env_get_current_dir());
 			return (ret);
 		}
 		else
