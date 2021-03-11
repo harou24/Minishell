@@ -3,8 +3,8 @@
 
 #include "libft.h"
 
-t_bool	is_in_path(const char *execname);
+t_bool	path_contains(const char *path, const char *name);
 
-char	*abspath(const char *execname);
+char	*path_expand(const char *path, const char *name);
 
 #endif

@@ -1,10 +1,13 @@
 #include <assert.h>
 #include <stdlib.h>
-#include "directory.h"
-#include "prompt.h"
+
 #include "libft.h"
 #include "get_next_line.h"
 #include "ft_printf.h"
+
+#include "filesystem.h"
+#include "filesystem_traversal.h"
+#include "prompt.h"
 
 #define __PROMPT_BUFF_SIZE 255
 #define	__PROMPT_MAX_LENGTH 1024
@@ -23,7 +26,7 @@ t_prompt 	*prompt_create(const char *_username, const char *_hostname)
 	prompt->hostname = ft_strdup(_hostname);
 	prompt->error_code = 0;
 	prompt->buffer = ft_calloc(sizeof(char), __PROMPT_BUFF_SIZE);
-	prompt->current_path = directory_get_current_dir();
+	prompt->current_path = fs_get_cur_dir_name();
 	if (!prompt->current_path || !prompt->buffer || !prompt->username || !prompt->hostname)
 	{
 		prompt_destroy(prompt);
@@ -59,7 +62,7 @@ void	prompt_prepare_buffer(t_prompt *_prompt)
 int	prompt_update_current_path(t_prompt *_prompt)
 {
 	free(_prompt->current_path);
-	_prompt->current_path = directory_get_current_dir();
+	_prompt->current_path = fs_get_cur_dir_name();
 	if (!_prompt->current_path)
 		return (0);
 	return (1);

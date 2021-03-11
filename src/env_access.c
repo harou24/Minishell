@@ -24,3 +24,13 @@ char	*env_get_home()
 {
 	return (env_get_s("HOME"));
 }
+
+char	*env_get_path()
+{
+	return (env_get_s("PATH"));
+}
+
+char	*env_get_cdpath()
+{
+	return (env_get_s("CDPATH"));
+}
