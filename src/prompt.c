@@ -1,10 +1,12 @@
 #include <assert.h>
 #include <stdlib.h>
-#include "directory.h"
-#include "prompt.h"
+
 #include "libft.h"
 #include "get_next_line.h"
 #include "ft_printf.h"
+
+#include "filesystem.h"
+#include "prompt.h"
 
 #define __PROMPT_BUFF_SIZE 255
 #define	__PROMPT_MAX_LENGTH 1024
