@@ -4,10 +4,9 @@
 
 int	builtin_pwd(t_command *cmd)
 {
-	char *current;
-	(void)cmd;
+	char	*current;
 
 	current = env_get_current_dir();
-	ft_dprintf(STDERR, "%s\n", current);
+	ft_dprintf(cmd->fds[FD_OUT], "%s\n", current);
 	return (0);
 }
