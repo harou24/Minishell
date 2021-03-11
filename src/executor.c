@@ -13,29 +13,6 @@
 
 #include "bash_ops.h"
 
-typedef struct		s_op
-{
-	t_exec_op_type	type;
-	int				(*f)(t_command *cmd);
-}					t_op;
-
-/* remove stub function when ready */
-static int			op_stub(t_command *cmd) {(void)cmd; return (-1);}
-
-static int	(*g_optab__[OP_TAB_SIZE])(t_command *cmd) =	{
-	[OP_COMMAND] = exec_bin,
-	[OP_PATH] = op_stub,
-	[OP_ASSIGNMENT] = op_stub,
-	[OP_BUILTIN_ECHO] = builtin_echo,
-	[OP_BUILTIN_CD] = op_stub,
-	[OP_BUILTIN_PWD] = op_stub,
-	[OP_BUILTIN_EXPORT] = op_stub,
-	[OP_BUILTIN_UNSET] = op_stub,
-	[OP_BUILTIN_ENV] = op_stub,
-	[OP_BUILTIN_EXIT] = op_stub,
-	[OP_NO_TYPE] = op_stub
-	};
-
 int		execute(t_execscheme *scheme)
 {
 	int		error;
@@ -54,7 +31,7 @@ int		execute(t_execscheme *scheme)
 		if (pid == 0)
 		{
 			/* child */
-			g_optab__[scheme->op_type](scheme->cmd);
+			/*g_optab__[scheme->op_type](scheme->cmd); */
 			dbg("%s\n", "child process didn't exit!");
 			abort();
 		}
@@ -66,6 +43,10 @@ int		execute(t_execscheme *scheme)
 		}
 
 		/* handle error */
+	
+		/* if REL_SEQ -> wait for pid to finish, this is very slow -> wait in child process! */
+		if (scheme->relation_type == REL_SEQ)
+			pid_wait(pid);
 
 		scheme = scheme->next;
 	}
