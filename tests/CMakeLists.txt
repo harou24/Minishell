@@ -87,9 +87,9 @@ target_link_libraries(${TEST}.bin PRIVATE minishell ft vector hashmap gnl printf
 add_test(NAME ${TEST}
 		COMMAND ${TEST}.bin)
     
-## Directory unittest
-set (TEST "test-directory")
-set (SRC_LIST "src/directory.cpp")
+## Filesystem traversal unittest
+set (TEST "test-filesystem_traversal")
+set (SRC_LIST "src/filesystem_traversal.cpp")
 
 add_executable(${TEST}.bin ${MAIN} ${SRC_LIST})
 target_compile_features(${TEST}.bin PRIVATE cxx_std_14)

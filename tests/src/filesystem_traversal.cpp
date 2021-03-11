@@ -18,20 +18,25 @@
  * }
  */
 extern "C" {
-# include "directory.h"
+# include "filesystem.h"
+# include "filesystem_traversal.h"
 }
 
 #include <string.h>
 #include <unistd.h>
 
- TEST_CASE( "directory_get_current_dir", "[dir]" ) {
-	 char *cur_dir = directory_get_current_dir();
+ TEST_CASE( "fs_get_cur_dir_name", "[dir]" ) {
+	 char *cur_dir = fs_get_cur_dir_name();
 	 char buffer[1024];
 	 getcwd(buffer, 1024);
-	 REQUIRE(strcmp(cur_dir, buffer) == 0);
+	 CHECK(strcmp(cur_dir, buffer) == 0);
 	 free(cur_dir);
  }
 
- TEST_CASE( "directory_change_dir", "[dir]" ) {
-	REQUIRE(directory_change_dir("non_existing_dir") != 0);
+ TEST_CASE( "fs_change_dir", "[dir]" ) {
+	CHECK(fs_change_dir("non_existing_dir__________________") != 0);
+ }
+
+ TEST_CASE("directory_exist", "dir") {
+	CHECK(directory_exists("non_existing_dir______________________") == FALSE);
  }

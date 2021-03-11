@@ -6,6 +6,9 @@
 char	*env_get_user();
 char	*env_get_host();
 char	*env_get_current_dir();
+char	*env_get_prev_dir();
 char	*env_get_home();
+char	*env_get_path();
+char	*env_get_cdpath();
 
 #endif
