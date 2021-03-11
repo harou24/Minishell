@@ -18,7 +18,7 @@
  * }
  */
 extern "C" {
-# include "directory.h"
+# include "filesystem.h"
 }
 
 #include <string.h>
@@ -28,14 +28,14 @@ extern "C" {
 	 char *cur_dir = directory_get_current_dir();
 	 char buffer[1024];
 	 getcwd(buffer, 1024);
-	 REQUIRE(strcmp(cur_dir, buffer) == 0);
+	 CHECK(strcmp(cur_dir, buffer) == 0);
 	 free(cur_dir);
  }
 
  TEST_CASE( "directory_change_dir", "[dir]" ) {
-	REQUIRE(directory_change_dir("non_existing_dir") != 0);
+	CHECK(directory_change_dir("non_existing_dir__________________") != 0);
  }
 
  TEST_CASE("directory_exist", "dir") {
-	REQUIRE(directory_exists("non_existing_dir") != 0);
+	CHECK(directory_exists("non_existing_dir______________________") == FALSE);
  }

@@ -2,7 +2,8 @@
 #include <stdlib.h>
 
 #include "env_singleton.h"
-#include "file.h"
+#include "filesystem.h"
+
 #include "path.h"
 
 static char	**g_path__;
