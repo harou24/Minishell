@@ -4,9 +4,11 @@
 
 int	builtin_pwd(t_command *cmd)
 {
-	char	*current;
+	char	*pwd;
 
-	current = env_get_current_dir();
-	ft_dprintf(cmd->fds[FD_OUT], "%s\n", current);
+	pwd = env_get_cur_dir();
+	if (!pwd)
+		return (-1);
+	ft_dprintf(cmd->fds[FD_OUT], "%s\n", pwd);
 	return (0);
 }
