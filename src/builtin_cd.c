@@ -1,5 +1,8 @@
 #include "bash_ops.h"
-#include "env_access"
+#include "env_access.h"
+#include "directory.h"
+#include "ft_printf.h"
+#include <stdlib.h>
 
 /* maybe put this in env_access */
 char	*get_parent_dir()
@@ -45,7 +48,7 @@ int	go_to_dots(const char *dots)
 		return (go_to_path(env_get_current_dir()));
 	while (count < nb_dots)
 	{
-		ret = go_to_parrent_dir();
+		ret = go_to_parent_dir();
 		if (ret != 0)
 			return (ret);
 		count++;
@@ -60,6 +63,14 @@ int	builtin_cd(t_command *cmd)
 	else
 	{
 		if (dots_only(cmd->argv->argv[1]))
+			return (go_to_dots(cmd->argv->argv[1]));
+		else if (ft_strcmp(cmd->argv->argv[1], "-"))
+		{
+			int ret = go_to_prev_dir();
+			ft_dprintf(STDERR, "%s\n", env_get_current_dir());
+			return (ret);
+		}
+		else
+			return (go_to_path(cmd->argv->argv[1]));
 	}
-	return(directory_change_dir(cmd->argv->argv[1]));
 }
