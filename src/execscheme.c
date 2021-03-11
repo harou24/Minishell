@@ -48,6 +48,7 @@ void			execscheme_attach(t_execscheme *root, t_execscheme *scheme)
 	while (root->next)
 		root = root->next;
 	root->next = scheme;
+	scheme->prev = root;
 }
 
 t_exec_relation_type execscheme_get_relation_type_for_token(t_token *token)

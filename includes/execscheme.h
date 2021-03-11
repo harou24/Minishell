@@ -38,6 +38,7 @@ typedef struct				s_execscheme
 	t_exec_op_type			op_type;
 	t_exec_relation_type	relation_type;
 	t_command				*cmd;
+	struct s_execscheme		*prev;
 	struct s_execscheme		*next;
 }							t_execscheme;
 
