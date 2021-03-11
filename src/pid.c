@@ -30,6 +30,19 @@ t_bool	pid_push(pid_t *pid)
 	return (vector(&g_pidvec__, V_PUSHBACK, 0, pid) != NULL);
 }
 
+pid_t	pid_last()
+{
+	pid_t	*pid;
+
+	if (g_pidvec__)
+	{
+		pid = vector(&g_pidvec__, V_PEEKBACK, 0, NULL);
+		if (pid)
+			return (*pid);
+	}
+	return (0);
+}
+
 int		pid_wait(pid_t pid)
 {
 	int	status;
