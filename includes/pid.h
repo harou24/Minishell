@@ -8,7 +8,7 @@
 
 pid_t	*pid_allocate(pid_t pid);
 
-t_bool	pid_push(pid_t *pid);
+t_bool	pid_push(pid_t pid);
 pid_t	pid_last();
 
 int		pid_wait(pid_t pid);

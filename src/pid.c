@@ -24,10 +24,15 @@ pid_t	*pid_allocate(pid_t pid)
 	return ((pid_t *)ft_memdup(&pid, sizeof(pid_t)));
 }
 
-t_bool	pid_push(pid_t *pid)
+t_bool	pid_push(pid_t pid)
 {
+	pid_t	*pid_ptr;
+
 	__pidvec_init();
-	return (vector(&g_pidvec__, V_PUSHBACK, 0, pid) != NULL);
+	pid_ptr = pid_allocate(pid);
+	if (!pid_ptr)
+		return (FALSE);
+	return (vector(&g_pidvec__, V_PUSHBACK, 0, pid_ptr) != NULL);
 }
 
 pid_t	pid_last()
@@ -86,7 +91,8 @@ int		pid_kill_all()
 	int		_err;
 	pid_t	*pid;
 
-	assert(g_pidvec__);
+	if (!g_pidvec__)
+		return (0);
 	_err = 0;
 	while((pid = vector(&g_pidvec__, V_POPBACK, 0, NULL)))
 	{
