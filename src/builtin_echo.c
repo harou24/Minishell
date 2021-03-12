@@ -34,5 +34,5 @@ static		void print_output(t_command *cmd)
 int		builtin_echo(t_command *cmd)
 {
 	print_output(cmd);
-	return (0);
+	exit(EXIT_SUCCESS);
 }
