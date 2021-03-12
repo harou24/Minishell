@@ -11,5 +11,5 @@ int	builtin_pwd(t_command *cmd)
 	if (!pwd)
 		return (-1);
 	ft_dprintf(cmd->fds[FD_OUT], "%s\n", pwd);
-	return (0);
+	exit(EXIT_SUCCESS);
 }
