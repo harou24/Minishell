@@ -40,13 +40,18 @@ static int	__got_to_path(t_command *cmd)
 
 int		builtin_cd(t_command *cmd)
 {
+	int	ret;
+
 	if (cmd->argv->argc == 1)
-		return(__got_to_home());
+		ret = __got_to_home();
 	else if (cmd->argv->argc == 2)
-		return (__got_to_path(cmd));
+		ret = __got_to_path(cmd);
 	else
 	{
 		/*handle errors*/
-		return (1);
+		return (-1);
 	}
+	if (ret != 0)
+		return (-1);
+	exit(EXIT_SUCCESS);
 }
