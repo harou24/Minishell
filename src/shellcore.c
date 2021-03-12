@@ -55,6 +55,7 @@ int			_shell_exec(t_shell *shell, const char *command_string)
 		/* handle parse failure */
 		return (-1);
 	}
+	execscheme_pretty_dump(scheme, 15);
 	return (execute(scheme));
 	(void)shell;
 }
