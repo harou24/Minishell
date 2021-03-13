@@ -19,5 +19,6 @@ void	env_destroy(t_env *env);
 void	*set_env_array(t_env *this_env, const char **env);
 int	put_env_line_into_store(t_env *env, const char *env_line, void *hm_store);
 t_pair	*split_line_into_key_value_pair(const char *line);
-
+t_pair	*get_next(t_env *env);
+void	env_print_out(t_env *env, int fd);
 #endif
