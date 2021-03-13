@@ -1,5 +1,6 @@
 #include "libft.h"
 #include "env.h"
+#include "ft_printf.h"
 #include <stdlib.h>
 
 #define HASHMAP_SIZE 1000
@@ -97,4 +98,28 @@ void	env_destroy(t_env *env)
 	if (env->hm_store)
 		hm_destroy(env->hm_store, free);
 	free(env);
+}
+
+t_pair	*get_next(t_env *env)
+{
+	t_pair next;
+
+	next = hm_get_seq(env->hm_store);
+	return (pair_create(next.f.key, next.s.value));
+}
+
+void	env_print_out(t_env *env, int fd)
+{
+	size_t	count;
+	t_pair	*next;
+
+	count = 0;
+	while (count < env->store_size)
+	{
+		next = get_next(env);
+		if (next)
+			ft_dprintf(fd, "%s=%s\n", next->f.key, next->s.value);
+		pair_destroy(next);
+		count++;
+	}
 }

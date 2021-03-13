@@ -27,5 +27,8 @@ if(BUILD_TESTING)
 	
 	add_executable(builtin_echo.bin builtin_echo.c)
 	target_link_libraries(builtin_echo.bin PRIVATE minishell ft hashmap vector pair)
+	
+	add_executable(env.bin env.c)
+	target_link_libraries(env.bin PRIVATE minishell ft hashmap vector pair)
 
 endif()
