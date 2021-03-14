@@ -4,18 +4,17 @@
 #include "pair.h"
 #include <stdlib.h>
 
-static	t_bool	__set(const char *to_be_splited)
+static	t_bool	__set(const char *to_be_set)
 {
-	t_bool	ret;
+	t_bool	no_error_occured;
 	t_pair	*to_set;
 
-	ret = TRUE;
-	/*need split_line_into_key_value_pair()->env_singleton ??? */
-	to_set = split_line_into_key_value_pair(to_be_splited);
+	no_error_occured = TRUE;
+	to_set = split_line_into_key_value_pair(to_be_set);
 	if (!to_set || !env_set_s(to_set->f.key, to_set->s.value))
-		ret = FALSE;
+		no_error_occured = FALSE;
 	pair_destroy(to_set);
-	return (ret);
+	return (no_error_occured);
 }
 
 int		builtin_export(t_command *cmd)
