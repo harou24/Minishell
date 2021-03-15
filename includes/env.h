@@ -3,6 +3,7 @@
 
 #include "pair.h"
 #include "hashmap.h"
+#include "env_node.h"
 
 typedef struct	senv
 {
@@ -18,6 +19,8 @@ size_t	env_size(t_env *env);
 void	env_destroy(t_env *env);
 void	*set_env_array(t_env *this_env, const char **env);
 int	put_env_line_into_store(t_env *env, const char *env_line, void *hm_store);
-t_pair	*split_line_into_key_value_pair(const char *line);
+t_pair	*env_build_key_value_pair_from_line(const char *line);
+t_pair	*get_next_pair(t_env *env);
+char	**env_to_array(t_env *_env, e_scope scope);
 
 #endif

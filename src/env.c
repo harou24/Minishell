@@ -4,16 +4,16 @@
 
 #define HASHMAP_SIZE 1000
 
-t_pair	*split_line_into_key_value_pair(const char *line)
+t_pair	*env_build_key_value_pair_from_line(const char *line)
 {
-	t_pair	*pair;
-	int	equal_sign_index;
-	char	*key;
-	char	*value;
+	t_pair		*pair;
+	int		equal_sign_index;
+	char		*key;
+	t_env_node	*value;
 
 	equal_sign_index = ft_strclen(line, '=');
 	key = ft_strsub(line, 0, equal_sign_index);
-	value = ft_strsub(line, equal_sign_index + 1, ft_strlen(line) - equal_sign_index);
+	value = env_node_create(line, ENV);
 	pair = pair_create(key, value);
 	if (!pair)
 	{
@@ -27,7 +27,7 @@ int	put_env_line_into_store(t_env *env, const char *envline, void *hm_store)
 {
 	t_pair	*pair;
 
-	pair = split_line_into_key_value_pair(envline);
+	pair = env_build_key_value_pair_from_line(envline);
 	if (!pair || !hm_set(hm_store, pair->f.key, pair->s.value))
 	{
 		free(pair->f.key);
@@ -95,6 +95,39 @@ size_t	env_size(t_env *env)
 void	env_destroy(t_env *env)
 {
 	if (env->hm_store)
-		hm_destroy(env->hm_store, free);
+		hm_destroy(env->hm_store, env_node_destroy);
 	free(env);
+}
+
+t_pair	*get_next_pair(t_env *env)
+{
+	t_pair next;
+
+	next = hm_get_seq(env->hm_store);
+	return (pair_create(next.f.key, next.s.value));
+}
+
+char	**env_to_array(t_env *_env, e_scope scope)
+{
+	char	**env;
+	size_t	count;
+	t_pair	*pair;
+	t_env_node	*node;
+
+	env = (char **)malloc(sizeof(char*) * _env->store_size);
+	if (!env)
+		return (NULL);
+	count = 0;
+	while (count < _env->store_size)
+	{
+		pair = get_next_pair(_env);
+		node = pair->s.value;
+		if(node->scope == scope)
+		{
+			env[count] = node->line;
+		}
+		pair_destroy(pair);
+		count++;
+	}
+	return (env);
 }
