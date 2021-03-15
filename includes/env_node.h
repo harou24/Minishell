@@ -1,7 +1,6 @@
 #ifndef ENV_NODE_H
 # define ENV_NODE_H
 
-#include "pair.h"
 #include "hashmap.h"
 
 typedef enum	s_scope
@@ -14,13 +13,12 @@ typedef enum	s_scope
 
 typedef struct	s_env_node
 {
-	t_pair	*key_value_pair;
+	char	*value;
 	char	*line;
-	e_scope	scope
+	e_scope	scope;
 }		t_env_node;
 
-t_env_node	*env_node_create(const char *line);
-int		build_key_value_pair_from_line(const char *line);
-void		env_destroy(t_env_node *to_destroy);
+t_env_node	*env_node_create(const char *line, e_scope scope);
+void		env_node_destroy(t_env_node *to_destroy);
 
 #endif
