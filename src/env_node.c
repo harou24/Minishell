@@ -17,9 +17,10 @@ t_env_node	*env_node_create(const char *line, e_scope scope)
 	return (node);
 }
 
-void		env_node_destroy(t_env_node *to_destroy)
+void		env_node_destroy(void *to_destroy)
 {
-	free(to_destroy->value);
-	free(to_destroy->line);
-	free(to_destroy);
+	t_env_node *node = (t_env_node *)to_destroy;
+	free(node->value);
+	free(node->line);
+	free(node);
 }
