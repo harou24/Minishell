@@ -28,5 +28,5 @@ int		exec_bin(t_command *cmd)
 		return (-1);
 	}
 	/* command was not found, return appropriate error */
-	return (-1);
+	exit(127);
 }
