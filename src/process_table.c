@@ -1,12 +1,16 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <errno.h>
+#include <string.h>
 
+#include <unistd.h>
 #include <signal.h>
 #include <sys/wait.h>
 
+#include "debugger.h"
+
 #include "vector.h"
-#include "pid.h"
+#include "process.h"
 
 const size_t pidvec_def_size = 16;
 
@@ -19,60 +23,38 @@ static void	__pidvec_init()
 	assert(vector(&g_pidvec__, V_CREATE, pidvec_def_size, NULL));
 }
 
-pid_t	*pid_allocate(pid_t pid)
-{
-	return ((pid_t *)ft_memdup(&pid, sizeof(pid_t)));
-}
-
-t_bool	pid_push(pid_t pid)
+t_bool	p_tab_push(pid_t pid)
 {
 	pid_t	*pid_ptr;
 
 	__pidvec_init();
-	pid_ptr = pid_allocate(pid);
+	pid_ptr = p_allocate_pid(pid);
 	if (!pid_ptr)
 		return (FALSE);
 	return (vector(&g_pidvec__, V_PUSHBACK, 0, pid_ptr) != NULL);
 }
 
-pid_t	pid_last()
+pid_t	p_tab_at(size_t index)
 {
 	pid_t	*pid;
 
 	if (g_pidvec__)
 	{
-		pid = vector(&g_pidvec__, V_PEEKBACK, 0, NULL);
+		pid = vector(&g_pidvec__, V_PEEKAT, index, NULL);
 		if (pid)
 			return (*pid);
 	}
+	return (-1);
+}
+
+size_t	p_tab_size()
+{
+	if (g_pidvec__)
+		return (*(size_t *)vector(&g_pidvec__, V_SIZE, 0, NULL));
 	return (0);
 }
 
-int		pid_wait(pid_t pid)
-{
-	int	status;
-
-	waitpid(pid, &status, 0);
-	if (WIFEXITED(status))
-	{
-		/* process exited */
-		return (WEXITSTATUS(status));
-	}
-	else
-	{
-		/* handle anomaly */
-		return (-1);
-	}
-}
-
-int		pid_kill(pid_t pid)
-{
-	if (kill(pid, SIGTERM) == -1)
-		return(errno);
-	return (0);
-}
-
-int		pid_wait_all()
+int		p_tab_waitpid_all(t_waitcond cond)
 {
 	size_t	i;
 	pid_t	*pid;
@@ -81,12 +63,12 @@ int		pid_wait_all()
 	i = 0;
 	while ((pid = vector(&g_pidvec__, V_PEEKAT, i++, NULL)))
 	{
-		pid_wait(*pid);
+		p_waitpid(*pid, cond);
 	}
 	return (0);
 }
 
-int		pid_kill_all()
+int		p_tab_signal_all(int signal)
 {
 	int		_err;
 	pid_t	*pid;
@@ -96,9 +78,10 @@ int		pid_kill_all()
 	_err = 0;
 	while((pid = vector(&g_pidvec__, V_POPBACK, 0, NULL)))
 	{
-		if (pid_kill(*pid) != 0)
+		if (p_signal(*pid, signal) != 0)
 			_err = errno;
 		free(pid);
 	}
+	assert(*(size_t *)vector(&g_pidvec__, V_SIZE, 0, NULL) == 0);
 	return (_err);
 }
