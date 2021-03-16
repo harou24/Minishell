@@ -43,6 +43,7 @@ t_shell		*_shell_destroy(t_shell **shell)
 int			_shell_exec(t_shell *shell, const char *command_string)
 {
 	t_execscheme	*scheme;
+	int				error;
 
 	if (!lex(command_string))
 	{
@@ -56,7 +57,9 @@ int			_shell_exec(t_shell *shell, const char *command_string)
 		return (-1);
 	}
 	execscheme_pretty_dump(scheme, 15);
-	return (execute(scheme));
+	error = execute(scheme);
+	execscheme_destroy(&scheme);
+	return (error);
 	(void)shell;
 }
 
@@ -71,6 +74,7 @@ t_shellerr	_shell_loop(t_shell *shell)
 	{
 		line = prompt(last_error);
 		last_error = _shell_exec(shell, line);
+		free(line);
 		/* break out condition */
 	}
 	return (SHELL_ERRNO); /* stub */
