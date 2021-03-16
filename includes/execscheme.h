@@ -6,6 +6,7 @@
 
 typedef enum				e_exec_relation_type
 {
+	REL_START,
 	REL_SEQ,
 	REL_PIPE,
 	REL_READ,
@@ -32,11 +33,15 @@ typedef enum				e_exec_op_type
 	OP_TAB_SIZE
 }							t_exec_op_type;
 
+/* accessor symbols for rel_type[2] in t_execscheme*/
+#define PREV_R				0
+#define NEXT_R				1
+
 struct						s_execscheme;
 typedef struct				s_execscheme
 {
 	t_exec_op_type			op_type;
-	t_exec_relation_type	relation_type;
+	t_exec_relation_type	rel_type[2];
 	t_command				*cmd;
 	struct s_execscheme		*prev;
 	struct s_execscheme		*next;
