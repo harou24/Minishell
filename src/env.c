@@ -4,7 +4,9 @@
 
 #define HASHMAP_SIZE 1000
 
-t_pair	*env_build_key_value_pair_from_line(const char *line)
+size_t	g_environ_size = 128;
+
+t_pair	*pair_create_from_line(const char *line)
 {
 	t_pair		*pair;
 	int		equal_sign_index;
@@ -13,7 +15,7 @@ t_pair	*env_build_key_value_pair_from_line(const char *line)
 
 	equal_sign_index = ft_strclen(line, '=');
 	key = ft_strsub(line, 0, equal_sign_index);
-	value = env_node_create(line, ENV);
+	value = env_node_create(line, ENVIRON);
 	pair = pair_create(key, value);
 	if (!pair)
 	{
@@ -23,11 +25,11 @@ t_pair	*env_build_key_value_pair_from_line(const char *line)
 	return (pair);
 }
 
-int	put_env_line_into_store(t_env *env, const char *envline, void *hm_store)
+int	env_instert_from_line(t_env *env, const char *envline, void *hm_store)
 {
 	t_pair	*pair;
 
-	pair = env_build_key_value_pair_from_line(envline);
+	pair = pair_create_from_line(envline);
 	if (!pair || !hm_set(hm_store, pair->f.key, pair->s.value))
 	{
 		free(pair->f.key);
@@ -39,7 +41,7 @@ int	put_env_line_into_store(t_env *env, const char *envline, void *hm_store)
 	return (1);
 }
 
-void	*set_env_array(t_env *this_env, const char **env)
+void	*env_bootstrap_from_environ(t_env *this_env, const char **env)
 {
 	void		*hm_store;
 	int		count;
@@ -50,7 +52,7 @@ void	*set_env_array(t_env *this_env, const char **env)
 	count = 0;
 	while(env[count])
 	{
-		if (!put_env_line_into_store(this_env, env[count], hm_store))
+		if (!env_instert_from_line(this_env, env[count], hm_store))
 			return (NULL);
 		count++;
 	}
@@ -66,7 +68,7 @@ t_env	*env_create(const char **env)
 	if (!this_env)
 		return (NULL);
 	this_env->store_size = ft_arraylen((const void**)env);
-	this_env->hm_store = set_env_array(this_env, env);
+	this_env->hm_store = env_bootstrap_from_environ(this_env, env);
 	if (!this_env->hm_store)
 		return (NULL);
 	return (this_env);
@@ -82,9 +84,20 @@ void	*env_set(t_env *env, const char *key, char *value)
 	return (hm_set(env->hm_store, key, value));
 }
 
-void	env_unset(t_env *env, const char *key)
+t_env_node	*env_get_node_for_key(t_env *env, const char *key)
 {
-	hm_remove(env->hm_store, key, free);
+	t_env_node *node = (t_env_node *)hm_get(env->hm_store, key);
+	if (!node)
+		node = NULL;
+	return (node);
+}
+
+t_bool	env_unset(t_env *env, const char *key)
+{
+	if (!env_get_node_for_key(env, key))
+		return (FALSE);
+	hm_remove(env->hm_store, key, env_node_destroy);
+	return (TRUE);
 }
 
 size_t	env_size(t_env *env)
@@ -109,12 +122,12 @@ t_pair	*get_next_pair(t_env *env)
 
 char	**env_to_array(t_env *_env, e_scope scope)
 {
-	char	**env;
-	size_t	count;
-	t_pair	*pair;
+	char		**env;
+	size_t		count;
+	t_pair		*pair;
 	t_env_node	*node;
 
-	env = (char **)malloc(sizeof(char*) * _env->store_size);
+	env = (char **)malloc(sizeof(char*) * g_environ_size);
 	if (!env)
 		return (NULL);
 	count = 0;
