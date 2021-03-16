@@ -8,59 +8,59 @@
 #include "debugger.h"
 
 #include "command.h"
-#include "pid.h"
+#include "process.h"
 #include "executor.h"
 
 #include "bash_ops.h"
 
-int		execute(t_execscheme *scheme)
+#include <stdio.h>
+#include <string.h>
+
+static int	__execute_sequentially()
 {
 	int		error;
-	pid_t	pid;
-	pid_t	pid_prev;
+	size_t	i;
+
+	dbg("signalling all children...%s\n","");
 
 	error = 0;
+	i = 0;
+	while (p_tab_at(i) > 0)
+	{
+		p_signal(p_tab_at(i), SIGUSR1);
+		error = p_waitpid(p_tab_at(i), W_EXITED);
+		if (error != 0)
+			break;
+		i++;
+	}
+	return (error);
+}
+
+int			execute(t_execscheme *scheme)
+{
+	int		error;
+
+	error = 0;
+	p_queue_register_signalhandler(SIGUSR1);
 	while (scheme)
 	{
-		/*
-			1. handle op type
-			2. setup fd's
-			3. fork()
-			4. execute
-		*/
-
-
-		/* prepare execscheme */
-		if (!exec_prepare_execscheme_dispatch(scheme->relation_type)(scheme))
+		/* dispatch for execscheme type */
+		dbg("executing scheme: %s, %s <- relation -> %s\n", execscheme_dump_op_type(scheme->op_type), execscheme_dump_relation_type(scheme->rel_type[PREV_R]), execscheme_dump_relation_type(scheme->rel_type[NEXT_R]));
+		if (execscheme_dispatch(scheme->rel_type[NEXT_R])(&scheme) != 0)
 		{
-			/* failed to prepare execscheme */
-		}
-
-		pid_prev = pid_last();
-		pid = fork();
-		if (pid == 0)
-		{
-			/* child */
-			if (scheme->prev && scheme->prev->relation_type == REL_SEQ)
-				pid_wait(pid_prev);
-			
-			/* call command */
-			exec_command_dispatch(scheme->op_type)(scheme->cmd);
-			dbg("%s\n", "child process didn't exit!");
-			abort();
-		}
-		else
-		{
-			/* parent */
-
-			/* store pid in vec */
-			pid_push(pid_allocate(pid));
+			dbg("%s\n", "failed to execute scheme !");
+			p_tab_signal_all(SIGTERM);
+			return (-1);
 		}
 		scheme = scheme->next;
 	}
 
-	/* wait for all child processes to finish,  or kill processes when process returns non-zero */
-	error = pid_wait_all();
-	pid_kill_all();
+	/* wait for children to register signal handlers */
+	p_queue_wait_for_signals(p_tab_size());
+
+	error = __execute_sequentially();
+
+	/* kill the kids */
+	p_tab_signal_all(SIGTERM);
 	return (error);
 }
