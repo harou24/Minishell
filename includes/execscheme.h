@@ -7,13 +7,13 @@
 typedef enum				e_exec_relation_type
 {
 	REL_START,
-	REL_SEQ,
-	REL_PIPE,
-	REL_READ,
-	REL_APPEND,
-	REL_WRITE,
-	REL_NO_TYPE,
-	REL_END,
+	REL_SEQ =		1<<1,
+	REL_PIPE =		1<<2,
+	REL_READ =		1<<3,
+	REL_APPEND =	1<<4,
+	REL_WRITE =		1<<5,
+	REL_END =		1<<6,
+	REL_NO_TYPE =	1<<7,
 	REL_TAB_SIZE
 }							t_exec_relation_type;
 
