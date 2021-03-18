@@ -6,14 +6,15 @@
 
 typedef enum				e_exec_relation_type
 {
-	REL_SEQ,
-	REL_PIPE,
-	REL_READ,
-	REL_APPEND,
-	REL_WRITE,
-	REL_NO_TYPE,
-	REL_TAB_SIZE,
-	REL_END
+	REL_START,
+	REL_SEQ =		1<<1,
+	REL_PIPE =		1<<2,
+	REL_READ =		1<<3,
+	REL_APPEND =	1<<4,
+	REL_WRITE =		1<<5,
+	REL_END =		1<<6,
+	REL_NO_TYPE =	1<<7,
+	REL_TAB_SIZE
 }							t_exec_relation_type;
 
 typedef enum				e_exec_op_type
@@ -32,12 +33,18 @@ typedef enum				e_exec_op_type
 	OP_TAB_SIZE
 }							t_exec_op_type;
 
+/* accessor symbols for rel_type[2] in t_execscheme*/
+#define PREV_R				0
+#define NEXT_R				1
+
 struct						s_execscheme;
 typedef struct				s_execscheme
 {
 	t_exec_op_type			op_type;
-	t_exec_relation_type	relation_type;
+	t_exec_relation_type	rel_type[2];
+	int						pipe[2];
 	t_command				*cmd;
+	struct s_execscheme		*prev;
 	struct s_execscheme		*next;
 }							t_execscheme;
 
