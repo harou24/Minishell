@@ -16,24 +16,76 @@
 #include <stdio.h>
 #include <string.h>
 
-static int	__execute_sequentially()
+int			executor_launch_sequential_scheme(t_execscheme *scheme, pid_t pid)
 {
 	int		error;
-	size_t	i;
 
-	dbg("signalling all children...%s\n","");
+	p_signal(pid, SIGUSR1);
+	error = p_waitpid(pid, W_EXITED);
+	
+	return (error);
+	(void)scheme;
+}
+
+int			executor_launch_parallel_scheme(t_execscheme *scheme, pid_t pid)
+{
+	int		error;
+
+	p_signal(pid, SIGUSR1);
+	error = 0;
+	
+	return (error);
+	(void)scheme;
+}
+
+#include <stdio.h>
+
+int			executor_launch_processes(t_execscheme *scheme)
+{
+	int		error;
+	size_t	pid_index;
 
 	error = 0;
-	i = 0;
-	while (p_tab_at(i) > 0)
+	pid_index = 0;
+
+
+	while (scheme)
 	{
-		p_signal(p_tab_at(i), SIGUSR1);
-		error = p_waitpid(p_tab_at(i), W_EXITED);
-		if (error != 0)
-			break;
-		i++;
+		if (scheme->rel_type[NEXT_R] == REL_PIPE)
+		{
+			/* parallel operation */
+			error = executor_launch_parallel_scheme(scheme, p_tab_at(pid_index));
+			if (error != 0)
+				break;
+		}
+		else
+		{
+			/* sequential operation */
+			error = executor_launch_sequential_scheme(scheme, p_tab_at(pid_index));
+			if (error != 0)
+				break;
+		}
+		pid_index++;
+		scheme = scheme->next;
 	}
 	return (error);
+}
+
+t_bool		executor_prepare_processes(t_execscheme *scheme)
+{
+	while (scheme)
+	{
+		/* dispatch for execscheme type */
+		dbg("executing scheme: %s, %s <- relation -> %s\n", execscheme_dump_op_type(scheme->op_type), execscheme_dump_relation_type(scheme->rel_type[PREV_R]), execscheme_dump_relation_type(scheme->rel_type[NEXT_R]));
+		if (execscheme_dispatch(scheme->rel_type[NEXT_R])(scheme) != 0)
+		{
+			dbg("%s\n", "failed to execute scheme !");
+			p_tab_signal_all(SIGTERM);
+			return (FALSE);
+		}
+		scheme = scheme->next;
+	}
+	return (TRUE);
 }
 
 int			execute(t_execscheme *scheme)
@@ -42,23 +94,13 @@ int			execute(t_execscheme *scheme)
 
 	error = 0;
 	p_queue_register_signalhandler(SIGUSR1);
-	while (scheme)
+
+	if (executor_prepare_processes(scheme))
 	{
-		/* dispatch for execscheme type */
-		dbg("executing scheme: %s, %s <- relation -> %s\n", execscheme_dump_op_type(scheme->op_type), execscheme_dump_relation_type(scheme->rel_type[PREV_R]), execscheme_dump_relation_type(scheme->rel_type[NEXT_R]));
-		if (execscheme_dispatch(scheme->rel_type[NEXT_R])(&scheme) != 0)
-		{
-			dbg("%s\n", "failed to execute scheme !");
-			p_tab_signal_all(SIGTERM);
-			return (-1);
-		}
-		scheme = scheme->next;
+		/* wait for children to register signal handlers */
+		p_queue_wait_for_signals(p_tab_size());
+		error = executor_launch_processes(scheme);
 	}
-
-	/* wait for children to register signal handlers */
-	p_queue_wait_for_signals(p_tab_size());
-
-	error = __execute_sequentially();
 
 	/* kill the kids */
 	p_tab_signal_all(SIGTERM);
