@@ -71,7 +71,7 @@ int		builtin_cd(t_command *cmd)
 {
 	int	error;
 
-	if (cmd->argv->argc > 0 && cmd->argv->argv <= 2)
+	if (cmd->argv->argc > 0 && cmd->argv->argc <= 2)
 		error = __exec_cd(cmd);
 	else
 	{
@@ -83,5 +83,4 @@ int		builtin_cd(t_command *cmd)
 	if (__is_print_path_needed(cmd->argv->argv[1]))
 		__print_cur_path();
 	exit(EXIT_SUCCESS);
-
-
+}
