@@ -49,6 +49,7 @@ void			execscheme_attach(t_execscheme *root, t_execscheme *scheme)
 		root = root->next;
 	root->next = scheme;
 	scheme->prev = root;
+	scheme->rel_type[PREV_R] = scheme->prev->rel_type[NEXT_R];
 }
 
 t_exec_relation_type execscheme_get_relation_type_for_token(t_token *token)
@@ -89,7 +90,8 @@ t_execscheme	*execscheme_create()
 	scheme = ft_calloc(sizeof(t_execscheme), 1);
 	if (scheme)
 	{
-
+		scheme->pipe[STDIN] = -1;
+		scheme->pipe[STDOUT] = -1;
 	}
 	return (scheme);
 }
