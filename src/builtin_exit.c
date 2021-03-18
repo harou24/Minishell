@@ -9,7 +9,7 @@ int	builtin_exit(t_command *cmd)
 	if (cmd->argv->argc > 2)
 	{
 		/*error handler*/
-		return (-1);
+		exit(EXIT_FAILURE);
 	}
 	if (cmd->argv->argc == 2)
 		exit_status = (unsigned char)ft_atoi(cmd->argv->argv[1]);
