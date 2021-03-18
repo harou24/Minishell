@@ -291,7 +291,6 @@ t_execscheme	*parse_build_execscheme(t_range area, t_bash_pattern_type pat_type)
 	{
 		/* put this in seperate functions */
 		scheme->rel_type[NEXT_R] = execscheme_get_relation_type_for_token(journal_get(area.end));
-		scheme->rel_type[PREV_R] = (scheme->prev == NULL) ? REL_START : scheme->prev->rel_type[NEXT_R];
 		scheme->op_type = execscheme_get_op_type_for_token(journal_get(area.begin));
 		scheme->cmd = parse_build_command(area);
 		assert(scheme->cmd);
@@ -352,7 +351,10 @@ t_execscheme	*parse_generate_execschemes()
 	while((scheme = parse_get_next_scheme()))
 	{
 		if (!root)
+		{
 			root = scheme;
+			scheme->rel_type[PREV_R] = REL_START;
+		}
 		else
 			execscheme_attach(root, scheme);
 	}
