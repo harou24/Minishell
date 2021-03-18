@@ -9,7 +9,7 @@ int	builtin_pwd(t_command *cmd)
 
 	pwd = fs_get_cur_dir_name();
 	if (!pwd)
-		return (-1);
+		exit (EXIT_FAILURE);
 	ft_dprintf(cmd->fds[FD_OUT], "%s\n", pwd);
 	exit(EXIT_SUCCESS);
 }
