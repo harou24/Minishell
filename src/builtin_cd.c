@@ -6,6 +6,7 @@
 #include <stdlib.h>
 
 #define DIR_ERROR 0
+#define TOO_MANY_ARGS -1
 
 static int 	__go_to_prev_dir()
 {
@@ -61,6 +62,8 @@ static int	__exec_cd(t_command *cmd)
 		else
 			error = __go_to_path(cmd->argv->argv[1]);
 	}
+	else
+		error = TOO_MANY_ARGS;
 	return (error);
 }
 
@@ -68,7 +71,7 @@ int		builtin_cd(t_command *cmd)
 {
 	int	error;
 
-	if (cmd->argv->argc > 0)
+	if (cmd->argv->argc > 0 && cmd->argv->argv <= 2)
 		error = __exec_cd(cmd);
 	else
 	{
@@ -80,4 +83,5 @@ int		builtin_cd(t_command *cmd)
 	if (__is_print_path_needed(cmd->argv->argv[1]))
 		__print_cur_path();
 	exit(EXIT_SUCCESS);
-}
+
+
