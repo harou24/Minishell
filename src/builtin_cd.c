@@ -5,7 +5,7 @@
 #include "path.h"
 #include <stdlib.h>
 
-#define DIR_HAS_CHANGED 0
+#define DIR_ERROR 0
 
 static int 	__go_to_prev_dir()
 {
@@ -17,42 +17,67 @@ static int	__go_to_home()
 	return (fs_change_dir(env_get_home()));
 }
 
-static t_bool	__update_dir_change(t_command *cmd)
+static int	__go_to_path(const char *path)
 {
-	return (env_set_s("OLDPWD", env_get_s("PWD")) && 
-			env_set_s("PWD", cmd->argv->argv[1]));
+	return (fs_change_dir(path));
 }
 
-static int	__go_to_path(t_command *cmd)
+static t_bool	__update_dir_change(char *new_path)
 {
-	int dir_change;
+	return (env_set_s("OLDPWD", env_get_s("PWD")) && 
+			env_set_s("PWD", new_path));
+}
 
-	if (ft_strcmp(cmd->argv->argv[1], "-") || path_contains("CDPATH", cmd->argv->argv[1]))
+static	t_bool	__is_dash(const char *str)
+{
+	return (ft_strcmp(str, "-") == 0);
+}
+
+static t_bool __is_path_in_cdpath(const char *path)
+{
+	return (path_contains("CDPATH", path));
+}
+
+static t_bool	__is_print_path_needed(const char *path)
+{
+	return (__is_dash(path) || __is_path_in_cdpath(path));
+}
+
+static	void	__print_cur_path()
+{
+	ft_dprintf(STDOUT, "%s\n", env_get_current_dir());
+}
+
+static int	__exec_cd(t_command *cmd)
+{
+	int error;
+
+	if (cmd->argv->argc == 1)
+		error = __go_to_home();
+	else if (cmd->argv->argc == 2)
 	{
-		dir_change = __go_to_prev_dir();
-		ft_dprintf(cmd->fds[FD_OUT], "%s\n", env_get_current_dir());
+		if (__is_dash(cmd->argv->argv[1]))
+			error = __go_to_prev_dir();
+		else
+			error = __go_to_path(cmd->argv->argv[1]);
 	}
-	else
-		dir_change = fs_change_dir(cmd->argv->argv[1]);
-	if (dir_change == DIR_HAS_CHANGED)
-		__update_dir_change(cmd);
-	return (dir_change);
+	return (error);
 }
 
 int		builtin_cd(t_command *cmd)
 {
-	int	dir_change;
+	int	error;
 
-	if (cmd->argv->argc == 1)
-		dir_change = __go_to_home();
-	else if (cmd->argv->argc == 2)
-		dir_change = __go_to_path(cmd);
+	if (cmd->argv->argc > 0)
+		error = __exec_cd(cmd);
 	else
 	{
 		/*handle errors*/
-		return (-1);
+		exit(EXIT_FAILURE);
 	}
-	if (dir_change != DIR_HAS_CHANGED)
-		return (-1);
+	if (!(error == DIR_ERROR && __update_dir_change(cmd->argv->argv[1])))
+		exit(EXIT_FAILURE);
+	if (__is_print_path_needed(cmd->argv->argv[1]))
+		__print_cur_path();
 	exit(EXIT_SUCCESS);
 }
