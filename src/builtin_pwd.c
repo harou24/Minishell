@@ -6,10 +6,11 @@
 int	builtin_pwd(t_command *cmd)
 {
 	char	*pwd;
+	(void)cmd;
 
 	pwd = fs_get_cur_dir_name();
 	if (!pwd)
 		exit (EXIT_FAILURE);
-	ft_dprintf(cmd->fds[FD_OUT], "%s\n", pwd);
+	ft_dprintf(STDOUT, "%s\n", pwd);
 	exit(EXIT_SUCCESS);
 }
