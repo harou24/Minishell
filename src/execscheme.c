@@ -48,6 +48,8 @@ void			execscheme_attach(t_execscheme *root, t_execscheme *scheme)
 	while (root->next)
 		root = root->next;
 	root->next = scheme;
+	scheme->prev = root;
+	scheme->rel_type[PREV_R] = scheme->prev->rel_type[NEXT_R];
 }
 
 t_exec_relation_type execscheme_get_relation_type_for_token(t_token *token)
@@ -57,6 +59,7 @@ t_exec_relation_type execscheme_get_relation_type_for_token(t_token *token)
 	return (g_reltok_tab__[token->type]);
 }
 
+/* split up into multiple functions */
 t_exec_op_type		execscheme_get_op_type_for_token(t_token *token)
 {
 	const size_t	tabsize = sizeof(g_optok_tab__)/sizeof(g_optok_tab__[0]);
@@ -87,7 +90,8 @@ t_execscheme	*execscheme_create()
 	scheme = ft_calloc(sizeof(t_execscheme), 1);
 	if (scheme)
 	{
-
+		scheme->pipe[STDIN] = -1;
+		scheme->pipe[STDOUT] = -1;
 	}
 	return (scheme);
 }
@@ -138,6 +142,8 @@ const char		*execscheme_dump_relation_type(t_exec_relation_type type)
 {
 	switch (type)
 	{
+		case REL_START:
+			return ("REL_START");
 		case REL_SEQ:
 			return ("REL_SEQ");
 		case REL_PIPE:
@@ -163,7 +169,8 @@ void			execscheme_pretty_dump(t_execscheme *root, int indent)
 	{
 		dbg("%*s :\n", indent, "Scheme");
 		dbg("%*s : %s\n", (int)(indent * 1.5), "OP", execscheme_dump_op_type(root->op_type));
-		dbg("%*s : %s\n", (int)(indent * 1.5), "REL", execscheme_dump_relation_type(root->relation_type));
+		dbg("%*s : %s\n", (int)(indent * 1.5), "REL_PREV", execscheme_dump_relation_type(root->rel_type[PREV_R]));
+		dbg("%*s : %s\n", (int)(indent * 1.5), "REL_NEXT", execscheme_dump_relation_type(root->rel_type[NEXT_R]));
 		command_pretty_dump(root->cmd, indent * 1.5);
 		root = root->next;
 	}	
