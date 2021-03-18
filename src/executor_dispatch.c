@@ -7,9 +7,9 @@
 #include "executor.h"
 
 /* remove stub function when ready */
-static int					rel_stub(t_execscheme **scheme) {(void)scheme; return (-1);}
+static int					rel_stub(t_execscheme *scheme) {(void)scheme; return (-1);}
 
-static int	(*g_schemetab__[REL_TAB_SIZE])(t_execscheme **scheme) =	{
+static int	(*g_schemetab__[REL_TAB_SIZE])(t_execscheme *scheme) =	{
 																[REL_START] = handler_scheme_seq,
 																[REL_SEQ] = handler_scheme_seq,
 																[REL_PIPE] = handler_scheme_pipe,
