@@ -22,7 +22,7 @@ static	t_bool	__set(const char *to_be_splited)
 int		builtin_set(t_command *cmd)
 {	
 	int	exit_status;
-	int	count;
+	int	index;
 
 	exit_status = EXIT_SUCCESS;
 	if (cmd->argv->argc == 1)
@@ -31,12 +31,12 @@ int		builtin_set(t_command *cmd)
 	}
 	else
 	{
-		count = 1;
-		while (count < cmd->argv->argc)
+		index = 1;
+		while (index < cmd->argv->argc)
 		{
-			if(!__set(cmd->argv->argv[count]))
+			if(!__set(cmd->argv->argv[index]))
 				exit_status = EXIT_FAILURE;
-			count++;
+			index++;
 		}
 	}
 	exit(exit_status);
