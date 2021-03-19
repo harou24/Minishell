@@ -10,14 +10,17 @@
 t_pair	*pair_create_from_line(char *line)
 {
 	t_pair		*pair;
-	int			equal_sign_index;
+	int		equal_sign_index;
 	char		*key;
 	t_env_node	*node;
+	char		*value;
 
 	equal_sign_index = ft_strclen(line, '=');
 	key = ft_strsub(line, 0, equal_sign_index);
 	assert(key);
-	node = env_node_create(line, SCOPE_ENVIRON);
+	value = ft_strchr(line, '=') + 1;
+	assert(value);
+	node = env_node_create(key, value, SCOPE_ENVIRON);
 	assert(node);
 	pair = pair_create(key, node);
 	if (!pair)
@@ -92,19 +95,19 @@ char	*env_get(t_env *env, const char *key)
 	return ((node != NULL)? node->value : NULL);
 }
 
-void		*env_set(t_env *env, const char *key, char *value)
+t_bool	env_set(t_env *env, const char *key, char *value, e_scope scope)
 {
-	t_pair	*pair;
-
 	assert(env);
 	assert(key);
 	assert(value);
 
-	pair = pair_create((void *)key, value);
-	if (pair && hm_set(env->hm_store, key, pair))
-		return (value);
-	pair_destroy(pair);
-	return (NULL);
+	t_env_node	*node;
+
+	node = env_node_create(key, value, scope);
+	if (node && hm_set(env->hm_store, key, node))
+		return (TRUE);
+	env_node_destroy(node);
+	return (FALSE);
 }
 
 t_env_node	*env_get_node_for_key(t_env *env, const char *key)
@@ -145,7 +148,7 @@ t_pair	*get_next_pair(t_env *env)
 char	**env_to_array(t_env *_env, e_scope scope)
 {
 	char		**env;
-	size_t		count;
+	size_t		index;
 	t_pair		*pair;
 	t_env_node	*node;
 
@@ -153,18 +156,18 @@ char	**env_to_array(t_env *_env, e_scope scope)
 	env = (char **)malloc(sizeof(char*) * (env_size(_env) + 1));
 	if (!env)
 		return (NULL);
-	count = 0;
-	while (count < env_size(_env))
+	index = 0;
+	while (index < env_size(_env))
 	{
 		pair = get_next_pair(_env);
 		assert(pair);
 		node = pair->s.value;
 		assert(node);
 		if(node->scope == scope)
-			env[count] = node->line;
+			env[index] = node->line;
 		pair_destroy(pair);
-		count++;
+		index++;
 	}
-	env[count] = NULL;
+	env[index] = NULL;
 	return (env);
 }

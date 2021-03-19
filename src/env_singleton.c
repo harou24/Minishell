@@ -34,14 +34,10 @@ char		*env_get_s(const char *key)
 	return (env_get(g_env__, key));
 }
 
-t_bool		env_set_s(const char *key, char *value)
+t_bool		env_set_s(const char *key, char *value, e_scope scope)
 {
 	assert(g_env__);
-	if (g_env__)
-	{
-		return (env_set(g_env__, key, value) != NULL);
-	}
-	return (FALSE);
+	return (env_set(g_env__, key, value, scope));
 }
 
 t_bool		env_unset_s(const char *key)

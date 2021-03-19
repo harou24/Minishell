@@ -12,7 +12,7 @@ typedef struct	senv
 
 t_env			*env_create(const char **environ);
 char			*env_get(t_env *env, const char *key);
-void			*env_set(t_env *env, const char *key, char *value);
+t_bool			env_set(t_env *env, const char *key, char *value, e_scope scope);
 t_bool			env_unset(t_env *env, const char *key);
 size_t			env_size(t_env *env);
 void			env_destroy(t_env *env);

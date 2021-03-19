@@ -5,18 +5,20 @@
 
 #include "env_node.h"
 
-t_env_node	*env_node_create(char *line, e_scope scope)
+t_env_node	*env_node_create(const char *key, const char *value, e_scope scope)
 {
 	t_env_node	*node;
 
-	assert(line);
+	assert(key);
 	node = ft_calloc(sizeof(t_env_node), 1);
 	if (node)
 	{
-		node->value = ft_strdup(ft_strchr(line, '=') + 1);
-		node->line = ft_strdup(line);
+		node->key = ft_strdup(key);
+		node->value = ft_strdup(value);
 		node->scope = scope;
 	}
+	if (!node->key || !node->value)
+		return (NULL);
 	return (node);
 }
 
@@ -24,8 +26,8 @@ t_env_node	*env_node_destroy(t_env_node *node)
 {
 	if (node)
 	{
+		free(node->key);
 		free(node->value);
-		free(node->line);
 		free(node);
 	}
 	return (NULL);
@@ -38,8 +40,8 @@ void		env_node_destroy_hm(void *_node)
 	if (_node)
 	{
 		node = (t_env_node *)_node;
+		free(node->key);
 		free(node->value);
-		free(node->line);
 		free(node);
 	}
 }
@@ -61,11 +63,9 @@ e_scope     env_node_get_scope(t_env_node *node)
 	return (node->scope);
 }
 
-/*	
-	t_pair      *env_node_pair_from_node(t_env_node *node)
-
-	env_node does not have the key. The key belongs to env.
-	I think it is better to keep that way, It would not be 
-	clean to have key twice in two different object.
-*/
+t_pair      *env_node_pair_from_node(t_env_node *node)
+{
+	assert(node);
+	return (pair_create(node->key, node->value));
+}
 
