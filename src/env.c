@@ -157,7 +157,7 @@ char	**env_to_array(t_env *_env, e_scope scope)
 		node = pair->s.value;
 		assert(node);
 		if(node->scope == scope)
-			env[index] = node->line;
+			env[index] = node->value;
 		pair_destroy(pair);
 		index++;
 	}
