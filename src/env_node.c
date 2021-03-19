@@ -13,7 +13,7 @@ t_env_node	*env_node_create(char *line, e_scope scope)
 	node = ft_calloc(sizeof(t_env_node), 1);
 	if (node)
 	{
-		node->value = ft_strdup(ft_strchr(line, '='));
+		node->value = ft_strdup(ft_strchr(line, '=') + 1);
 		node->line = ft_strdup(line);
 		node->scope = scope;
 	}

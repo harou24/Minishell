@@ -70,11 +70,15 @@ t_env	*env_create(const char **environ)
 	t_env	*this_env;
 
 	this_env = ft_calloc(sizeof(t_env), 1);
-	if (!this_env)
-		return (NULL);
-	this_env->hm_store = env_bootstrap_from_environ(this_env, (char **)environ);
-	if (!this_env->hm_store)
-		return (NULL);
+	if (this_env)
+	{
+		this_env->hm_store = env_bootstrap_from_environ(this_env, (char **)environ);
+		if (!this_env->hm_store)
+		{
+			free(this_env);
+			return (NULL);
+		}
+	}
 	return (this_env);
 }
 
@@ -142,14 +146,16 @@ char	**env_to_array(t_env *_env, e_scope scope)
 	t_env_node	*node;
 
 	hm_get_seq(NULL); /* resets internal static ptr */
-	env = (char **)malloc(sizeof(char*) * env_size(_env) + 1);
+	env = (char **)malloc(sizeof(char*) * (env_size(_env) + 1));
 	if (!env)
 		return (NULL);
 	count = 0;
 	while (count < env_size(_env))
 	{
 		pair = get_next_pair(_env);
+		assert(pair);
 		node = pair->s.value;
+		assert(node);
 		if(node->scope == scope)
 		{
 			env[count] = node->line;
