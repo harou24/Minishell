@@ -89,18 +89,22 @@ char	*env_get(t_env *env, const char *key)
 	assert(env);
 	assert(key);
 	node = env_get_node_for_key(env, key);
-	if (node)
-		return (node->value);
-	else
-		return (NULL);
+	return ((node != NULL)? node->value : NULL);
 }
 
-void	*env_set(t_env *env, const char *key, char *value)
+void		*env_set(t_env *env, const char *key, char *value)
 {
+	t_pair	*pair;
+
 	assert(env);
 	assert(key);
 	assert(value);
-	return (hm_set(env->hm_store, key, value));
+
+	pair = pair_create(key, value);
+	if (pair && hm_set(env->hm_store, key, pair))
+		return (value);
+	pair_destroy(pair);
+	return (NULL);
 }
 
 t_env_node	*env_get_node_for_key(t_env *env, const char *key)
@@ -157,9 +161,7 @@ char	**env_to_array(t_env *_env, e_scope scope)
 		node = pair->s.value;
 		assert(node);
 		if(node->scope == scope)
-		{
 			env[count] = node->line;
-		}
 		pair_destroy(pair);
 		count++;
 	}
