@@ -100,7 +100,7 @@ void		*env_set(t_env *env, const char *key, char *value)
 	assert(key);
 	assert(value);
 
-	pair = pair_create(key, value);
+	pair = pair_create((void *)key, value);
 	if (pair && hm_set(env->hm_store, key, pair))
 		return (value);
 	pair_destroy(pair);
