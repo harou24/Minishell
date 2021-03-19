@@ -18,9 +18,9 @@ size_t			env_size(t_env *env);
 void			env_destroy(t_env *env);
 
 /* internal */
-void			*env_bootstrap_from_environ(t_env *this_env, char **env);
-t_bool			env_insert_from_line(t_env *env, char *env_line, void *hm_store);
-t_pair			*pair_create_from_line(char *line);
+void			*env_bootstrap_from_environ(const char **env);
+t_bool			env_insert_from_line(const char *env_line, void *hm_store);
+t_pair			*pair_create_from_line(const char *line);
 t_pair			*get_next_pair(t_env *env);
 char			**env_to_array(t_env *env, e_scope scope);
 t_env_node		*env_get_node_for_key(t_env *env, const char *key);

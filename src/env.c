@@ -7,12 +7,11 @@
 
 #define HASHMAP_SIZE 1000
 
-t_pair	*pair_create_from_line(char *line)
+t_env_node	*env_node_create_from_line(const char *line)
 {
-	t_pair		*pair;
+	t_env_node	*node;
 	int		equal_sign_index;
 	char		*key;
-	t_env_node	*node;
 	char		*value;
 
 	equal_sign_index = ft_strclen(line, '=');
@@ -22,48 +21,42 @@ t_pair	*pair_create_from_line(char *line)
 	assert(value);
 	node = env_node_create(key, value, SCOPE_ENVIRON);
 	assert(node);
-	pair = pair_create(key, node);
-	if (!pair)
+	if (!key || !value || !node)
 	{
 		env_node_destroy(node);
-		return (NULL);
+		node = NULL;
 	}
-	return (pair);
+	free(key);
+	return (node);
 }
 
-t_bool	env_insert_from_line(t_env *env, char *envline, void *hm_store)
+t_bool	env_insert_from_line(const char *envline, void *hm_store)
 {
-	t_pair	*pair;
+	t_env_node	*node;
 
-	pair = pair_create_from_line(envline);
-	if (!pair || !hm_set(hm_store, pair->f.key, pair->s.value))
-	{
-		free(pair->f.key);
-		env_destroy(env);
+	node = env_node_create_from_line(envline);
+	if (!node || !hm_set(hm_store, node->key, node))
 		return (FALSE);
-	}
-	free(pair->f.key);
-	pair_destroy(pair);
 	return (TRUE);
 }
 
-void	*env_bootstrap_from_environ(t_env *this_env, char **env)
+void	*env_bootstrap_from_environ(const char **env)
 {
 	void		*hm_store;
-	int		count;
+	int		index;
 
 	hm_store = hm_new(HASHMAP_SIZE);
 	if (!hm_store)
 		return (NULL);
-	count = 0;
-	while(env[count])
+	index = 0;
+	while(env[index])
 	{
-		if (!env_insert_from_line(this_env, env[count], hm_store))
+		if (!env_insert_from_line(env[index], hm_store))
 		{
 			hm_destroy(hm_store, env_node_destroy_hm);
 			return (NULL);
 		}
-		count++;
+		index++;
 	}
 	return (hm_store);
 }
@@ -75,7 +68,7 @@ t_env	*env_create(const char **environ)
 	this_env = ft_calloc(sizeof(t_env), 1);
 	if (this_env)
 	{
-		this_env->hm_store = env_bootstrap_from_environ(this_env, (char **)environ);
+		this_env->hm_store = env_bootstrap_from_environ(environ);
 		if (!this_env->hm_store)
 		{
 			free(this_env);
