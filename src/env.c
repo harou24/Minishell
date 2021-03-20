@@ -2,6 +2,7 @@
 #include <assert.h>
 
 #include "libft.h"
+#include "vector.h"
 
 #include "env.h"
 
@@ -130,35 +131,31 @@ void	env_destroy(t_env *env)
 	free(env);
 }
 
-t_pair	*get_next_pair(t_env *env)
+t_env_node	*get_next_env_node(t_env *env)
 {
 	t_pair next;
 
 	next = hm_get_seq(env->hm_store);
-	return (pair_create(next.f.key, next.s.value));
+	return ((t_env_node *)next.s.value);
 }
 
 char	**env_to_array(t_env *_env, e_scope scope)
 {
 	char		**env;
 	size_t		index;
-	t_pair		*pair;
 	t_env_node	*node;
-
-	hm_get_seq(NULL); /* resets internal static ptr */
+	
+	hm_get_seq(NULL);
 	env = (char **)malloc(sizeof(char*) * (env_size(_env) + 1));
 	if (!env)
 		return (NULL);
 	index = 0;
 	while (index < env_size(_env))
 	{
-		pair = get_next_pair(_env);
-		assert(pair);
-		node = pair->s.value;
+		node = get_next_env_node(_env);
 		assert(node);
 		if(node->scope == scope)
 			env[index] = node->value;
-		pair_destroy(pair);
 		index++;
 	}
 	env[index] = NULL;

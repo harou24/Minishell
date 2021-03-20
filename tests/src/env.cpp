@@ -78,6 +78,6 @@ TEST_CASE( "env_to_array env", "[env]" ) {
 	REQUIRE(env != NULL);
 	char **array = env_to_array(env, SCOPE_LOCAL);
 	REQUIRE(array != NULL);
-	//ft_array_destroy((void **)array, ft_arraylen((const void **)array)); 
 	env_destroy(env);
+	free(array);
 }
