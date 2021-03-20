@@ -81,30 +81,3 @@ TEST_CASE( "env_to_array env", "[env]" ) {
 	env_destroy(env);
 	free(array);
 }
-
-TEST_CASE( "adding_values_repeated env", "[env]" ) {
-	extern char **environ;
-
-	t_env *env = env_create((const char **)environ);
-	REQUIRE(env != NULL);
-	char *value = ft_strdup("wolrd");
-	CHECK(env_set(env, (char *)"hello", value, SCOPE_ENVIRON));
-	CHECK(env_set(env, (char *)"hello", value, SCOPE_ENVIRON));
-	CHECK(env_set(env, (char *)"hello", value, SCOPE_ENVIRON));
-	free(value);
-	env_destroy(env);
-}
-
-TEST_CASE( "env_unset", "[env]" ) {
-	extern char **environ;
-
-	t_env *env = env_create((const char **)environ);
-	REQUIRE(env != NULL);
-	char *value = ft_strdup("world");
-	CHECK(env_set(env, "hello", value, SCOPE_ENVIRON));
-	CHECK(env_get(env, "hello"));
-	CHECK(env_unset(env, "hello"));
-//	CHECK(env_get(env, "hello") == NULL);
-	env_destroy(env);
-	free(value);
-}

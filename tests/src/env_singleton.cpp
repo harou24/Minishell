@@ -55,7 +55,7 @@ TEST_CASE( "unset", "[env_singleton]" ) {
 	CHECK(env_set_s("hello", value, SCOPE_ENVIRON));
 	CHECK(env_get_s("hello"));
 	CHECK(env_unset_s("hello"));
-	//CHECK(env_get_s("hello") == NULL);
+	CHECK(env_get_s("hello") == NULL);
 	env_deinit(NULL);
 	free(value);
 }
