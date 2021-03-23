@@ -23,7 +23,7 @@ typedef struct	s_env_node
 t_env_node	*env_node_create(const char *key, const char *value, e_scope scope);
 /* needs create function that takes key, value and scope, as you would expect*/
 
-t_env_node	*env_node_destroy(t_env_node *node);
+t_env_node	*env_node_destroy(t_env_node **node);
 void		env_node_destroy_hm(void *node);
 
 void		env_node_set_environ_index(t_env_node *node, size_t index);

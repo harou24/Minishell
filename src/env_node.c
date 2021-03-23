@@ -22,13 +22,14 @@ t_env_node	*env_node_create(const char *key, const char *value, e_scope scope)
 	return (node);
 }
 
-t_env_node	*env_node_destroy(t_env_node *node)
+t_env_node	*env_node_destroy(t_env_node **node)
 {
 	if (node)
 	{
-		free(node->key);
-		free(node->value);
-		free(node);
+		free((*node)->key);
+		free((*node)->value);
+		free((*node));
+		*node = NULL;
 	}
 	return (NULL);
 }
