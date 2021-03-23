@@ -11,20 +11,24 @@
 t_env_node	*env_node_create_from_line(const char *line)
 {
 	t_env_node	*node;
-	int		equal_sign_index;
+	int			equal_sign_index;
 	char		*key;
 	char		*value;
 
+	assert(line);
+
 	equal_sign_index = ft_strclen(line, '=');
 	key = ft_strsub(line, 0, equal_sign_index);
-	assert(key);
 	value = ft_strchr(line, '=') + 1;
+
+	assert(key);
 	assert(value);
 	node = env_node_create(key, value, SCOPE_ENVIRON);
 	assert(node);
+
 	if (!key || !value || !node)
 	{
-		env_node_destroy(node);
+		env_node_destroy(&node);
 		node = NULL;
 	}
 	free(key);
@@ -35,6 +39,8 @@ t_bool	env_insert_from_line(const char *envline, void *hm_store)
 {
 	t_env_node	*node;
 
+	assert(envline);
+	assert(hm_store);
 	node = env_node_create_from_line(envline);
 	if (!node || !hm_set(hm_store, node->key, node))
 		return (FALSE);
@@ -46,6 +52,7 @@ void	*env_bootstrap_from_environ(const char **env)
 	void		*hm_store;
 	int		index;
 
+	assert(env);
 	hm_store = hm_new(HASHMAP_SIZE);
 	if (!hm_store)
 		return (NULL);
@@ -66,6 +73,7 @@ t_env	*env_create(const char **environ)
 {
 	t_env	*this_env;
 
+	assert(environ);
 	this_env = ft_calloc(sizeof(t_env), 1);
 	if (this_env)
 	{
@@ -100,7 +108,7 @@ t_bool	env_set(t_env *env, const char *key, char *value, e_scope scope)
 	node = env_node_create(key, value, scope);
 	if (node && hm_set(env->hm_store, key, node))
 		return (TRUE);
-	env_node_destroy(node);
+	env_node_destroy(&node);
 	return (FALSE);
 }
 
@@ -113,6 +121,8 @@ t_env_node	*env_get_node_for_key(t_env *env, const char *key)
 
 t_bool	env_unset(t_env *env, const char *key)
 {
+	assert(env);
+	assert(key);
 	if (!env_get_node_for_key(env, key))
 		return (FALSE);
 	hm_remove(env->hm_store, key, env_node_destroy_hm);
