@@ -14,12 +14,47 @@
 
 #include <stdio.h>
 
+static t_bool	redirection_write_handle_fd(const char *fname, t_bool should_append)
+{
+	int			fd;
+	t_bool		success;
+
+	assert(fname);
+	success = FALSE;
+	if (should_append)
+		fd = open(fname, O_WRONLY | O_CREAT | O_APPEND, 0644);
+	else
+		fd = open(fname, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		
+	if (fd != -1)
+	{
+		success = (dup2(fd, STDOUT) != -1);
+		close(fd);
+	}
+	return (success);
+}
+
+static t_bool	redirection_read_handle_fd(const char *fname)
+{
+	int			fd;
+	t_bool		success;
+
+	assert(fname);
+	success = FALSE;
+	fd = fs_open(fname, O_RDONLY);
+	if (fd != -1)
+	{
+		success = (dup2(fd, STDIN) != -1);
+		close(fd);
+	}
+	return (success);
+}
+
 int			handler_scheme_redirection(t_execscheme *scheme)
 {
 	pid_t	pid;
 	pid_t	ppid;
 
-	printf("HELLO\n");
 
 	ppid = getpid();
 	pid = fork();
@@ -33,7 +68,6 @@ int			handler_scheme_redirection(t_execscheme *scheme)
 	else if (pid == 0)
 	{
 		/* child */
-
 		p_queue_register_signalhandler(SIGUSR1);
 		dbg("new child with pid : %i\n", getpid());
 
@@ -43,26 +77,14 @@ int			handler_scheme_redirection(t_execscheme *scheme)
 
 		if (scheme->rel_type[NEXT_R] & (REL_WRITE | REL_APPEND))
 		{
-			int fd;
-			/* setup fd for writing/appending*/
-
-			printf("opening path : %s\n", scheme->next->cmd->path);
-			if (scheme->rel_type[NEXT_R] & REL_WRITE)
-				fd = open("./test_f", O_WRONLY | O_CREAT | O_TRUNC, 0644);
-			else
-				fd = open("./test_f", O_WRONLY | O_CREAT | O_APPEND, 0644);
-				
-			assert(fd != -1);
-			dup2(fd, STDOUT);
-			//close(fd);
+			if (!redirection_write_handle_fd(scheme->next->cmd->path,
+					scheme->rel_type[NEXT_R] & REL_APPEND))
+				exit (-1);
 		}
 		else if (scheme->rel_type[NEXT_R] & REL_READ)
 		{
-			/* setup fd for reading */
-			int fd = fs_open(scheme->next->cmd->path, O_RDONLY);
-			assert(fd != -1);
-			dup2(fd, STDIN);
-			//close(fd);
+			if(!redirection_read_handle_fd(scheme->next->cmd->path))
+				exit (-1);
 		}
 
 		/* duplicate and close read pipe from previous scheme */
@@ -79,7 +101,6 @@ int			handler_scheme_redirection(t_execscheme *scheme)
 
 		/* wait for single signal */
 		p_queue_wait_for_signals(1);
-
 		command_dispatch(scheme->op_type)(scheme->cmd);
 		dbg("FATAL: child process didn't exit! errno: %s\n", strerror(errno));
 		abort();
