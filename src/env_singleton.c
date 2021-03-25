@@ -21,7 +21,7 @@ t_env		*env_init(char **env)
 void		env_deinit(t_env **env)
 {
 	if (g_env__)
-		env_destroy(g_env__);
+		env_destroy(&g_env__);
 	environ_deinit();
 	if (env)
 		*env = NULL;
