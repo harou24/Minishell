@@ -1,6 +1,8 @@
 #ifndef ENVIRON_H
 # define ENVIRON_H
 
+#include "libft.h"
+
 t_bool		environ_init(char **environ);
 t_bool		environ_deinit();
 
