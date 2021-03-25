@@ -11,19 +11,21 @@ static void	*g_environ_vec__;
 
 t_bool		environ_init(char **environ)
 {
-	return (g_environ_vec__
-		|| (vector(&g_environ_vec__, V_ADOPT, 0, environ)
+	assert(environ);
+	return (g_environ_vec__ != NULL
+		|| (vector(&g_environ_vec__, V_ADOPT, ft_arraylen((const void **)environ), environ)
 		&& vector(&g_environ_vec__, V_PUSHBACK, 0, NULL)));
 }
 
 t_bool		environ_deinit()
 {
-	return (!g_environ_vec__ || vector(&g_environ_vec__, V_DESTROY, TRUE, NULL) == NULL);
+	return (!g_environ_vec__ || vector(&g_environ_vec__, V_DESTROY, FALSE, NULL) == NULL);
 }
 
 
 char		**environ_get()
 {
+	assert(g_environ_vec__);
 	return (g_environ_vec__ ? (char **)vector(&g_environ_vec__, V_MEM, 0, NULL) : NULL);
 }
 
