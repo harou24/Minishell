@@ -6,8 +6,6 @@
 #include "debugger.h"
 #include "libft.h"
 
-#include "pipe.h"
-
 /*
 ** ft_pipe() is a wrapper function for the pipe syscall since for some reason
 ** 42 sometimes mistakes a requirement for a nice to have. At some point we
