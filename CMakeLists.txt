@@ -66,7 +66,6 @@ endif()
 
 # Cmake dependencies 
 include(cmake/subdirlist.cmake)
-include(cmake/add_subdirectories.cmake)
 
 # Target directories
 add_subdirectory(${EXTERN_D})

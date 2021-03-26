@@ -58,7 +58,6 @@ int			_shell_exec(t_shell *shell, const char *command_string)
 	}
 	execscheme_pretty_dump(scheme, 15);
 	error = execute(scheme);
-	execscheme_destroy(&scheme);
 	return (error);
 	(void)shell;
 }
