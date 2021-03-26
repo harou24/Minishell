@@ -6,7 +6,34 @@
 
 #include "env.h"
 
-#define HASHMAP_SIZE 1000
+#define HASHMAP_SIZE 1024
+
+t_env	*env_create(const char **environ)
+{
+	t_env	*this_env;
+
+	assert(environ);
+	this_env = ft_calloc(sizeof(t_env), 1);
+	if (this_env)
+	{
+		this_env->hm_store = env_bootstrap_from_environ(environ);
+		if (!this_env->hm_store)
+			return (env_destroy(&this_env));
+	}
+	return (this_env);
+}
+
+t_env	*env_destroy(t_env **env)
+{
+	if (env)
+	{
+		if ((*env)->hm_store)
+			hm_destroy((*env)->hm_store, env_node_destroy_hm);
+		free(*env);
+		*env = NULL;
+	}
+	return (NULL);
+}
 
 t_env_node	*env_node_create_from_line(const char *line)
 {
@@ -69,24 +96,6 @@ void	*env_bootstrap_from_environ(const char **env)
 	return (hm_store);
 }
 
-t_env	*env_create(const char **environ)
-{
-	t_env	*this_env;
-
-	assert(environ);
-	this_env = ft_calloc(sizeof(t_env), 1);
-	if (this_env)
-	{
-		this_env->hm_store = env_bootstrap_from_environ(environ);
-		if (!this_env->hm_store)
-		{
-			free(this_env);
-			return (NULL);
-		}
-	}
-	return (this_env);
-}
-
 char	*env_get(t_env *env, const char *key)
 {
 	t_env_node	*node;
@@ -134,40 +143,38 @@ size_t	env_size(t_env *env)
 	return (hm_size(env->hm_store));
 }
 
-void	env_destroy(t_env *env)
-{
-	if (env->hm_store)
-		hm_destroy(env->hm_store, env_node_destroy_hm);
-	free(env);
-}
-
 t_env_node	*get_next_env_node(t_env *env)
 {
-	t_pair next;
+	t_pair pair;
 
-	next = hm_get_seq(env->hm_store);
-	return ((t_env_node *)next.s.value);
+	pair = hm_get_seq(env->hm_store);
+	return ((t_env_node *)pair.s.value);
 }
 
-char	**env_to_array(t_env *_env, e_scope scope)
+char	**env_to_array(t_env *env, e_scope scope)
 {
-	char		**env;
+	char		**environ;
 	size_t		index;
+	size_t		count;
 	t_env_node	*node;
 	
-	hm_get_seq(NULL);
-	env = (char **)malloc(sizeof(char*) * (env_size(_env) + 1));
-	if (!env)
+	hm_get_seq(NULL); /* resets internal static */
+	environ = (char **)ft_calloc(sizeof(char *), env_size(env) + 1);
+	if (!environ)
 		return (NULL);
 	index = 0;
-	while (index < env_size(_env))
+	count = 0;
+	while (count < env_size(env))
 	{
-		node = get_next_env_node(_env);
+		node = get_next_env_node(env);
 		assert(node);
 		if(node->scope == scope)
-			env[index] = node->value;
-		index++;
+		{
+			environ[index] = ft_strjoin_multi(3, node->key, "=", node->value);
+			node->environ_index = index;
+			index++;
+		}
+		count++;
 	}
-	env[index] = NULL;
-	return (env);
+	return (environ);
 }
