@@ -18,27 +18,17 @@
 
 int			executor_launch_sequential_scheme(t_execscheme *scheme, pid_t pid)
 {
-	int		error;
-
+	assert(pid != -1);
 	p_signal(pid, SIGUSR1);
-	error = p_waitpid(pid, W_EXITED);
-	
-	return (error);
+	return(p_waitpid(pid, W_EXITED));
 	(void)scheme;
 }
 
-int			executor_launch_parallel_scheme(t_execscheme *scheme, pid_t pid)
+void		executor_launch_parallel_scheme(pid_t pid)
 {
-	int		error;
-
+	assert(pid != -1);
 	p_signal(pid, SIGUSR1);
-	error = 0;
-	
-	return (error);
-	(void)scheme;
 }
-
-#include <stdio.h>
 
 int			executor_launch_processes(t_execscheme *scheme)
 {
@@ -47,24 +37,18 @@ int			executor_launch_processes(t_execscheme *scheme)
 
 	error = 0;
 	pid_index = 0;
-
-
 	while (scheme)
 	{
 		if (scheme->rel_type[NEXT_R] == REL_PIPE)
 		{
 			/* parallel operation */
-			error = executor_launch_parallel_scheme(scheme, p_tab_at(pid_index));
-			if (error != 0)
-				break;
+			executor_launch_parallel_scheme(p_tab_at(pid_index));
 			pid_index++;
 		}
 		else if (!(scheme->rel_type[PREV_R] & (REL_READ | REL_APPEND | REL_WRITE)))
 		{
 			/* sequential operation */
 			error = executor_launch_sequential_scheme(scheme, p_tab_at(pid_index));
-			if (error != 0)
-				break;
 			pid_index++;
 		}
 		scheme = scheme->next;
@@ -72,29 +56,24 @@ int			executor_launch_processes(t_execscheme *scheme)
 	return (error);
 }
 
-t_bool		executor_prepare_processes(t_execscheme *scheme)
+int		executor_prepare_processes(t_execscheme *scheme)
 {
 	while (scheme)
 	{
 		/* dispatch for execscheme type */
-
 		if (!(scheme->rel_type[PREV_R] & (REL_READ | REL_APPEND | REL_WRITE)))
 		{
 			dbg("executing scheme: %s, %s <- relation -> %s\n", execscheme_dump_op_type(scheme->op_type), execscheme_dump_relation_type(scheme->rel_type[PREV_R]), execscheme_dump_relation_type(scheme->rel_type[NEXT_R]));
 			if (execscheme_dispatch(scheme->rel_type[NEXT_R])(scheme) != 0)
 			{
-				dbg("%s\n", "failed to execute scheme !");
+				dbg("%s\n", "failed to prepare scheme !");
 				p_tab_signal_all(SIGTERM);
-				return (FALSE);
+				return (-1);
 			}
-		}
-		else
-		{
-			dbg("skipped scheme: %s, %s <- relation -> %s\n", execscheme_dump_op_type(scheme->op_type), execscheme_dump_relation_type(scheme->rel_type[PREV_R]), execscheme_dump_relation_type(scheme->rel_type[NEXT_R]));
 		}
 		scheme = scheme->next;
 	}
-	return (TRUE);
+	return (0);
 }
 
 int			execute(t_execscheme *scheme)
@@ -104,7 +83,7 @@ int			execute(t_execscheme *scheme)
 	error = 0;
 	p_queue_register_signalhandler(SIGUSR1);
 
-	if (executor_prepare_processes(scheme))
+	if ((error = executor_prepare_processes(scheme)) == 0)
 	{
 		/* wait for children to register signal handlers */
 		p_queue_wait_for_signals(p_tab_size());
