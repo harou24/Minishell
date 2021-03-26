@@ -34,6 +34,11 @@ static t_bool	__update_dir_change(char *new_path)
 			env_set_s("PWD", new_path, SCOPE_ENVIRON));
 }
 
+static t_bool	__is_tilde(const char *str)
+{
+	return (ft_strcmp(str, "~") == 0);
+}
+
 static	t_bool	__is_dash(const char *str)
 {
 	return (ft_strcmp(str, "-") == 0);
@@ -41,7 +46,12 @@ static	t_bool	__is_dash(const char *str)
 
 static t_bool __is_path_in_cdpath(const char *path)
 {
-	return (path_contains("CDPATH", path));
+	char	*cdpath;
+	char	*dir_name;
+
+	cdpath = env_get_s("CDPATH");
+	dir_name = ft_strrchr(cdpath, '/');
+	return ((ft_strcmp(dir_name + 1, path) == 0) && path_contains(cdpath, path));
 }
 static t_bool	__is_print_path_needed(const char *path)
 {
@@ -53,6 +63,7 @@ static	void	__print_cur_path()
 	ft_dprintf(STDOUT, "%s\n", env_get_current_dir());
 }
 
+/* THE FOLLOWING FUNCTION NEED TO BE MOVED IN ANOTHER FILE*/
 char	*ft_realpath(char *path)
 {
 	char resolved_path[1024];
@@ -101,9 +112,8 @@ static int	__exec_cd(t_command *cmd)
 
 	exit_status = EXIT_FAILURE;
 	if (__is_path_in_cdpath(cmd->argv->argv[1]))
-	{		/*NOT WORKING*/
-		new_path = path_expand("CDPATH", cmd->argv->argv[1]);
-		ft_printf("PATH->%s\n",new_path);
+	{
+		new_path = path_expand(env_get_s("CDPATH"), cmd->argv->argv[1]);
 	}
 	else
 		new_path = ft_realpath(cmd->argv->argv[1]);
@@ -129,7 +139,9 @@ int	builtin_cd(t_command *cmd)
 			exit_status = __exec_cd_home();
 		else
 		{
-			if (__is_dash(cmd->argv->argv[1]))
+			if (__is_tilde(cmd->argv->argv[1]))
+				exit_status = __exec_cd_home();
+			else if (__is_dash(cmd->argv->argv[1]))
 				exit_status = __exec_cd_dash();
 			else
 				exit_status = __exec_cd(cmd);	
@@ -137,6 +149,6 @@ int	builtin_cd(t_command *cmd)
 				__print_cur_path();
 		}
 	}
-	/*__print_cur_path();*/
+	__print_cur_path();
 	exit(exit_status);
 }
