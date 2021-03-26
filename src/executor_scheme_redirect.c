@@ -12,7 +12,7 @@
 #include "execscheme.h"
 #include "executor.h"
 
-#include <stdio.h>
+#define CHILD 0
 
 static t_bool	redirection_write_handle_fd(const char *fname, t_bool should_append)
 {
@@ -55,21 +55,21 @@ int			handler_scheme_redirection(t_execscheme *scheme)
 	pid_t	pid;
 	pid_t	ppid;
 
+	if (!scheme->next)
+		return (-1);
+	if (scheme->rel_type[NEXT_R] & REL_READ && !fs_exists(scheme->next->cmd->path))
+		return (-1);
 
 	ppid = getpid();
 	pid = fork();
 	if (pid < 0)
 	{
-		/* error */
 		dbg("Forking failed with error : %s\n", strerror(errno));
-		abort();
 		return (-1);
 	}
-	else if (pid == 0)
+	else if (pid == CHILD)
 	{
-		/* child */
 		p_queue_register_signalhandler(SIGUSR1);
-		dbg("new child with pid : %i\n", getpid());
 
 		assert(scheme->next);
 		assert(scheme->next->cmd);
@@ -79,12 +79,12 @@ int			handler_scheme_redirection(t_execscheme *scheme)
 		{
 			if (!redirection_write_handle_fd(scheme->next->cmd->path,
 					scheme->rel_type[NEXT_R] & REL_APPEND))
-				exit (-1);
+				exit (1);
 		}
 		else if (scheme->rel_type[NEXT_R] & REL_READ)
 		{
 			if(!redirection_read_handle_fd(scheme->next->cmd->path))
-				exit (-1);
+				exit (1);
 		}
 
 		/* duplicate and close read pipe from previous scheme */
@@ -105,15 +105,13 @@ int			handler_scheme_redirection(t_execscheme *scheme)
 		dbg("FATAL: child process didn't exit! errno: %s\n", strerror(errno));
 		abort();
 	}
-	else
+	else /* parent */
 	{
 		if (scheme->rel_type[PREV_R] == REL_PIPE)
 		{
 			close(scheme->prev->pipe[PIPE_READ]);
 			close(scheme->prev->pipe[PIPE_WRITE]);
 		}
-
-		/* parent */
 		return ((p_tab_push(pid) == TRUE) ? 0 : -1);
 	}
 	return (-1);
