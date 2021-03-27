@@ -15,5 +15,6 @@ command_handler_f	command_dispatch(t_exec_op_type type);
 /* execscheme handlers */
 int		handler_scheme_seq(t_execscheme *scheme);
 int		handler_scheme_pipe(t_execscheme *scheme);
+int		handler_scheme_redirection(t_execscheme *scheme);
 
 #endif
