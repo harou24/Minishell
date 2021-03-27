@@ -72,9 +72,12 @@ t_shellerr	_shell_loop(t_shell *shell)
 	while (1)
 	{
 		line = prompt(last_error);
+		if (line == NULL)
+			exit(0);
 		last_error = _shell_exec(shell, line);
 		free(line);
-		/* break out condition */
+		if (_shell_was_interrupted())
+			last_error = 130;
 	}
 	return (SHELL_ERRNO); /* stub */
 }
