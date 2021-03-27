@@ -13,7 +13,7 @@ TEST_CASE( "create_destroy env", "[env]" ) {
 
 	t_env *env = env_create((const char **)environ);
 	REQUIRE(env != NULL);
-	env_destroy(env);
+	env_destroy(&env);
 }
 
 TEST_CASE( "env size", "[env]" ) {
@@ -21,7 +21,7 @@ TEST_CASE( "env size", "[env]" ) {
 
 	t_env *env = env_create((const char **)environ);
 	REQUIRE(ft_arraylen((const void **)environ) == env_size(env));
-	env_destroy(env);
+	env_destroy(&env);
 }
 
 TEST_CASE( "basic_get_set_unset env", "[env]" ) {
@@ -54,7 +54,7 @@ TEST_CASE( "basic_get_set_unset env", "[env]" ) {
 	REQUIRE(env_unset(env, "key"));
 	REQUIRE(env_unset(env, "hello"));
 	REQUIRE(env_unset(env, "last"));
-	env_destroy(env);
+	env_destroy(&env);
 }
 
 TEST_CASE( "env_get_node_for_key", "[env]" ) {
@@ -68,7 +68,7 @@ TEST_CASE( "env_get_node_for_key", "[env]" ) {
 	REQUIRE(env_set(env, "key", (char *)"value", SCOPE_LOCAL));
 	node = env_get_node_for_key(env, "key");
 	REQUIRE(strcmp(node->key, "key") == 0);
-	env_destroy(env);
+	env_destroy(&env);
 }
 
 TEST_CASE( "env_to_array env", "[env]" ) {
@@ -78,6 +78,6 @@ TEST_CASE( "env_to_array env", "[env]" ) {
 	REQUIRE(env != NULL);
 	char **array = env_to_array(env, SCOPE_LOCAL);
 	REQUIRE(array != NULL);
-	env_destroy(env);
+	env_destroy(&env);
 	free(array);
 }
