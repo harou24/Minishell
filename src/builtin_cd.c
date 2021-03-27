@@ -50,9 +50,13 @@ static t_bool __is_path_in_cdpath(const char *path)
 	char	*dir_name;
 
 	cdpath = env_get_s("CDPATH");
+	if (!cdpath)
+		return (FALSE);
 	dir_name = ft_strrchr(cdpath, '/');
+	if (!dir_name || !dir_name + 1)
 	return ((ft_strcmp(dir_name + 1, path) == 0) && path_contains(cdpath, path));
 }
+
 static t_bool	__is_print_path_needed(const char *path)
 {
 	return (__is_dash(path) || __is_path_in_cdpath(path));
@@ -112,9 +116,7 @@ static int	__exec_cd(t_command *cmd)
 
 	exit_status = EXIT_FAILURE;
 	if (__is_path_in_cdpath(cmd->argv->argv[1]))
-	{
 		new_path = path_expand(env_get_s("CDPATH"), cmd->argv->argv[1]);
-	}
 	else
 		new_path = ft_realpath(cmd->argv->argv[1]);
 	error = __go_to_path(new_path);
