@@ -273,7 +273,7 @@ t_command		*parse_build_command(t_range area)
 }
 
 
-t_exec_op_type	parse_get_op_type_for_pattern (t_range area, t_bash_pattern_type pat_type)
+t_exec_op_type	parse_get_op_type_for_pattern(t_range area, t_bash_pattern_type pat_type)
 {
 	t_exec_op_type	op_type;
 
@@ -283,6 +283,8 @@ t_exec_op_type	parse_get_op_type_for_pattern (t_range area, t_bash_pattern_type 
 		op_type = OP_ASSIGNMENT;
 	else if (pat_type == P_PATH)
 		op_type = OP_PATH;
+	else
+		op_type = OP_NO_TYPE;
 	return (op_type);
 }
 
