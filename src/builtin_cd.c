@@ -53,8 +53,9 @@ static t_bool __is_path_in_cdpath(const char *path)
 	if (!cdpath)
 		return (FALSE);
 	dir_name = ft_strrchr(cdpath, '/');
-	if (!dir_name || !dir_name + 1)
-	return ((ft_strcmp(dir_name + 1, path) == 0) && path_contains(cdpath, path));
+	if (dir_name && dir_name + 1)
+		return ((ft_strcmp(dir_name + 1, path) == 0) && path_contains(cdpath, path));
+	return (FALSE);
 }
 
 static t_bool	__is_print_path_needed(const char *path)
