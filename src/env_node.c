@@ -15,6 +15,7 @@ t_env_node	*env_node_create_from_pair(t_pair *pair, e_scope scope)
 	node = ft_calloc(sizeof(t_env_node), 1);
 	if (node)
 	{
+		node->environ_index = -1;
 		node->key = pair->f.key;
 		node->value = pair->s.value;
 		node->scope = scope;
@@ -29,6 +30,7 @@ t_env_node	*env_node_create(const char *key, const char *value, e_scope scope)
 	node = ft_calloc(sizeof(t_env_node), 1);
 	if (node)
 	{
+		node->environ_index = -1;
 		node->key = ft_strdup(key);
 		node->value = ft_strdup(value);
 		node->scope = scope;
@@ -63,7 +65,7 @@ void		env_node_destroy_hm(void *_node)
 	}
 }
 
-void		env_node_set_environ_index(t_env_node *node, size_t index)
+void		env_node_set_environ_index(t_env_node *node, int index)
 {
 	node->environ_index = index;
 }

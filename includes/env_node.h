@@ -16,7 +16,7 @@ typedef struct	s_env_node
 	char		*key;
 	char		*value;
 	char		*line;
-	size_t		environ_index;
+	int			environ_index;
 	e_scope		scope;
 }				t_env_node;
 
@@ -26,7 +26,7 @@ t_env_node	*env_node_create(const char *key, const char *value, e_scope scope);
 t_env_node	*env_node_destroy(t_env_node **node);
 void		env_node_destroy_hm(void *node);
 
-void		env_node_set_environ_index(t_env_node *node, size_t index);
+void		env_node_set_environ_index(t_env_node *node, int index);
 
 t_bool		env_node_update(t_env_node *node, char *key, char *value);
 char		*env_node_get_value(t_env_node *node);
