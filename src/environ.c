@@ -45,6 +45,11 @@ t_bool		environ_add(char *line)
 			&& vector(&g_environ_vec__, V_PUSHBACK, 0, NULL) != NULL);
 }
 
+size_t		environ_size()
+{
+	return (*(size_t *)vector(&g_environ_vec__, V_SIZE, 0, NULL));
+}
+
 void		environ_remove(size_t index)
 {
 	assert(g_environ_vec__);
