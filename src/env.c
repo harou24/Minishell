@@ -3,6 +3,7 @@
 
 #include "libft.h"
 #include "vector.h"
+#include "environ.h"
 
 #include "env.h"
 
@@ -129,8 +130,25 @@ t_bool	env_set(t_env *env, const char *key, char *value, e_scope scope)
 	assert(key);
 	assert(value);
 
+	char		*line;
 	t_env_node	*node;
 
+	node = hm_get(env->hm_store, key);
+	if (node && scope == SCOPE_ENVIRON)
+	{
+		line = ft_strjoin_multi(3, key, "=", value);
+		if (node->environ_index >= 0)
+		{
+			printf("environ node has no index!\n");
+			environ_set(node->environ_index, line);
+		}
+		else
+		{
+			printf("environ node has index!\n");
+			environ_add(line);
+			node->environ_index = environ_size() - 1;
+		}
+	}
 	node = env_node_create(key, value, scope);
 	if (node && hm_set(env->hm_store, key, node))
 		return (TRUE);
