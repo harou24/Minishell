@@ -5,6 +5,22 @@
 
 #include "env_node.h"
 
+t_env_node	*env_node_create_from_pair(t_pair *pair, e_scope scope)
+{
+	t_env_node	*node;
+
+	assert(pair);
+	assert(pair->f.key);
+	assert(pair->s.value);
+	node = ft_calloc(sizeof(t_env_node), 1);
+	if (node)
+	{
+		node->key = pair->f.key;
+		node->value = pair->s.value;
+		node->scope = scope;
+	}
+	return (node);
+}
 t_env_node	*env_node_create(const char *key, const char *value, e_scope scope)
 {
 	t_env_node	*node;
