@@ -365,6 +365,8 @@ t_execscheme	*parse()
 {
 	if (!parse_expand())
 		return (NULL);
+	if (g_parser__->rootscheme)
+		execscheme_destroy(&g_parser__->rootscheme);
 	g_parser__->rootscheme = parse_generate_execschemes();
 
 	return (g_parser__->rootscheme);

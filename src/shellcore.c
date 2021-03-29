@@ -58,7 +58,6 @@ int			_shell_exec(t_shell *shell, const char *command_string)
 	}
 	execscheme_pretty_dump(scheme, 15);
 	error = execute(scheme);
-	execscheme_destroy(&scheme);
 	return (error);
 	(void)shell;
 }
@@ -73,9 +72,12 @@ t_shellerr	_shell_loop(t_shell *shell)
 	while (1)
 	{
 		line = prompt(last_error);
+		if (line == NULL)
+			exit(0);
 		last_error = _shell_exec(shell, line);
 		free(line);
-		/* break out condition */
+		if (_shell_was_interrupted())
+			last_error = 130;
 	}
 	return (SHELL_ERRNO); /* stub */
 }

@@ -6,12 +6,12 @@
 #include "debugger.h"
 #include "libft.h"
 
-#include "pipe.h"
+#include "ft_unistd.h"
 #include "process.h"
 #include "execscheme.h"
 #include "executor.h"
 
-#include <stdio.h>
+#define CHILD 0
 
 int			handler_scheme_seq(t_execscheme *scheme)
 {
@@ -22,17 +22,12 @@ int			handler_scheme_seq(t_execscheme *scheme)
 	pid = fork();
 	if (pid < 0)
 	{
-		/* error */
 		dbg("Forking failed with error : %s\n", strerror(errno));
-		abort();
 		return (-1);
 	}
-	else if (pid == 0)
+	else if (pid == CHILD)
 	{
-		/* child */
-
 		p_queue_register_signalhandler(SIGUSR1);
-		dbg("new child with pid : %i\n", getpid());
 
 		/* duplicate and close read pipe from previous scheme */
 		if (scheme->rel_type[PREV_R] == REL_PIPE)
@@ -52,15 +47,13 @@ int			handler_scheme_seq(t_execscheme *scheme)
 		dbg("FATAL: child process didn't exit! errno: %s\n", strerror(errno));
 		abort();
 	}
-	else
+	else /* parent */
 	{
 		if (scheme->rel_type[PREV_R] == REL_PIPE)
 		{
 			close(scheme->prev->pipe[PIPE_READ]);
 			close(scheme->prev->pipe[PIPE_WRITE]);
 		}
-
-		/* parent */
 		return ((p_tab_push(pid) == TRUE) ? 0 : -1);
 	}
 	return (-1);
