@@ -33,5 +33,5 @@ static void		print_for_argv(t_argv *argv)
 int		builtin_echo(t_command *cmd)
 {
 	print_for_argv(cmd->argv);
-	exit(EXIT_SUCCESS);
+	return(0);
 }
