@@ -3,6 +3,8 @@
 
 #include "minishell.h"
 
+#include <setjmp.h>
+
 #include "env.h"
 #include "lexer.h"
 #include "parser.h"
@@ -22,4 +24,10 @@ t_shell			*_shell_destroy(t_shell **shell);
 int				_shell_exec(t_shell *shell, const char *command_string);
 
 t_shellerr		_shell_loop(t_shell *shell);
+
+/* shellsignals.c */
+
+t_bool			_shell_was_interrupted();
+int				_shell_register_sigint_handler(void);
+jmp_buf			*_shell_get_interrupt_jmpbuf(void);
 #endif

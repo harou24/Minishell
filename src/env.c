@@ -3,6 +3,7 @@
 
 #include "libft.h"
 #include "vector.h"
+#include "environ.h"
 
 #include "env.h"
 
@@ -33,6 +34,23 @@ t_env	*env_destroy(t_env **env)
 		*env = NULL;
 	}
 	return (NULL);
+}
+
+t_pair		*env_pair_create_from_line(const char *line)
+{
+	t_pair	*pair;
+	char	**split;
+
+	assert(line);
+	split = ft_strsplit(line, '=');
+	if (!split || ft_arraylen((const void **)split) != 2)
+	{
+		ft_array_destroy((void **)split, ft_arraylen((const void **)split));
+		return (NULL);
+	}
+	pair = pair_create(split[0], split[1]);
+	free(split);
+	return (pair);
 }
 
 t_env_node	*env_node_create_from_line(const char *line)
@@ -106,6 +124,33 @@ char	*env_get(t_env *env, const char *key)
 	return ((node != NULL)? node->value : NULL);
 }
 
+t_bool	env_add_to_environ(t_env_node *node, const char *key, char *value, e_scope scope)
+{
+	char *line;
+
+	assert(node);
+	assert(key);
+	assert(value);
+	if (scope == SCOPE_ENVIRON || node->scope == SCOPE_ENVIRON)
+	{
+		line = ft_strjoin_multi(3, key, "=", value);
+		if (node->environ_index >= 0)
+		{
+			assert(environ_set(node->environ_index, line) == TRUE);
+		}
+		else
+		{
+			assert(environ_add(line) == TRUE);
+			node->environ_index = environ_size() - 1;
+		}
+		return(TRUE);
+	}
+	else
+	{
+		return (FALSE);
+	}
+}
+
 t_bool	env_set(t_env *env, const char *key, char *value, e_scope scope)
 {
 	assert(env);
@@ -114,11 +159,20 @@ t_bool	env_set(t_env *env, const char *key, char *value, e_scope scope)
 
 	t_env_node	*node;
 
-	node = env_node_create(key, value, scope);
-	if (node && hm_set(env->hm_store, key, node))
-		return (TRUE);
-	env_node_destroy(&node);
-	return (FALSE);
+	node = hm_get(env->hm_store, key);
+	if (node)
+	{
+		if (node->value != value)
+			free(node->value);
+		node->value = ft_strdup(value);
+	}
+	else
+	{
+		node = env_node_create(key, value, scope);
+		hm_set(env->hm_store, key, node);
+	}
+	env_add_to_environ(node, key, value, scope);
+	return (TRUE);
 }
 
 t_env_node	*env_get_node_for_key(t_env *env, const char *key)
