@@ -153,5 +153,5 @@ int	builtin_cd(t_command *cmd)
 		}
 	}
 	__print_cur_path();
-	exit(exit_status);
+	return(exit_status);
 }
