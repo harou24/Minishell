@@ -184,10 +184,15 @@ t_env_node	*env_get_node_for_key(t_env *env, const char *key)
 
 t_bool	env_unset(t_env *env, const char *key)
 {
+	t_env_node *node;
+
 	assert(env);
 	assert(key);
 	if (!env_get_node_for_key(env, key))
 		return (FALSE);
+	node = env_get_node_for_key(env, key);
+	if (node->environ_index >= 0)
+		environ_remove(node->environ_index);
 	hm_remove(env->hm_store, key, env_node_destroy_hm);
 	return (TRUE);
 }

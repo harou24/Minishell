@@ -56,5 +56,5 @@ size_t		environ_size()
 void		environ_remove(size_t index)
 {
 	assert(g_environ_vec__);
-	vector(&g_environ_vec__, V_POPAT, index, NULL);
+	free(vector(&g_environ_vec__, V_POPAT, index, NULL));
 }
