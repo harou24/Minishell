@@ -5,6 +5,7 @@
 #include "get_next_line.h"
 #include "ft_printf.h"
 
+#include "env_singleton.h"
 #include "filesystem.h"
 #include "filesystem_traversal.h"
 #include "prompt.h"
@@ -70,6 +71,11 @@ int	prompt_update_current_path(t_prompt *_prompt)
 
 void	prompt_set_error_code(t_prompt *_prompt, int _error_code)
 {
+	char *errstring;
+
+	errstring = ft_itoa(_error_code);
+	env_set_s("?", errstring, SCOPE_LOCAL);
+	free(errstring);
 	_prompt->error_code = _error_code;
 }
 
