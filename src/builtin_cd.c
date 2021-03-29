@@ -87,7 +87,7 @@ static int	__exec_cd_home()
 	exit_status = EXIT_FAILURE;
 	new_path = NULL;
 	if (error == NO_ERROR_OCCURED)
-		new_path = env_get_home();
+		new_path = ft_strdup(env_get_home());
 	if (new_path && __update_dir_change(new_path))
 		exit_status = EXIT_SUCCESS;
 	return (exit_status);
@@ -103,7 +103,7 @@ static int	__exec_cd_dash()
 	exit_status = EXIT_FAILURE;
 	new_path = NULL;
 	if (error == NO_ERROR_OCCURED)
-		new_path = env_get_prev_dir();
+		new_path = ft_strdup(env_get_prev_dir());
 	if (new_path && __update_dir_change(new_path))
 		exit_status = EXIT_SUCCESS;
 	return (exit_status);
