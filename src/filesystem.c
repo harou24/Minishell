@@ -1,7 +1,22 @@
 #include <stdlib.h>
 #include <assert.h>
+#include <errno.h>
+#include <string.h>
 
+#include "debugger.h"
 #include "filesystem.h"
+
+int		fs_open(const char *fname, int flags)
+{
+	int	fd;
+
+	fd = open(fname, flags);
+	if (fd == -1)
+	{
+		dbg("File %s failed to open! errno: %s\n", fname, strerror(errno));
+	}
+	return (fd);
+}
 
 t_bool	fs_exists(const char *fname)
 {

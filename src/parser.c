@@ -6,10 +6,9 @@
 #include "debugger.h"
 #include "bash_pattern.h"
 #include "parser.h"
+#include "env_singleton.h"
 
 # define VEC_SIZE 128
-
-#include <stdio.h>
 
 static t_parser *g_parser__;
 
@@ -116,16 +115,8 @@ char			*parse_retreive_var_from_env_for_token(t_token *token)
 	key = ft_strsub(journal_get_input_str(), token->range.begin, 1 + token->range.end - token->range.begin);
 	assert(key);
 
-	assert(g_parser__->env);
-	var = env_get(g_parser__->env, key);
-	if (!var)
-	{
-		/*
-		ft_printf("parser: var not found for key '%s'\n", key);
-		*/
-		var = ft_strdup("");
-	}
-
+	var = env_get_s(key);
+	var = (var == NULL) ? ft_strdup("") : ft_strdup(var);
 	free(key);
 	return(var);
 }
@@ -281,6 +272,22 @@ t_command		*parse_build_command(t_range area)
 	return (command);
 }
 
+
+t_exec_op_type	parse_get_op_type_for_pattern(t_range area, t_bash_pattern_type pat_type)
+{
+	t_exec_op_type	op_type;
+
+	if (pat_type == P_COMMAND || pat_type == P_PATH) /* hacky but needed */
+		op_type = execscheme_get_op_type_for_token(journal_get(area.begin));
+	else if (pat_type == P_ASSIGNMENT)
+		op_type = OP_ASSIGNMENT;
+	else if (pat_type == P_PATH)
+		op_type = OP_PATH;
+	else
+		op_type = OP_NO_TYPE;
+	return (op_type);
+}
+
 t_execscheme	*parse_build_execscheme(t_range area, t_bash_pattern_type pat_type)
 {
 	t_execscheme *scheme;
@@ -288,17 +295,12 @@ t_execscheme	*parse_build_execscheme(t_range area, t_bash_pattern_type pat_type)
 	scheme = execscheme_create();
 	if (scheme)
 	{
-		scheme->relation_type = execscheme_get_relation_type_for_token(journal_get(area.end));
-		scheme->op_type = execscheme_get_op_type_for_token(journal_get(area.begin));
+		/* put this in seperate functions */
+		scheme->rel_type[NEXT_R] = execscheme_get_relation_type_for_token(journal_get(area.end));
+		scheme->op_type = parse_get_op_type_for_pattern(area, pat_type);
 		scheme->cmd = parse_build_command(area);
 		assert(scheme->cmd);
 	}
-
-	/*
-	how to differentiate between path & command with pat_type??
-	*/
-	(void)pat_type;
-
 	return (scheme);
 }
 
@@ -349,7 +351,10 @@ t_execscheme	*parse_generate_execschemes()
 	while((scheme = parse_get_next_scheme()))
 	{
 		if (!root)
+		{
 			root = scheme;
+			scheme->rel_type[PREV_R] = REL_START;
+		}
 		else
 			execscheme_attach(root, scheme);
 	}
@@ -360,6 +365,8 @@ t_execscheme	*parse()
 {
 	if (!parse_expand())
 		return (NULL);
+	if (g_parser__->rootscheme)
+		execscheme_destroy(&g_parser__->rootscheme);
 	g_parser__->rootscheme = parse_generate_execschemes();
 
 	return (g_parser__->rootscheme);

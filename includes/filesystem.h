@@ -3,6 +3,7 @@
 
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <fcntl.h>
 #include <unistd.h>
 
 #include "libft.h"
@@ -25,6 +26,8 @@ typedef enum	e_filemode
 	FM_READ = S_IRUSR,
 	FM_WRITE = S_IWUSR
 }				t_filemode;
+
+int		fs_open(const char *fname, int flags);
 
 t_bool	fs_exists(const char *fname);
 t_bool	fs_has_type(const char *fname, t_filetype ftype);

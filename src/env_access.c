@@ -1,3 +1,4 @@
+#include "ft_unistd.h"
 #include "env_access.h"
 
 char	*env_get_user()
@@ -7,7 +8,9 @@ char	*env_get_user()
 
 char	*env_get_host()
 {
-	return (env_get_s("HOST"));
+	return (ft_gethostname());
+	/* POSIX does not require HOST to be set
+	return (env_get_s("HOST")); */
 }
 
 char	*env_get_current_dir()

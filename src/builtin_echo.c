@@ -4,35 +4,34 @@
 
 #define N_FLAG_POS 1
 
-static t_bool	is_n_flag(t_command *cmd)
+static t_bool	check_has_n_flag(t_argv *argv)
 {
-	if (cmd->argv->argc > N_FLAG_POS && ft_strcmp(cmd->argv->argv[N_FLAG_POS], "-n") == 0)
-		return (TRUE);
-	return (FALSE);
+	return (argv->argc > N_FLAG_POS
+			&& ft_strcmp(argv->argv[N_FLAG_POS], "-n") == 0);
 }
 
-static		void print_output(t_command *cmd)
+static void		print_for_argv(t_argv *argv)
 {
-	int	count;
-	t_bool	_is_n_flag;
+	int			index;
+	t_bool		has_n_flag;
 
-	count = 1;
-	_is_n_flag = is_n_flag(cmd);
-	if (_is_n_flag)
-		count++;
-	while (count < cmd->argv->argc)
+	index = 1;
+	has_n_flag = check_has_n_flag(argv);
+	if (has_n_flag)
+		index++;
+	while (index < argv->argc)
 	{
-		ft_dprintf(cmd->fds[FD_OUT], "%s", argv_get(cmd->argv, count));
-		if (count != cmd->argv->argc - 1)
-			ft_dprintf(cmd->fds[FD_OUT], " ");
-		count++;
+		ft_printf("%s", argv_get(argv, index));
+		if (index != argv->argc - 1)
+			ft_printf(" ");
+		index++;
 	}
-	if (!_is_n_flag)
-		ft_dprintf(cmd->fds[FD_OUT], "\n");
+	if (!has_n_flag)
+		ft_printf("\n");
 }
 
 int		builtin_echo(t_command *cmd)
 {
-	print_output(cmd);
-	return (0);
+	print_for_argv(cmd->argv);
+	return(0);
 }
