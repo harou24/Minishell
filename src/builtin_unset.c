@@ -21,5 +21,5 @@ int	builtin_unset(t_command *cmd)
 			exit_status = EXIT_FAILURE;
 		index++;
 	}
-	exit(exit_status);
+	return(exit_status);
 }
