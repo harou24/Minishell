@@ -277,7 +277,7 @@ t_exec_op_type	parse_get_op_type_for_pattern(t_range area, t_bash_pattern_type p
 {
 	t_exec_op_type	op_type;
 
-	if (pat_type == P_COMMAND)
+	if (pat_type == P_COMMAND || pat_type == P_PATH) /* hacky but needed */
 		op_type = execscheme_get_op_type_for_token(journal_get(area.begin));
 	else if (pat_type == P_ASSIGNMENT)
 		op_type = OP_ASSIGNMENT;
