@@ -36,6 +36,7 @@ t_bool		_shell_was_interrupted()
 
 int			_shell_register_sigint_handler(void)
 {
+	p_register_signalhandler(SIGQUIT, shell_handle_sigint);
 	return(p_register_signalhandler(SIGINT, shell_handle_sigint));
 }
 
