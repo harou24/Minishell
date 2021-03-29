@@ -18,6 +18,8 @@ t_bool			env_set(t_env *env, const char *key, char *value, e_scope scope);
 t_bool			env_unset(t_env *env, const char *key);
 size_t			env_size(t_env *env);
 
+t_pair			*env_pair_create_from_line(const char *line);
+
 /* internal */
 char			**env_to_array(t_env *env, e_scope scope);
 t_env_node		*env_get_node_for_key(t_env *env, const char *key);

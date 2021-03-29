@@ -16,12 +16,26 @@
 #include <stdio.h>
 #include <string.h>
 
+int			executor_launch_builtin(t_execscheme *scheme)
+{
+	return (command_dispatch(scheme->op_type)(scheme->cmd));
+}
+
+t_bool		executor_is_builtin(t_execscheme *scheme)
+{
+	return (scheme->op_type != OP_COMMAND && scheme->op_type != OP_PATH);
+}
+
 int			executor_launch_sequential_scheme(t_execscheme *scheme, pid_t pid)
 {
 	assert(pid != -1);
+	if (executor_is_builtin(scheme))
+	{
+		p_signal(pid, SIGTERM); /* not particularly pretty eh */
+		return (executor_launch_builtin(scheme));
+	}
 	p_signal(pid, SIGUSR1);
 	return(p_waitpid(pid, W_EXITED));
-	(void)scheme;
 }
 
 void		executor_launch_parallel_scheme(pid_t pid)

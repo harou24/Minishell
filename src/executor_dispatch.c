@@ -25,8 +25,8 @@ static int				op_stub(t_command *cmd) {(void)cmd; return (-1);}
 
 static int	(*g_comtab__[OP_TAB_SIZE])(t_command *cmd) =		{
 																[OP_COMMAND] = exec_bin,
-																[OP_PATH] = op_stub,
-																[OP_ASSIGNMENT] = op_stub,
+																[OP_PATH] = exec_bin,
+																[OP_ASSIGNMENT] = op_assignment,
 																[OP_BUILTIN_ECHO] = builtin_echo,
 																[OP_BUILTIN_CD] = op_stub,
 																[OP_BUILTIN_PWD] = builtin_pwd,

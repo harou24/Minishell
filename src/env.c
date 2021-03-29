@@ -35,6 +35,23 @@ t_env	*env_destroy(t_env **env)
 	return (NULL);
 }
 
+t_pair		*env_pair_create_from_line(const char *line)
+{
+	t_pair	*pair;
+	char	**split;
+
+	assert(line);
+	split = ft_strsplit(line, '=');
+	if (!split || ft_arraylen((const void **)split) != 2)
+	{
+		ft_array_destroy((void **)split, ft_arraylen((const void **)split));
+		return (NULL);
+	}
+	pair = pair_create(split[0], split[1]);
+	free(split);
+	return (pair);
+}
+
 t_env_node	*env_node_create_from_line(const char *line)
 {
 	t_env_node	*node;

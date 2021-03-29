@@ -12,5 +12,6 @@ int	builtin_cd(t_command *cmd);
 int	builtin_pwd(t_command *cmd);
 
 int	exec_bin(t_command *cmd);
+int op_assignment(t_command *cmd);
 
 #endif
