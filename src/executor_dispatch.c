@@ -32,8 +32,8 @@ static int	(*g_comtab__[OP_TAB_SIZE])(t_command *cmd) =		{
 																[OP_BUILTIN_EXPORT] = builtin_export,
 																[OP_BUILTIN_PWD] = builtin_pwd,
 																[OP_BUILTIN_UNSET] = builtin_unset,
-																[OP_BUILTIN_ENV] = op_stub,
-																[OP_BUILTIN_EXIT] = op_stub,
+																[OP_BUILTIN_ENV] = builtin_env,
+																[OP_BUILTIN_EXIT] = builtin_exit,
 																[OP_NO_TYPE] = op_stub
 															};
 
