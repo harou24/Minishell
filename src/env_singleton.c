@@ -3,6 +3,7 @@
 
 #include "environ.h"
 #include "env_singleton.h"
+#include "env.h"
 
 static t_env *g_env__;
 
@@ -46,4 +47,10 @@ t_bool		env_unset_s(const char *key)
 	if (g_env__)
 		env_unset(g_env__, key);
 	return (TRUE); /* env.h doesn't provide error handling for unset */
+}
+
+char		**env_to_array_s(e_scope scope)
+{
+	assert(g_env__);
+	return (env_to_array(g_env__, scope));
 }
