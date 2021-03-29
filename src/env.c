@@ -163,8 +163,10 @@ t_bool	env_set(t_env *env, const char *key, char *value, e_scope scope)
 	if (node)
 	{
 		if (node->value != value)
+		{
 			free(node->value);
-		node->value = ft_strdup(value);
+			node->value = ft_strdup(value);
+		}
 	}
 	else
 	{
