@@ -124,36 +124,55 @@ char	*env_get(t_env *env, const char *key)
 	return ((node != NULL)? node->value : NULL);
 }
 
+t_bool	env_add_to_environ(t_env_node *node, const char *key, char *value, e_scope scope)
+{
+	char *line;
+
+	assert(node);
+	assert(key);
+	assert(value);
+	if (scope == SCOPE_ENVIRON || node->scope == SCOPE_ENVIRON)
+	{
+		line = ft_strjoin_multi(3, key, "=", value);
+		if (node->environ_index >= 0)
+		{
+			assert(environ_set(node->environ_index, line) == TRUE);
+		}
+		else
+		{
+			assert(environ_add(line) == TRUE);
+			node->environ_index = environ_size() - 1;
+		}
+		return(TRUE);
+	}
+	else
+	{
+		return (FALSE);
+	}
+}
+
 t_bool	env_set(t_env *env, const char *key, char *value, e_scope scope)
 {
 	assert(env);
 	assert(key);
 	assert(value);
 
-	char		*line;
 	t_env_node	*node;
 
 	node = hm_get(env->hm_store, key);
-	if (node && scope == SCOPE_ENVIRON)
+	if (node)
 	{
-		line = ft_strjoin_multi(3, key, "=", value);
-		if (node->environ_index >= 0)
-		{
-			printf("environ node has no index!\n");
-			environ_set(node->environ_index, line);
-		}
-		else
-		{
-			printf("environ node has index!\n");
-			environ_add(line);
-			node->environ_index = environ_size() - 1;
-		}
+		if (node->value != value)
+			free(node->value);
+		node->value = ft_strdup(value);
 	}
-	node = env_node_create(key, value, scope);
-	if (node && hm_set(env->hm_store, key, node))
-		return (TRUE);
-	env_node_destroy(&node);
-	return (FALSE);
+	else
+	{
+		node = env_node_create(key, value, scope);
+		hm_set(env->hm_store, key, node);
+	}
+	env_add_to_environ(node, key, value, scope);
+	return (TRUE);
 }
 
 t_env_node	*env_get_node_for_key(t_env *env, const char *key)
