@@ -8,7 +8,7 @@
 
 void	dump_scope(e_scope scope)
 {
-	char **arr;
+	char	**arr;
 	size_t	i;
 
 	arr = env_to_array_s(scope);
@@ -21,10 +21,9 @@ void	dump_scope(e_scope scope)
 	ft_array_destroy((void **)arr, ft_arraylen((const void **)arr));
 }
 
-int		builtin_env(t_command *cmd)
+int	builtin_env(t_command *cmd)
 {
 	dump_scope(SCOPE_ENVIRON);
-	//dump_scope(SCOPE_LOCAL);
 	(void)cmd;
 	return (0);
 }
