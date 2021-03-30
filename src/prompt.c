@@ -102,6 +102,7 @@ int	prompt_update(t_prompt *_prompt)
 {
 	if (!prompt_update_current_path(_prompt))
 		return (0);
+	prompt_init_indexes(_prompt);
 	prompt_prepare_buffer(_prompt);
 	return (1);
 }
