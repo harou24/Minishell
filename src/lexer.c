@@ -47,7 +47,7 @@ void		lex_add_nullbyte()
 {
 	t_token *token;
 
-	assert(g_lex__->input[g_lex__->index] == '\0');
+	/* assert(g_lex__->input[g_lex__->index] == '\0'); */
 	token = token_create(range(g_lex__->index, g_lex__->index), NULLBYTE);
 	assert(token);
 	journal_push(token);
