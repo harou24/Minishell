@@ -19,7 +19,7 @@ int		exec_bin(t_command *cmd)
 	char	*abspath;
 
 	assert(cmd);
-	if (strncmp(cmd->path, "./", 2) == 0)
+	if (strncmp(cmd->path, "./", 2) == 0 || strncmp(cmd->path, "/", 1) == 0)
 		abspath = cmd->path;
 	else
 		abspath = path_expand(env_get_path(), cmd->path);
