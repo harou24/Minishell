@@ -184,7 +184,7 @@ t_bool			parse_should_expand_literals()
 	string = journal_find_nth_type(STRING, 0);
 	literal = journal_find_nth_type(LITERAL, 0);
 
-	return (string && literal && string->index > literal->index);
+	return (!string || (string && literal && string->index > literal->index));
 }
 
 t_bool			parse_expand()
