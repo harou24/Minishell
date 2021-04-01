@@ -6,7 +6,7 @@
 #include "debugger.h"
 #include "filesystem.h"
 
-int	fs_open(const char *fname, int flags)
+int		fs_open(const char *fname, int flags)
 {
 	int	fd;
 
@@ -20,23 +20,23 @@ int	fs_open(const char *fname, int flags)
 
 t_bool	fs_exists(const char *fname)
 {
-	struct stat	buffer;
-
-	return (stat(fname, &buffer) == 0);
+ 	struct stat	buffer;
+	
+ 	return (stat(fname, &buffer) == 0);
 }
 
 t_bool	fs_has_type(const char *fname, t_filetype ftype)
 {
-	struct stat	buffer;
-
-	return (stat(fname, &buffer) == 0 && (buffer.st_mode & S_IFMT) == ftype);
+ 	struct stat	buffer;
+	
+ 	return (stat(fname, &buffer) == 0 && (buffer.st_mode & S_IFMT) == ftype);
 }
 
 t_bool	fs_has_mode(const char *fname, t_filemode fmode)
 {
-	struct stat	buffer;
-
-	return (stat(fname, &buffer) == 0 && (buffer.st_mode & fmode));
+ 	struct stat	buffer;
+	
+ 	return (stat(fname, &buffer) == 0 && (buffer.st_mode & fmode));
 }
 
 t_bool	file_exists(const char *fname)
@@ -66,5 +66,5 @@ t_bool	directory_exists(const char *dname)
 
 t_bool	directory_is_openable(const char *dname)
 {
-	return (fs_has_type(dname, F_DIR) && fs_has_mode(dname, FM_EXEC | FM_READ));
+	return (fs_has_type(dname, F_DIR) && fs_has_mode(dname, FM_EXEC|FM_READ));
 }
