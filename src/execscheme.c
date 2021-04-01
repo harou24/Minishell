@@ -29,7 +29,7 @@ typedef struct s_optok__
 	const char				*key;
 }							t_optok__;
 
-static const t_optok__	g_optok_tab__[] = {
+static const t_optok__				g_optok_tab__[] = {
 					{OP_BUILTIN_ECHO, "echo"},
 					{OP_BUILTIN_CD, "cd"},
 					{OP_BUILTIN_PWD, "pwd"},
