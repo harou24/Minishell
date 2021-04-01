@@ -8,7 +8,7 @@
 
 #include "filesystem_traversal.h"
 
-static char *__get_cur_dir_name(size_t buflen)
+static char	*__get_cur_dir_name(size_t buflen)
 {
 	char	*buf;
 
@@ -18,7 +18,7 @@ static char *__get_cur_dir_name(size_t buflen)
 		free(buf);
 		return (NULL);
 	}
-	return(buf);
+	return (buf);
 }
 
 char	*fs_get_cur_dir_name(void)
@@ -36,7 +36,7 @@ char	*fs_get_cur_dir_name(void)
 	return (buf);
 }
 
-int		fs_change_dir(const char *dname)
+int	fs_change_dir(const char *dname)
 {
 	if (chdir(dname) == 0)
 		return (0);

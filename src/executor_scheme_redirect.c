@@ -1,4 +1,3 @@
-#include <assert.h>
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
@@ -13,6 +12,7 @@
 #include "executor.h"
 
 #define CHILD 0
+#define ERROR_OCCURED -1
 
 static t_bool	redirection_write_handle_fd(const char *fname,
 						t_bool should_append)
@@ -65,7 +65,10 @@ static	int	__exec_child_process(t_execscheme *scheme, pid_t ppid)
 	if (scheme->rel_type[PREV_R] == REL_PIPE)
 	{
 		if (!(scheme->rel_type[NEXT_R] & REL_READ))
-			assert(dup2(scheme->prev->pipe[PIPE_READ], STDIN) != -1);
+		{
+			if (dup2(scheme->prev->pipe[PIPE_READ], STDIN) == ERROR_OCCURED)
+				return (-1);
+		}
 		close(scheme->prev->pipe[PIPE_READ]);
 		close(scheme->prev->pipe[PIPE_WRITE]);
 	}
