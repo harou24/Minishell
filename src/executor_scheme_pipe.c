@@ -1,4 +1,3 @@
-#include <assert.h>
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
@@ -12,15 +11,15 @@
 #include "executor.h"
 
 #define CHILD 0
+#define ERROR_OCCURED -1
 
-int		handler_scheme_pipe(t_execscheme *scheme)
+int	handler_scheme_pipe(t_execscheme *scheme)
 {
 	pid_t			pid;
 	pid_t			ppid;
 
-	if (pipe(scheme->pipe) == -1)
+	if (pipe(scheme->pipe) == ERROR_OCCURED)
 		return (-1);
-
 	ppid = getpid();
 	pid = fork();
 	if (pid < 0)
@@ -30,19 +29,17 @@ int		handler_scheme_pipe(t_execscheme *scheme)
 	}
 	else if (pid == CHILD)
 	{
-		/* duplicate and close pipes */
-		assert(dup2(scheme->pipe[PIPE_WRITE], STDOUT) != -1);
+		if (dup2(scheme->pipe[PIPE_WRITE], STDOUT) == ERROR_OCCURED)
+			return (-1);
 		close(scheme->pipe[PIPE_WRITE]);
 		close(scheme->pipe[PIPE_READ]);
-
 		if (scheme->rel_type[PREV_R] == REL_PIPE)
 		{
-			assert(dup2(scheme->prev->pipe[PIPE_READ], STDIN) != -1);
+			if (dup2(scheme->prev->pipe[PIPE_READ], STDIN) != ERROR_OCCURED)
+				return (-1);
 			close(scheme->prev->pipe[PIPE_READ]);
 			close(scheme->prev->pipe[PIPE_WRITE]);
 		}
-
-		/* move this to common function */
 		p_queue_register_signalhandler(SIGUSR1);
 		p_signal(ppid, SIGUSR1);
 		p_queue_wait_for_signals(1);
@@ -50,15 +47,17 @@ int		handler_scheme_pipe(t_execscheme *scheme)
 		dbg("FATAL: child process didn't exit! errno: %s\n", strerror(errno));
 		abort();
 	}
-	else /* parent */
+	else
 	{
-		/* close read end of pipe from previous scheme because child will have used it*/
 		if (scheme->rel_type[PREV_R] == REL_PIPE)
 		{
 			close(scheme->prev->pipe[PIPE_READ]);
 			close(scheme->prev->pipe[PIPE_WRITE]);
 		}
-		return ((p_tab_push(pid) == TRUE) ? 0 : -1);
+		if (p_tab_push(pid) == TRUE)
+			return (0);
+		else
+			return (-1);
 	}
 	return (-1);
 }
