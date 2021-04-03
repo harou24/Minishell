@@ -7,13 +7,13 @@
 static t_bool	check_has_n_flag(t_argv *argv)
 {
 	return (argv->argc > N_FLAG_POS
-			&& ft_strcmp(argv->argv[N_FLAG_POS], "-n") == 0);
+		&& ft_strcmp(argv->argv[N_FLAG_POS], "-n") == 0);
 }
 
-static void		print_for_argv(t_argv *argv)
+static void	print_for_argv(t_argv *argv)
 {
-	int			index;
-	t_bool		has_n_flag;
+	int	index;
+	t_bool	has_n_flag;
 
 	index = 1;
 	has_n_flag = check_has_n_flag(argv);
@@ -30,8 +30,8 @@ static void		print_for_argv(t_argv *argv)
 		ft_printf("\n");
 }
 
-int		builtin_echo(t_command *cmd)
+int	builtin_echo(t_command *cmd)
 {
 	print_for_argv(cmd->argv);
-	return(0);
+	return (0);
 }

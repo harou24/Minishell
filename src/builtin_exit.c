@@ -8,7 +8,6 @@ int	builtin_exit(t_command *cmd)
 	exit_status = EXIT_SUCCESS;
 	if (cmd->argv->argc > 2)
 	{
-		/*error handler*/
 		exit(EXIT_FAILURE);
 	}
 	if (cmd->argv->argc == 2)
