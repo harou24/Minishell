@@ -11,11 +11,10 @@
 #include "bash_ops.h"
 #include "path.h"
 
-extern char	**environ;
-
 int	exec_bin(t_command *cmd)
 {
-	char	*abspath;
+	extern char	**environ;
+	char		*abspath;
 
 	if (strncmp(cmd->path, "./", 2) == 0 || strncmp(cmd->path, "/", 1) == 0)
 		abspath = cmd->path;
