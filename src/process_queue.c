@@ -14,7 +14,7 @@
 
 static size_t	g_ready__;
 
-static void		__sighandler(int signal)
+static void	__sighandler(int signal)
 {
 	dbg("Pid %i received signal %s\n", getpid(), strsignal(signal));
 	g_ready__++;
@@ -22,7 +22,7 @@ static void		__sighandler(int signal)
 
 void	p_queue_register_signalhandler(int sig)
 {
-	static t_bool sighandler_registered;
+	static t_bool	sighandler_registered;
 
 	if (!sighandler_registered)
 	{

@@ -7,11 +7,12 @@
 #include "env_singleton.h"
 #include "bash_ops.h"
 
-int			op_assignment(t_command *cmd)
+int	op_assignment(t_command *cmd)
 {
 	if (cmd->argv->argc == 3)
 	{
-		if (env_set_s(cmd->argv->argv[0], cmd->argv->argv[2], SCOPE_LOCAL) == TRUE)
+		if (env_set_s(cmd->argv->argv[0],
+				cmd->argv->argv[2], SCOPE_LOCAL) == TRUE)
 			return (0);
 	}
 	else if (cmd->argv->argc == 2)

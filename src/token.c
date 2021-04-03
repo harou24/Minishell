@@ -39,39 +39,35 @@ t_token		*token_destroy(t_token *token)
 
 const char	*token_dump_type(e_token_type type)
 {
-	switch (type)
-	{
-		case WORD:
-			return ("WORD");
-		case STRING:
-			return ("STRING");
-		case LITERAL:
-			return ("LITERAL");
-		case ASSIGNMENT:
-			return ("ASSIGNMENT");
-		case ESCAPE:
-			return ("ESCAPE");
-		case VARIABLE:
-			return ("VARIABLE");
-		case SPACE:
-			return ("SPACE");
-		case PIPE:
-			return ("PIPE");
-		case NEWLINE:
-			return ("NEWLINE");
-		case SEMICOLON:
-			return ("SEMICOLON");
-		case OP_READ:
-			return ("OP_READ");
-		case OP_APPEND:
-			return ("OP_APPEND");
-		case OP_WRITE:
-			return ("OP_WRITE");
-		case NULLBYTE:
-			return ("NULLBYTE");
-		case NO_TYPE:
-			return ("NO_TYPE");
-		default:
-			return ("UNKNOWN");
-	}
+	if (type == WORD)
+		return ("WORD");
+	if (type == STRING)
+		return ("STRING");
+	if (type == LITERAL)
+		return ("LITERAL");
+	if (type == ASSIGNMENT)
+		return ("ASSIGNMENT");
+	if (type == ESCAPE)
+		return ("ESCAPE");
+	if (type == VARIABLE)
+		return ("VARIABLE");
+	if (type == SPACE)
+		return ("SPACE");
+	if (type == PIPE)
+		return ("PIPE");
+	if (type == NEWLINE)
+		return ("NEWLINE");
+	if (type == SEMICOLON)
+		return ("SEMICOLON");
+	if (type == OP_READ)
+		return ("OP_READ");
+	if (type == OP_APPEND)
+		return ("OP_APPEND");
+	if (type == OP_WRITE)
+		return ("OP_WRITE");
+	if (type == NULLBYTE)
+		return ("NULLBYTE");
+	if (type == NO_TYPE)
+		return ("NO_TYPE");
+	return ("UNKNOWN");
 }

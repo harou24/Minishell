@@ -8,38 +8,36 @@
 #include "parser.h"
 #include "env_singleton.h"
 
-# define VEC_SIZE 128
+#define VEC_SIZE 128
 
-static t_parser *g_parser__;
+static t_parser	*g_parser__;
 
-/* helper function for parse_expand_first_string */
-t_vector		parse_get_subtokens(t_token *first, t_token *last)
+t_vector	parse_get_subtokens(t_token *first, t_token *last)
 {
 	t_vector	subtokens;
-	
+
 	assert(first);
 	assert(last);
-
 	vector(&subtokens, V_CREATE, VEC_SIZE, NULL);
 	if (!subtokens)
 		return (NULL);
-	while(first->next && first->next != last)
+	while (first->next && first->next != last)
 	{
 		vector(&subtokens, V_PUSHBACK, 0, first->next);
 		first = first->next;
 	}
-	return (subtokens);	
+	return (subtokens);
 }
 
-/* helper function for parse_expand_first_string */
-void			parse_replace_tokens_with_token(t_vector tokens, t_token *first, t_token *last, t_token *token)
+void	parse_replace_tokens_with_token(t_vector tokens, t_token *first,
+						t_token *last, t_token *token)
 {
-	const ssize_t index_of_first = first->index;
-	ssize_t index;
+	const ssize_t	index_of_first = first->index;
+	ssize_t			index;
 
 	index = last->index;
 	assert(index > 0);
-	while(index >= index_of_first)
+	while (index >= index_of_first)
 	{
 		token_destroy(vector(&tokens, V_POPAT, index, NULL));
 		index--;
@@ -49,7 +47,8 @@ void			parse_replace_tokens_with_token(t_vector tokens, t_token *first, t_token 
 	journal_rebuild_tokens();
 }
 
-void			parse_perform_string_substitution(t_vector tokens, t_token *first, t_token *last, t_vector subtokens)
+void	parse_perform_string_substitution(t_vector tokens, t_token *first,
+						t_token *last, t_vector subtokens)
 {
 	char		*string;
 	t_token		*cur_token;
@@ -60,9 +59,7 @@ void			parse_perform_string_substitution(t_vector tokens, t_token *first, t_toke
 	assert(last);
 	assert(tokens);
 	assert(subtokens);
-
 	token = token_create(range(first->range.begin, last->range.end), WORD);
-
 	index = 0;
 	string = NULL;
 	while ((cur_token = vector(&subtokens, V_PEEKAT, index, NULL)))
@@ -74,26 +71,22 @@ void			parse_perform_string_substitution(t_vector tokens, t_token *first, t_toke
 	parse_replace_tokens_with_token(tokens, first, last, token);
 }
 
-t_bool			parse_expand_first_string(t_vector tokens, t_token *first, t_token *last)
+t_bool	parse_expand_first_string(t_vector tokens, t_token *first, t_token *last)
 {
-	t_vector subtokens;
+	t_vector	subtokens;
 
 	assert(tokens);
 	assert(first);
 	assert(last);
 	assert(first != last);
-
 	subtokens = parse_get_subtokens(first, last);
 	assert(subtokens);
-
-	/* stitch everything together */
 	parse_perform_string_substitution(tokens, first, last, subtokens);
-	
 	vector(&subtokens, V_DESTROY, FALSE, NULL);
 	return (TRUE);
 }
 
-t_bool			parse_expand_strings(e_token_type string_type)
+t_bool	parse_expand_strings(e_token_type string_type)
 {
 	t_vector *tokens;
 
@@ -107,41 +100,37 @@ t_bool			parse_expand_strings(e_token_type string_type)
 	return (TRUE);
 }
 
-char			*parse_retreive_var_from_env_for_token(t_token *token)
+char	*parse_retreive_var_from_env_for_token(t_token *token)
 {
-	char *key;
-	char *var;
+	char	*key;
+	char	*var;
 
 	key = ft_strsub(journal_get_input_str(), token->range.begin, 1 + token->range.end - token->range.begin);
 	assert(key);
-
 	var = env_get_s(key);
 	var = (var == NULL) ? ft_strdup("") : ft_strdup(var);
 	free(key);
 	return(var);
 }
 
-void			parse_perform_var_substitution(t_vector tokens, t_token *var_sym, t_token *var_name)
+void	parse_perform_var_substitution(t_vector tokens, t_token *var_sym, t_token *var_name)
 {
-	t_token *token;
+	t_token	*token;
 	
 	assert(var_sym->index == var_name->index - 1);
-
 	token = token_create(range(var_name->range.begin - 1, var_name->range.end), WORD);
 	assert(token);
-
 	token->string = parse_retreive_var_from_env_for_token(var_name);
 	assert(token->string);
-
 	parse_replace_tokens_with_token(tokens, var_sym, var_name, token);
 }
 
-t_bool			parse_is_variable(t_token *var_name)
+t_bool	parse_is_variable(t_token *var_name)
 {
 	return (var_name && var_name->type == WORD);
 }
 
-t_bool			parse_expand_first_variable(t_vector tokens, t_token *var_sym)
+t_bool	parse_expand_first_variable(t_vector tokens, t_token *var_sym)
 {
 	assert(tokens);
 	assert(var_sym);
@@ -152,7 +141,6 @@ t_bool			parse_expand_first_variable(t_vector tokens, t_token *var_sym)
 	var_name = journal_get(var_sym_index + 1);
 	if (!parse_is_variable(var_name))
 	{
-		/* this was just a $ sign */
 		var_sym->type = WORD;
 		journal_rebuild_tokens();
 		return (TRUE);
@@ -161,7 +149,7 @@ t_bool			parse_expand_first_variable(t_vector tokens, t_token *var_sym)
 	return (TRUE);
 }
 
-t_bool			parse_expand_variables()
+t_bool	parse_expand_variables(void)
 {
 	t_vector *tokens;
 
@@ -176,18 +164,17 @@ t_bool			parse_expand_variables()
 	return (TRUE);
 }
 
-t_bool			parse_should_expand_literals()
+t_bool	parse_should_expand_literals(void)
 {
 	t_token		*string;
 	t_token		*literal;
 	
 	string = journal_find_nth_type(STRING, 0);
 	literal = journal_find_nth_type(LITERAL, 0);
-
 	return (!string || (string && literal && string->index > literal->index));
 }
 
-t_bool			parse_expand()
+t_bool	parse_expand(void)
 {
 	if (parse_should_expand_literals())
 	{
@@ -201,12 +188,12 @@ t_bool			parse_expand()
 	return (TRUE);
 }
 
-t_bool			parse_keep_matching()
+t_bool	parse_keep_matching(void)
 {
 	return (g_parser__->matcharea.begin < g_parser__->matcharea.end);
 }
 
-char			*parse_build_argument(size_t index)
+char	*parse_build_argument(size_t index)
 {
 	t_token		*token;
 	char		*arg;
@@ -222,7 +209,7 @@ char			*parse_build_argument(size_t index)
 	return (NULL);
 }
 
-char			*parse_build_path(t_range *area)
+char	*parse_build_path(t_range *area)
 {
 	if (journal_at_index_is_type(area->begin, SPACE))
 	{
@@ -266,9 +253,6 @@ t_command		*parse_build_command(t_range area)
 	path = parse_build_path(&area);
 	argv = parse_build_argv(area);
 	command = command_create(path, argv);
-
-	/* handle non-default file descriptors for command */
-
 	return (command);
 }
 
@@ -277,7 +261,7 @@ t_exec_op_type	parse_get_op_type_for_pattern(t_range area, t_bash_pattern_type p
 {
 	t_exec_op_type	op_type;
 
-	if (pat_type == P_COMMAND || pat_type == P_PATH) /* hacky but needed */
+	if (pat_type == P_COMMAND || pat_type == P_PATH)
 		op_type = execscheme_get_op_type_for_token(journal_get(area.begin));
 	else if (pat_type == P_ASSIGNMENT)
 		op_type = OP_ASSIGNMENT;
@@ -295,7 +279,6 @@ t_execscheme	*parse_build_execscheme(t_range area, t_bash_pattern_type pat_type)
 	scheme = execscheme_create();
 	if (scheme)
 	{
-		/* put this in seperate functions */
 		scheme->rel_type[NEXT_R] = execscheme_get_relation_type_for_token(journal_get(area.end));
 		scheme->op_type = parse_get_op_type_for_pattern(area, pat_type);
 		scheme->cmd = parse_build_command(area);
@@ -304,7 +287,7 @@ t_execscheme	*parse_build_execscheme(t_range area, t_bash_pattern_type pat_type)
 	return (scheme);
 }
 
-t_execscheme	*parse_get_next_scheme()
+t_execscheme	*parse_get_next_scheme(void)
 {
 	t_range				my_area;
 	t_bash_pattern_type	pat_type;
@@ -312,12 +295,11 @@ t_execscheme	*parse_get_next_scheme()
 	my_area = g_parser__->matcharea;
 	while (my_area.end > my_area.begin)
 	{
-		pat_type = bash_match_pattern(range(my_area.begin, my_area.end - 1)); /* 1 less because .end is length, not index! */
+		pat_type = bash_match_pattern(range(my_area.begin, my_area.end - 1));
 		if (pat_type != P_NO_TYPE)
 		{
-			/* found a match */
 			dbg("found pattern %s for range {%i, %i}\n", pattern_dump_type(pat_type), my_area.begin, my_area.end);
-			g_parser__->matcharea.begin = my_area.end + 1; /* 1 extra for skipping the delimiter */
+			g_parser__->matcharea.begin = my_area.end + 1;
 			return (parse_build_execscheme(my_area, pat_type));
 		}
 		my_area.end--;
@@ -325,21 +307,24 @@ t_execscheme	*parse_get_next_scheme()
 	return (NULL);
 }
 
-void			parse_reset_match_area()
+void			parse_reset_match_area(void)
 {
 	g_parser__->matcharea = range(0, journal_size());
 }
 
 void			parse_dump_match_area(t_range area)
 {
-	char *range = range_dump(area);
-	char *tokens = journal_dump_tokens_for_range(area);
+	char	*range;
+	char	*tokens;
+
+	range = range_dump(area);
+	tokens = journal_dump_tokens_for_range(area);
 	dbg("area: %s, tokens: %s\n", range, tokens);
 	free(range);
 	free(tokens);
 }
 
-t_execscheme	*parse_generate_execschemes()
+t_execscheme	*parse_generate_execschemes(void)
 {
 	t_execscheme *root;
 	t_execscheme *scheme;
@@ -347,8 +332,7 @@ t_execscheme	*parse_generate_execschemes()
 	root = NULL;
 	parse_reset_match_area();
 	parse_dump_match_area(g_parser__->matcharea);
-	
-	while((scheme = parse_get_next_scheme()))
+	while ((scheme = parse_get_next_scheme()))
 	{
 		if (!root)
 		{
@@ -361,18 +345,17 @@ t_execscheme	*parse_generate_execschemes()
 	return (root);
 }
 
-t_execscheme	*parse()
+t_execscheme	*parse(void)
 {
 	if (!parse_expand())
 		return (NULL);
 	if (g_parser__->rootscheme)
 		execscheme_destroy(&g_parser__->rootscheme);
 	g_parser__->rootscheme = parse_generate_execschemes();
-
 	return (g_parser__->rootscheme);
 }
 
-t_parser	*parser_create()
+t_parser	*parser_create(void)
 {
 	t_parser *parser;
 
@@ -397,7 +380,7 @@ t_parser	*parser_destroy(t_parser **parser)
 	return ((g_parser__ = NULL));
 }
 
-void		parser_set_env(t_env *env)
+void	parser_set_env(t_env *env)
 {
 	assert(g_parser__);
 	assert(! g_parser__->env);

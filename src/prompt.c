@@ -16,7 +16,7 @@
 
 t_prompt 	*prompt_create(const char *_username, const char *_hostname)
 {
-	t_prompt *prompt;
+	t_prompt	*prompt;
 
 	assert(_username);
 	assert(_hostname);
@@ -28,7 +28,8 @@ t_prompt 	*prompt_create(const char *_username, const char *_hostname)
 	prompt->error_code = 0;
 	prompt->buffer = ft_calloc(sizeof(char), __PROMPT_BUFF_SIZE);
 	prompt->current_path = fs_get_cur_dir_name();
-	if (!prompt->current_path || !prompt->buffer || !prompt->username || !prompt->hostname)
+	if (!prompt->current_path || !prompt->buffer
+		|| !prompt->username || !prompt->hostname)
 	{
 		prompt_destroy(prompt);
 		return (NULL);
@@ -71,7 +72,7 @@ int	prompt_update_current_path(t_prompt *_prompt)
 
 void	prompt_set_error_code(t_prompt *_prompt, int _error_code)
 {
-	char *errstring;
+	char	*errstring;
 
 	errstring = ft_itoa(_error_code);
 	env_set_s("?", errstring, SCOPE_LOCAL);
