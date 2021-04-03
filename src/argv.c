@@ -8,9 +8,6 @@
 
 char	*argv_get(t_argv *argv, int index)
 {
-	assert(argv);
-	assert(index < argv->size); /* assert for testing */
-
 	if (index < argv->size)
 		return (argv->argv[index]);
 	return (NULL);
@@ -18,12 +15,9 @@ char	*argv_get(t_argv *argv, int index)
 
 t_bool	argv_push(t_argv *argv, char *arg)
 {
-	assert(argv);
-	assert(argv->argc < argv->size);
-
 	argv->argv[argv->argc] = arg;
 	argv->argc++;
-	return (TRUE); /* right now asserting will do, granular control flow not neccessary */
+	return (TRUE);
 }
 
 t_argv	*argv_create(int size)
@@ -57,7 +51,6 @@ void	argv_pretty_dump(t_argv *argv, int indent)
 {
 	int	i;
 
-	assert(argv);
 	if (argv->argc == 0)
 		return ;
 	dbg("%*s : %i\n", indent, "Argc", argv->argc);

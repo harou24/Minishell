@@ -1,9 +1,9 @@
 #ifndef ARGV_H
 # define ARGV_H
 
-#include "libft.h"
+# include "libft.h"
 
-typedef struct		s_argv
+typedef struct s_argv
 {
 	char			**argv;
 	int				argc;

@@ -1,18 +1,19 @@
 #include <assert.h>
 #include "journal.h"
 
-# define V_DEF_SIZE	128
+#define V_DEF_SIZE 128
 
-static t_journal *g_journal__;
+static t_journal	*g_journal__;
 
-t_journal        *journal_create()
+t_journal	*journal_create(void)
 {
 	if (g_journal__)
 		return (g_journal__);
 	g_journal__ = ft_calloc(sizeof(t_journal), 1);
 	if (g_journal__)
 	{
-		g_journal__->counter = ft_calloc(sizeof(t_journal_storetype), TOKEN_TYPE_SIZE);
+		g_journal__->counter = ft_calloc(
+				sizeof(t_journal_storetype), TOKEN_TYPE_SIZE);
 		if (!g_journal__->counter
 			|| !vector(&g_journal__->tokens, V_CREATE, V_DEF_SIZE, NULL))
 			return (journal_destroy(&g_journal__));
@@ -20,26 +21,25 @@ t_journal        *journal_create()
 	return (g_journal__);
 }
 
-void			journal_set_input_str(char *str)
+void	journal_set_input_str(char *str)
 {
 	journal_clear_input_str();
 	g_journal__->str = ft_strdup(str);
 }
 
-char			*journal_get_input_str()
+char	*journal_get_input_str(void)
 {
 	return (g_journal__->str);
 }
 
-void			journal_clear_input_str()
+void	journal_clear_input_str(void)
 {
 	free(g_journal__->str);
 	g_journal__->str = NULL;
 }
 
-void			journal_clear()
+void	journal_clear(void)
 {
-	/* this de-allocs all token elements in vector, which could be costly #40 */
 	if (g_journal__)
 	{
 		while (journal_size() > 0)
@@ -52,12 +52,12 @@ void			journal_clear()
 	}
 }
 
-void			journal_reset_counters()
+void	journal_reset_counters(void)
 {
-	size_t i;
+	size_t	i;
 
 	i = 0;
-	while(i < TOKEN_TYPE_SIZE)
+	while (i < TOKEN_TYPE_SIZE)
 	{
 		g_journal__->counter[i] = 0;
 		i++;
@@ -65,7 +65,7 @@ void			journal_reset_counters()
 	journal_creeper_reset();
 }
 
-void			journal_rebuild_tokens()
+void	journal_rebuild_tokens(void)
 {
 	const size_t	count = journal_size();
 	size_t			i;
@@ -83,7 +83,7 @@ void			journal_rebuild_tokens()
 	journal_build_linked_list();
 }
 
-t_journal        *journal_destroy(t_journal **journal)
+t_journal	*journal_destroy(t_journal **journal)
 {
 	if (!g_journal__)
 		return (NULL);
@@ -101,7 +101,7 @@ t_journal        *journal_destroy(t_journal **journal)
 	return ((g_journal__ = NULL));
 }
 
-t_token					*journal_push(t_token *token)
+t_token	*journal_push(t_token *token)
 {
 	assert(token->type < TOKEN_TYPE_SIZE);
 	if (vector(&g_journal__->tokens, V_PUSHBACK, 0, token))
@@ -115,7 +115,7 @@ t_token					*journal_push(t_token *token)
 	}
 }
 
-t_token					*journal_get(size_t index)
+t_token	*journal_get(size_t index)
 {
 	if (index >= journal_size())
 		return (NULL);
@@ -123,7 +123,7 @@ t_token					*journal_get(size_t index)
 		return (vector(&g_journal__->tokens, V_PEEKAT, index, NULL));
 }
 
-t_bool					journal_remove(size_t index)
+t_bool	journal_remove(size_t index)
 {
 	t_token				*token;
 
@@ -137,15 +137,15 @@ t_bool					journal_remove(size_t index)
 	return (FALSE);
 }
 
-t_bool					journal_at_index_is_type(size_t index, e_token_type type)
+t_bool	journal_at_index_is_type(size_t index, e_token_type type)
 {
 	t_token				*token;
 
 	token = journal_get(index);
-	return(token && token->type == type);
+	return (token && token->type == type);
 }
 
-size_t					journal_size()
+size_t	journal_size(void)
 {
 	if (!g_journal__)
 		return (0);
@@ -153,7 +153,7 @@ size_t					journal_size()
 		return (*(size_t *)vector(&g_journal__->tokens, V_SIZE, 0, 0));
 }
 
-char					*journal_dump_tokens()
+char	*journal_dump_tokens(void)
 {
 	char		*buf;
 	const int	buflen = 1024;
@@ -178,7 +178,7 @@ char					*journal_dump_tokens()
 	return (buf);
 }
 
-char					*journal_dump_tokens_for_range(t_range r)
+char	*journal_dump_tokens_for_range(t_range r)
 {
 	char		*buf;
 	const int	buflen = 1024;
@@ -204,22 +204,22 @@ char					*journal_dump_tokens_for_range(t_range r)
 	return (buf);
 }
 
-int						journal_has_token(const t_token *token)
+int	journal_has_token(const t_token *token)
 {
 	return (journal_has_tokentype(token->type));
 }
 
-int						journal_has_tokentype(const e_token_type type)
+int	journal_has_tokentype(const e_token_type type)
 {
 	return (g_journal__->counter[type]);
 }
 
-t_token					*journal_find_nth_token(const t_token *token, int n)
+t_token	*journal_find_nth_token(const t_token *token, int n)
 {
 	return (journal_find_nth_type(token->type, n));
 }
 
-t_token					*journal_find_nth_type(const e_token_type type, int n)
+t_token	*journal_find_nth_type(const e_token_type type, int n)
 {
 	const size_t		size = journal_size();
 	size_t				index;
@@ -241,22 +241,22 @@ t_token					*journal_find_nth_type(const e_token_type type, int n)
 	return (NULL);
 }
 
-t_token					*journal_find_first_token(const t_token *token)
+t_token	*journal_find_first_token(const t_token *token)
 {
 	return (journal_find_first_type(token->type));
 }
 
-t_token					*journal_find_last_token(const t_token *token)
+t_token	*journal_find_last_token(const t_token *token)
 {
 	return (journal_find_last_type(token->type));
 }
 
-t_token					*journal_find_first_type(const e_token_type type)
+t_token	*journal_find_first_type(const e_token_type type)
 {
 	return (journal_find_nth_type(type, 0));
 }
 
-t_token					*journal_find_last_type(const e_token_type type)
+t_token	*journal_find_last_type(const e_token_type type)
 {
 	const size_t		size = journal_size();
 	ssize_t				index;
@@ -275,7 +275,7 @@ t_token					*journal_find_last_type(const e_token_type type)
 	return (NULL);
 }
 
-void					 journal_remove_tokens_with_type(e_token_type type)
+void	journal_remove_tokens_with_type(e_token_type type)
 {
 	t_token				*token;
 
@@ -287,34 +287,34 @@ void					 journal_remove_tokens_with_type(e_token_type type)
 	journal_rebuild_tokens();
 }
 
-t_token					*journal_creeper_next()
+t_token	*journal_creeper_next(void)
 {
 	if (g_journal__->index >= journal_size())
 		return (NULL);
 	return (journal_get(g_journal__->index++));
 }
 
-void					journal_creeper_reset()
+void	journal_creeper_reset(void)
 {
 	journal_creeper_set_index(0);
 }
 
-size_t					journal_creeper_get_index()
+size_t	journal_creeper_get_index(void)
 {
-	return(g_journal__->index);
+	return (g_journal__->index);
 }
 
-void					journal_creeper_set_index(size_t index)
+void	journal_creeper_set_index(size_t index)
 {
 	g_journal__->index = index;
 }
 
-t_vector				journal_get_token_vector()
+t_vector	journal_get_token_vector(void)
 {
 	return (g_journal__->tokens);
 }
 
-void                    journal_build_linked_list()
+void	journal_build_linked_list(void)
 {
 	const size_t		size = journal_size();
 	ssize_t				index;
@@ -334,7 +334,6 @@ void                    journal_build_linked_list()
 		}
 		else
 		{
-			/* only for last token */
 			cur_token->next = NULL;
 			last_token = cur_token;
 		}
@@ -344,15 +343,16 @@ void                    journal_build_linked_list()
 	return ;
 }
 
-char					*journal_get_string_for_token(t_token *token)
+char	*journal_get_string_for_token(t_token *token)
 {
 	if (token->string)
 		return (ft_strdup(token->string));
 	else
-		return (ft_strsub(g_journal__->str, token->range.begin, 1 + token->range.end - token->range.begin));
+		return (ft_strsub(g_journal__->str,
+				token->range.begin, 1 + token->range.end - token->range.begin));
 }
 
-char					*journal_get_string_for_index(size_t index)
+char	*journal_get_string_for_index(size_t index)
 {
 	t_token				*token;
 
@@ -361,7 +361,7 @@ char					*journal_get_string_for_index(size_t index)
 	return (journal_get_string_for_token(token));
 }
 
-char					*journal_reconstruct_string()
+char	*journal_reconstruct_string(void)
 {
 	char		*buf;
 	char		*str;

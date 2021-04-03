@@ -17,7 +17,7 @@
 
 static int			g_dbg_fd__;
 
-static void			__debug_init()
+static void	__debug_init(void)
 {
 	if (g_dbg_fd__ <= 0)
 	{
@@ -28,16 +28,16 @@ static void			__debug_init()
 	}
 }
 
-static void			__debug_print_banner()
+static void	__debug_print_banner(void)
 {
 	ft_dprintf(g_dbg_fd__, "%-*s%*s%*s%s\n\n",
-				DBG_FILENAME_LEN, "Filename",
-				DBG_LINE_LEN, "LINE",
-				DBG_FUNCNAME_LEN + 3, "Function",
-				" Output");
+		DBG_FILENAME_LEN, "Filename",
+		DBG_LINE_LEN, "LINE",
+		DBG_FUNCNAME_LEN + 3, "Function",
+		" Output");
 }
 
-int					debug(const char *format, ...)
+int	debug(const char *format, ...)
 {
 	va_list			args;
 	int				rvalue;
@@ -49,7 +49,7 @@ int					debug(const char *format, ...)
 	return (rvalue);
 }
 
-t_bool				debug_init_tofile(const char *filename)
+t_bool	debug_init_tofile(const char *filename)
 {
 	int				fd;
 
@@ -63,7 +63,7 @@ t_bool				debug_init_tofile(const char *filename)
 	return (FALSE);
 }
 
-t_bool				debug_init_tofd(int fd)
+t_bool	debug_init_tofd(int fd)
 {
 	if (fd > 0)
 	{
@@ -74,7 +74,7 @@ t_bool				debug_init_tofd(int fd)
 	return (FALSE);
 }
 
-void				debug_deinit()
+void	debug_deinit(void)
 {
 	if (g_dbg_fd__ > 0)
 	{

@@ -12,15 +12,14 @@
 #include "vector.h"
 #include "process.h"
 
-const size_t pidvec_def_size = 16;
+const size_t	g_pidvec_def_size = 16;
+static void		*g_pidvec__;
 
-static void *g_pidvec__;
-
-static void	__pidvec_init()
+static void	__pidvec_init(void)
 {
 	if (g_pidvec__)
 		return ;
-	assert(vector(&g_pidvec__, V_CREATE, pidvec_def_size, NULL));
+	assert(vector(&g_pidvec__, V_CREATE, g_pidvec_def_size, NULL));
 }
 
 t_bool	p_tab_push(pid_t pid)
@@ -47,14 +46,14 @@ pid_t	p_tab_at(size_t index)
 	return (-1);
 }
 
-size_t	p_tab_size()
+size_t	p_tab_size(void)
 {
 	if (g_pidvec__)
 		return (*(size_t *)vector(&g_pidvec__, V_SIZE, 0, NULL));
 	return (0);
 }
 
-int		p_tab_waitpid_all(t_waitcond cond)
+int	p_tab_waitpid_all(t_waitcond cond)
 {
 	size_t	i;
 	pid_t	*pid;
@@ -68,7 +67,7 @@ int		p_tab_waitpid_all(t_waitcond cond)
 	return (0);
 }
 
-int		p_tab_signal_all(int signal)
+int	p_tab_signal_all(int signal)
 {
 	int		_err;
 	pid_t	*pid;
@@ -76,7 +75,7 @@ int		p_tab_signal_all(int signal)
 	if (!g_pidvec__)
 		return (0);
 	_err = 0;
-	while((pid = vector(&g_pidvec__, V_POPBACK, 0, NULL)))
+	while ((pid = vector(&g_pidvec__, V_POPBACK, 0, NULL)))
 	{
 		if (p_signal(*pid, signal) != 0)
 			_err = errno;

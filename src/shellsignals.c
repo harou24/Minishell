@@ -9,10 +9,10 @@
 #include "process.h"
 #include "libprintf.h"
 
-static jmp_buf g_jmpbuf__;
+static jmp_buf	g_jmpbuf__;
 
-static volatile int g_sigint__;
-static int g_sigint_last__;
+static volatile int	g_sigint__;
+static int		g_sigint_last__;
 
 static void	shell_handle_sigint(int signum)
 {
@@ -21,7 +21,7 @@ static void	shell_handle_sigint(int signum)
 	(void)signum;
 }
 
-t_bool		_shell_was_interrupted()
+t_bool	_shell_was_interrupted(void)
 {
 	t_bool	was_interrupted;
 
@@ -34,13 +34,13 @@ t_bool		_shell_was_interrupted()
 	return (was_interrupted);
 }
 
-int			_shell_register_sigint_handler(void)
+int	_shell_register_sigint_handler(void)
 {
 	p_register_signalhandler(SIGQUIT, shell_handle_sigint);
-	return(p_register_signalhandler(SIGINT, shell_handle_sigint));
+	return (p_register_signalhandler(SIGINT, shell_handle_sigint));
 }
 
-jmp_buf		*_shell_get_interrupt_jmpbuf(void)
+jmp_buf	*_shell_get_interrupt_jmpbuf(void)
 {
 	return (&g_jmpbuf__);
 }

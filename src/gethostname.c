@@ -6,9 +6,9 @@
 
 #define HOSTNAME_MAXLEN	128
 
-static char *g_hostname__;
+static char	*g_hostname__;
 
-char *ft_gethostname()
+char	*ft_gethostname(void)
 {
 	if (!g_hostname__)
 	{
