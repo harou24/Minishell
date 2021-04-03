@@ -20,6 +20,7 @@ int	handler_scheme_seq(t_execscheme *scheme)
 
 	ppid = getpid();
 	pid = fork();
+
 	if (pid < 0)
 	{
 		dbg("Forking failed with error : %s\n", strerror(errno));
