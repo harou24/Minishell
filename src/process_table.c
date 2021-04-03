@@ -60,9 +60,11 @@ int	p_tab_waitpid_all(t_waitcond cond)
 
 	assert(g_pidvec__);
 	i = 0;
-	while ((pid = vector(&g_pidvec__, V_PEEKAT, i++, NULL)))
+	pid = vector(&g_pidvec__, V_PEEKAT, i++, NULL);
+	while (pid)
 	{
 		p_waitpid(*pid, cond);
+		pid = vector(&g_pidvec__, V_PEEKAT, i++, NULL);
 	}
 	return (0);
 }
@@ -75,11 +77,13 @@ int	p_tab_signal_all(int signal)
 	if (!g_pidvec__)
 		return (0);
 	_err = 0;
-	while ((pid = vector(&g_pidvec__, V_POPBACK, 0, NULL)))
+	pid = vector(&g_pidvec__, V_POPBACK, 0, NULL);
+	while (pid)
 	{
 		if (p_signal(*pid, signal) != 0)
 			_err = errno;
 		free(pid);
+		pid = vector(&g_pidvec__, V_POPBACK, 0, NULL);
 	}
 	assert(*(size_t *)vector(&g_pidvec__, V_SIZE, 0, NULL) == 0);
 	return (_err);

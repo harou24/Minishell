@@ -100,7 +100,7 @@ t_bash_pattern_type	bash_match_pattern(t_range range)
 	const size_t	g_pat_list_size = sizeof(g_pat_list)
 						/ sizeof(g_pat_list[0]);
 	t_bash_pattern	*candidate;
-	size_t		i;
+	size_t			i;
 
 	candidate = NULL;
 	i = 0;
