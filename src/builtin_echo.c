@@ -12,7 +12,7 @@ static t_bool	check_has_n_flag(t_argv *argv)
 
 static void	print_for_argv(t_argv *argv)
 {
-	int	index;
+	int		index;
 	t_bool	has_n_flag;
 
 	index = 1;

@@ -50,15 +50,50 @@ static t_bool	redirection_read_handle_fd(const char *fname)
 	return (success);
 }
 
+static void	exec_child_process(t_execscheme *scheme, pid_t ppid)
+{
+	p_queue_register_signalhandler(SIGUSR1);
+	if (scheme->rel_type[NEXT_R] & (REL_WRITE | REL_APPEND))
+	{
+		if (!redirection_write_handle_fd(scheme->next->cmd->path,
+				scheme->rel_type[NEXT_R] & REL_APPEND))
+			exit (1);
+	}
+	else if (scheme->rel_type[NEXT_R] & REL_READ)
+	{
+		if (!redirection_read_handle_fd(scheme->next->cmd->path))
+			exit (1);
+	}
+	if (scheme->rel_type[PREV_R] == REL_PIPE)
+	{
+		if (!(scheme->rel_type[NEXT_R] & REL_READ))
+			assert(dup2(scheme->prev->pipe[PIPE_READ], STDIN) != -1);
+		close(scheme->prev->pipe[PIPE_READ]);
+		close(scheme->prev->pipe[PIPE_WRITE]);
+	}
+	p_signal(ppid, SIGUSR1);
+	p_queue_wait_for_signals(1);
+	command_dispatch(scheme->op_type)(scheme->cmd);
+	dbg("FATAL: child process didn't exit! errno: %s\n", strerror(errno));
+	abort();
+}
+
+static void	exec_parent_process(t_execscheme *scheme)
+{
+	if (scheme->rel_type[PREV_R] == REL_PIPE)
+	{
+		close(scheme->prev->pipe[PIPE_READ]);
+		close(scheme->prev->pipe[PIPE_WRITE]);
+	}
+}
+
 int	handler_scheme_redirection(t_execscheme *scheme)
 {
 	pid_t	pid;
 	pid_t	ppid;
 
-	if (!scheme->next)
-		return (-1);
-	if (scheme->rel_type[NEXT_R]
-		& REL_READ && !fs_exists(scheme->next->cmd->path))
+	if (!scheme->next || (scheme->rel_type[NEXT_R]
+			& REL_READ && !fs_exists(scheme->next->cmd->path)))
 		return (-1);
 	ppid = getpid();
 	pid = fork();
@@ -68,42 +103,10 @@ int	handler_scheme_redirection(t_execscheme *scheme)
 		return (-1);
 	}
 	else if (pid == CHILD)
-	{
-		p_queue_register_signalhandler(SIGUSR1);
-		assert(scheme->next);
-		assert(scheme->next->cmd);
-		assert(scheme->next->cmd->path);
-		if (scheme->rel_type[NEXT_R] & (REL_WRITE | REL_APPEND))
-		{
-			if (!redirection_write_handle_fd(scheme->next->cmd->path,
-					scheme->rel_type[NEXT_R] & REL_APPEND))
-				exit (1);
-		}
-		else if (scheme->rel_type[NEXT_R] & REL_READ)
-		{
-			if (!redirection_read_handle_fd(scheme->next->cmd->path))
-				exit (1);
-		}
-		if (scheme->rel_type[PREV_R] == REL_PIPE)
-		{
-			if (!(scheme->rel_type[NEXT_R] & REL_READ))
-				assert(dup2(scheme->prev->pipe[PIPE_READ], STDIN) != -1);
-			close(scheme->prev->pipe[PIPE_READ]);
-			close(scheme->prev->pipe[PIPE_WRITE]);
-		}
-		p_signal(ppid, SIGUSR1);
-		p_queue_wait_for_signals(1);
-		command_dispatch(scheme->op_type)(scheme->cmd);
-		dbg("FATAL: child process didn't exit! errno: %s\n", strerror(errno));
-		abort();
-	}
+		exec_child_process(scheme, ppid);
 	else
 	{
-		if (scheme->rel_type[PREV_R] == REL_PIPE)
-		{
-			close(scheme->prev->pipe[PIPE_READ]);
-			close(scheme->prev->pipe[PIPE_WRITE]);
-		}
+		exec_parent_process(scheme);
 		if (p_tab_push(pid) == TRUE)
 			return (0);
 		else

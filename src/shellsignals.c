@@ -10,8 +10,7 @@
 #include "libprintf.h"
 
 static jmp_buf	g_jmpbuf__;
-
-static volatile int	g_sigint__;
+static int		g_sigint__;
 static int		g_sigint_last__;
 
 static void	shell_handle_sigint(int signum)

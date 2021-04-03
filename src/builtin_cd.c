@@ -15,8 +15,8 @@
 
 static int	__exec_cd_home(void)
 {
-	int	error;
-	int	exit_status;
+	int		error;
+	int		exit_status;
 	char	*new_path;
 
 	error = __go_to_home();
@@ -31,8 +31,8 @@ static int	__exec_cd_home(void)
 
 static int	__exec_cd_dash(void)
 {
-	int	error;
-	int	exit_status;
+	int		error;
+	int		exit_status;
 	char	*new_path;
 
 	error = __go_to_prev_dir();
@@ -47,8 +47,8 @@ static int	__exec_cd_dash(void)
 
 static int	__exec_cd(t_command *cmd)
 {
-	int	error;
-	int	exit_status;
+	int		error;
+	int		exit_status;
 	char	*new_path;
 
 	exit_status = EXIT_FAILURE;

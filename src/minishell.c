@@ -7,8 +7,6 @@
 #include "minishell.h"
 #include "shellcore.h"
 
-extern char	**environ;
-
 static t_shell	*g_shell__;
 
 t_shellerr	shell_interactive(char **env)
@@ -26,6 +24,8 @@ t_shellerr	shell_interactive(char **env)
 
 t_shellerr	shell_init(char **env)
 {
+	extern char	**environ;
+
 	if (g_shell__)
 		return (SHELL_EXISTS);
 	if (env == NULL)
@@ -47,8 +47,9 @@ void	shell_deinit(void)
 
 int	shell_exec(const char *command_string)
 {
-	t_shell	*shell;
-	int		rvalue;
+	extern char	**environ;
+	t_shell		*shell;
+	int			rvalue;
 
 	if (g_shell__)
 	{

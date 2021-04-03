@@ -97,13 +97,15 @@ int	execute(t_execscheme *scheme)
 {
 	int		error;
 
-	error = 0;
+	error = executor_prepare_processes(scheme);
 	p_queue_register_signalhandler(SIGUSR1);
-	if ((error = executor_prepare_processes(scheme)) == 0)
+	if (error == 0)
 	{
 		p_queue_wait_for_signals(p_tab_size());
 		error = executor_launch_processes(scheme);
 	}
+	else
+		error = 0;
 	p_tab_signal_all(SIGTERM);
 	return (error);
 }
