@@ -23,7 +23,8 @@ t_bool	path_contains(const char *path, const char *name)
 {
 	char	*fullpath;
 
-	if ((fullpath = path_expand(path, name)))
+	fullpath = path_expand(path, name);
+	if (fullpath)
 	{
 		free(fullpath);
 		return (TRUE);
@@ -39,7 +40,8 @@ char	*path_expand(const char *path, const char *name)
 	dir = ft_strtok((char *)path, ":");
 	while (dir)
 	{
-		if ((fullpath = __fullpath(dir, name)))
+		fullpath = __fullpath(dir, name);
+		if (fullpath)
 		{
 			free(dir);
 			return (fullpath);

@@ -65,11 +65,13 @@ void	parse_perform_string_substitution(t_vector tokens, t_token *first,
 	token = token_create(range(first->range.begin, last->range.end), WORD);
 	index = 0;
 	string = NULL;
-	while ((cur_token = vector(&subtokens, V_PEEKAT, index, NULL)))
+	cur_token = vector(&subtokens, V_PEEKAT, index, NULL);
+	while (cur_token)
 	{
 		string = ft_strjoin_noreuse(string,
 				journal_get_string_for_token(cur_token));
 		index++;
+		cur_token = vector(&subtokens, V_PEEKAT, index, NULL);
 	}
 	if (string != NULL)
 		token->string = string;
@@ -348,7 +350,8 @@ t_execscheme	*parse_generate_execschemes(void)
 	root = NULL;
 	parse_reset_match_area();
 	parse_dump_match_area(g_parser__->matcharea);
-	while ((scheme = parse_get_next_scheme()))
+	scheme = parse_get_next_scheme();
+	while (scheme)
 	{
 		if (!root)
 		{
@@ -357,6 +360,7 @@ t_execscheme	*parse_generate_execschemes(void)
 		}
 		else
 			execscheme_attach(root, scheme);
+		scheme = parse_get_next_scheme();
 	}
 	return (root);
 }

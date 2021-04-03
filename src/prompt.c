@@ -47,17 +47,22 @@ void	prompt_init_indexes(t_prompt *_prompt)
 	_prompt->host_index = _prompt->at_index + 1;
 	_prompt->colon_index = _prompt->host_index + ft_strlen(_prompt->hostname);
 	_prompt->path_index = _prompt->colon_index + 1;
-	_prompt->bracket_index = _prompt->path_index + ft_strlen(_prompt->current_path);
+	_prompt->bracket_index = _prompt->path_index + ft_strlen(
+			_prompt->current_path);
 }
 
 void	prompt_prepare_buffer(t_prompt *_prompt)
 {
-	ft_snprintf(_prompt->buffer, __ERROR_LENGTH, "%-*d", __ERROR_LENGTH,_prompt->error_code);
-	ft_snprintf(_prompt->buffer + _prompt->user_index, ft_strlen(_prompt->username) + 1, "%s", _prompt->username);
-	ft_snprintf(_prompt->buffer + _prompt->at_index , 2, "@");
-	ft_snprintf(_prompt->buffer + _prompt->host_index, ft_strlen(_prompt->hostname) + 1, "%s", _prompt->hostname);
+	ft_snprintf(_prompt->buffer, __ERROR_LENGTH, "%-*d",
+		__ERROR_LENGTH, _prompt->error_code);
+	ft_snprintf(_prompt->buffer + _prompt->user_index,
+		ft_strlen(_prompt->username) + 1, "%s", _prompt->username);
+	ft_snprintf(_prompt->buffer + _prompt->at_index, 2, "@");
+	ft_snprintf(_prompt->buffer + _prompt->host_index,
+		ft_strlen(_prompt->hostname) + 1, "%s", _prompt->hostname);
 	ft_snprintf(_prompt->buffer + _prompt->colon_index, 2, ":");
-	ft_snprintf(_prompt->buffer + _prompt->path_index, ft_strlen(_prompt->current_path) + 1, "%s", _prompt->current_path);
+	ft_snprintf(_prompt->buffer + _prompt->path_index,
+		ft_strlen(_prompt->current_path) + 1, "%s", _prompt->current_path);
 	ft_snprintf(_prompt->buffer + _prompt->bracket_index, 3, "> ");
 }
 

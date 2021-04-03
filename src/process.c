@@ -72,7 +72,8 @@ int	p_waitpid(pid_t pid, t_waitcond cond)
 	if (cond == W_EXITED)
 		dbg("waiting for pid %i to exit\n", pid);
 	while (waitpid(pid, &status, 0) <= 0 && !__correct_signal(cond, status))
-		;;
+	{
+	}
 	if (cond == WEXITED)
 		dbg("pid %i exited with status %i!\n", pid, WEXITSTATUS(pid));
 	return (__return_signal_status(cond, status));

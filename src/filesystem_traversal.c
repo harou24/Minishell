@@ -27,11 +27,13 @@ char	*fs_get_cur_dir_name(void)
 	size_t	buflen;
 
 	buflen = PATH_DEF;
-	while (! (buf = __get_cur_dir_name(buflen))
+	buf = __get_cur_dir_name(buflen);
+	while (!buf
 		&& errno == ERANGE
 		&& buflen < PATH_MAX)
 	{
 		buflen *= 2;
+		buf = __get_cur_dir_name(buflen);
 	}
 	return (buf);
 }

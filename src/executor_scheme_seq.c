@@ -12,7 +12,7 @@
 #include "executor.h"
 
 #define CHILD 0
-
+#include "ft_printf.h"
 int	handler_scheme_seq(t_execscheme *scheme)
 {
 	pid_t	pid;
@@ -30,7 +30,10 @@ int	handler_scheme_seq(t_execscheme *scheme)
 		p_queue_register_signalhandler(SIGUSR1);
 		if (scheme->rel_type[PREV_R] == REL_PIPE)
 		{
-			assert(dup2(scheme->prev->pipe[PIPE_READ], STDIN) != -1);
+			if (dup2(scheme->prev->pipe[PIPE_READ], STDIN) == -1)
+			{
+				ft_printf("ERRNO->%s, fd->%d\n", strerror(errno), scheme->prev->pipe[PIPE_READ]);
+			}
 			close(scheme->prev->pipe[PIPE_READ]);
 			close(scheme->prev->pipe[PIPE_WRITE]);
 		}
