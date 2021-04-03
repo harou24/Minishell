@@ -9,9 +9,9 @@
 #include "prompt_singleton.h"
 #include "executor.h"
 
-t_shell			*_shell_create(char **env)
+t_shell	*_shell_create(char **env)
 {
-	t_shell		*shell;
+	t_shell	*shell;
 
 	shell = ft_calloc(sizeof(t_shell), 1);
 	if (shell)
@@ -23,7 +23,7 @@ t_shell			*_shell_create(char **env)
 	return (shell);
 }
 
-t_shell		*_shell_destroy(t_shell **shell)
+t_shell	*_shell_destroy(t_shell **shell)
 {
 	assert(shell);
 	if (!shell)
@@ -40,20 +40,18 @@ t_shell		*_shell_destroy(t_shell **shell)
 	return (NULL);
 }
 
-int			_shell_exec(t_shell *shell, const char *command_string)
+int	_shell_exec(t_shell *shell, const char *command_string)
 {
 	t_execscheme	*scheme;
 	int				error;
 
 	if (!lex(command_string))
 	{
-		/* handle lex failure */
 		return (-1);
 	}
 	scheme = parse();
 	if (!scheme)
 	{
-		/* handle parse failure */
 		return (-1);
 	}
 	execscheme_pretty_dump(scheme, 15);
@@ -79,5 +77,5 @@ t_shellerr	_shell_loop(t_shell *shell)
 		if (_shell_was_interrupted())
 			last_error = 130;
 	}
-	return (SHELL_ERRNO); /* stub */
+	return (SHELL_ERRNO);
 }
