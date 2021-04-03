@@ -35,5 +35,5 @@ void	p_queue_register_signalhandler(int sig)
 void	p_queue_wait_for_signals(size_t signalcount)
 {
 	while (g_ready__ < signalcount)
-	;;
+		;;
 }

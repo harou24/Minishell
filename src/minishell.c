@@ -28,9 +28,15 @@ t_shellerr	shell_init(char **env)
 {
 	if (g_shell__)
 		return (SHELL_EXISTS);
-	g_shell__ = _shell_create((env == NULL) ? environ : env);
+	if (env == NULL)
+		g_shell__ = _shell_create(environ);
+	else
+		g_shell__ = _shell_create(env);
 	_shell_register_sigint_handler();
-	return (g_shell__ != NULL ? SHELL_OK : SHELL_ERRNO);
+	if (g_shell__ != NULL)
+		return (SHELL_OK);
+	else
+		return (SHELL_ERRNO);
 }
 
 void	shell_deinit(void)
