@@ -46,6 +46,7 @@ t_token				token(t_range range, e_token_type type);
 t_token				*token_create(t_range range, e_token_type type);
 t_token				*token_destroy(t_token *token);
 
+const char			*token_dump_type_continue(e_token_type type);
 const char			*token_dump_type(e_token_type type);
 
 #endif

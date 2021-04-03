@@ -40,6 +40,25 @@ t_token	*token_destroy(t_token *token)
 	return (NULL);
 }
 
+const char	*token_dump_type_continue(e_token_type type)
+{
+	if (type == NEWLINE)
+		return ("NEWLINE");
+	if (type == SEMICOLON)
+		return ("SEMICOLON");
+	if (type == OP_READ)
+		return ("OP_READ");
+	if (type == OP_APPEND)
+		return ("OP_APPEND");
+	if (type == OP_WRITE)
+		return ("OP_WRITE");
+	if (type == NULLBYTE)
+		return ("NULLBYTE");
+	if (type == NO_TYPE)
+		return ("NO_TYPE");
+	return ("UNKNOWN");
+}
+
 const char	*token_dump_type(e_token_type type)
 {
 	if (type == WORD)
@@ -58,19 +77,5 @@ const char	*token_dump_type(e_token_type type)
 		return ("SPACE");
 	if (type == PIPE)
 		return ("PIPE");
-	if (type == NEWLINE)
-		return ("NEWLINE");
-	if (type == SEMICOLON)
-		return ("SEMICOLON");
-	if (type == OP_READ)
-		return ("OP_READ");
-	if (type == OP_APPEND)
-		return ("OP_APPEND");
-	if (type == OP_WRITE)
-		return ("OP_WRITE");
-	if (type == NULLBYTE)
-		return ("NULLBYTE");
-	if (type == NO_TYPE)
-		return ("NO_TYPE");
-	return ("UNKNOWN");
+	return (token_dump_type_continue(type));
 }

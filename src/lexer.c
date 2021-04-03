@@ -33,9 +33,11 @@ t_token	*lex_get_next_token(void)
 		slen++;
 		type = bash_match(&g_lex__->input[g_lex__->index], slen);
 	}
-	slen -= ((slen > 1) ? 1 : 0);
+	if (slen > 1)
+		slen -= 1;
 	g_lex__->index += slen;
-	slen -= ((slen > 0) ? 1 : 0);
+	if (slen > 0)
+		slen -= 1;
 	return (token_create(range(og_index, og_index + slen), og_type));
 }
 
@@ -43,7 +45,6 @@ void	lex_add_nullbyte(void)
 {
 	t_token		*token;
 
-	/* assert(g_lex__->input[g_lex__->index] == '\0'); */
 	token = token_create(range(g_lex__->index, g_lex__->index), NULLBYTE);
 	assert(token);
 	journal_push(token);
@@ -54,9 +55,11 @@ t_journal	*lex_build_journal(char *str)
 	t_token	*token;
 
 	journal_set_input_str(str);
-	while ((token = lex_get_next_token()))
+	token = lex_get_next_token();
+	while (token)
 	{
 		journal_push(token);
+		token = lex_get_next_token();
 	}
 	lex_add_nullbyte();
 	journal_build_linked_list();

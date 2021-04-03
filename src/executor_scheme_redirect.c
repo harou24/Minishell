@@ -104,7 +104,10 @@ int	handler_scheme_redirection(t_execscheme *scheme)
 			close(scheme->prev->pipe[PIPE_READ]);
 			close(scheme->prev->pipe[PIPE_WRITE]);
 		}
-		return ((p_tab_push(pid) == TRUE) ? 0 : -1);
+		if (p_tab_push(pid) == TRUE)
+			return (0);
+		else
+			return (-1);
 	}
 	return (-1);
 }
