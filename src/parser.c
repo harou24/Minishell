@@ -122,9 +122,9 @@ char	*parse_retreive_var_from_env_for_token(t_token *token)
 	assert(key);
 	var = env_get_s(key);
 	if (var == NULL)
-		ft_strdup("");
+		var = ft_strdup("");
 	else
-		ft_strdup(var);
+		var = ft_strdup(var);
 	free(key);
 	return (var);
 }

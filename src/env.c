@@ -208,7 +208,7 @@ char	**env_to_array(t_env *env, e_scope scope)
 	while (count < env_size(env))
 	{
 		node = get_next_env_node(env);
-		if (node->scope == scope)
+		if (node && node->scope == scope)
 		{
 			environ[index] = ft_strjoin_multi(3, node->key, "=", node->value);
 			node->environ_index = index;
