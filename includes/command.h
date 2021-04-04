@@ -1,12 +1,12 @@
 #ifndef COMMAND_H
 # define COMMAND_H
 
-#include "argv.h"
+# include "argv.h"
 
-typedef struct	s_command
+typedef struct s_command
 {
-		char	*path;
-		t_argv	*argv;
+	char	*path;
+	t_argv	*argv;
 }				t_command;
 
 t_command		*command_create(char *path, t_argv *argv);
