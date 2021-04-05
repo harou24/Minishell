@@ -5,6 +5,8 @@
 #include "hashmap.h"
 #include "env_node.h"
 
+#define HASHMAP_SIZE 1024
+
 typedef struct	s_env
 {
 	void		*hm_store;
