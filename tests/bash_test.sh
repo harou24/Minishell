@@ -22,6 +22,15 @@ declare -a arr=( \
 	"  ls -l| cat " \
 	"  ls -l   | cat " \
 	"  cat < ./minimake.sh" \
+	"echo $USER" \
+	"pwd" \
+	"pwd; ls -l " \
+	"cd /" \
+	"env" \
+	"export a=5" \
+	"a=5" \
+	"exit 0" \
+	"exit" \
 	)
 
 cd ..
