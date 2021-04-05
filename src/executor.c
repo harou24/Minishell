@@ -97,8 +97,8 @@ int	execute(t_execscheme *scheme)
 {
 	int		error;
 
-	error = executor_prepare_processes(scheme);
 	p_queue_register_signalhandler(SIGUSR1);
+	error = executor_prepare_processes(scheme);
 	if (error == 0)
 	{
 		p_queue_wait_for_signals(p_tab_size());
