@@ -19,7 +19,7 @@ t_bool	p_tab_push(pid_t pid)
 {
 	pid_t	*pid_ptr;
 
-	if (!g_pidvec)
+	if (!g_pidvec__)
 		assert(vector(&g_pidvec__, V_CREATE, g_pidvec_def_size, NULL));
 	pid_ptr = p_allocate_pid(pid);
 	if (!pid_ptr)
