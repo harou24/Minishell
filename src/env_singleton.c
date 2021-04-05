@@ -4,7 +4,7 @@
 #include "env_singleton.h"
 #include "env.h"
 
-static t_env	*g_env__;
+t_env	*g_env__;
 
 t_env	*env_init(char **env)
 {
@@ -44,9 +44,4 @@ t_bool	env_unset_s(const char *key)
 	if (g_env__)
 		env_unset(g_env__, key);
 	return (TRUE);
-}
-
-char	**env_to_array_s(e_scope scope)
-{
-	return (env_to_array(g_env__, scope));
 }
