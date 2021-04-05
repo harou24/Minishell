@@ -4,7 +4,8 @@
 #include "execscheme.h"
 
 int					execute(t_execscheme *scheme);
-
+void	executor_launch_parallel_scheme(pid_t pid);
+int	executor_launch_sequential_scheme(t_execscheme *scheme, pid_t pid);
 /* jumptable dispatchers */
 typedef int			(*relation_handler_f)(t_execscheme *scheme);
 relation_handler_f	execscheme_dispatch(t_exec_relation_type type);
