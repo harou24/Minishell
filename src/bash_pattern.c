@@ -29,12 +29,8 @@ static const t_bash_pattern	g_pat_list[] = {
 	{P_ASSIGNMENT, 2, {WORD, ASSIGNMENT}, 0, {}}
 						};
 
-t_bool	match_token_to_type(t_token *token, const e_token_type type)
-{
-	return (token->type == type);
-}
-
-t_bool	match_token_to_any_type(t_token *token, const e_token_type *types,
+static t_bool	match_token_to_any_type(t_token *token,
+				const e_token_type *types,
 				size_t types_len)
 {
 	while (types_len > 0)
@@ -46,7 +42,7 @@ t_bool	match_token_to_any_type(t_token *token, const e_token_type *types,
 	return (FALSE);
 }
 
-t_bool	match_fuzzy(t_range range, const e_token_type *fuzzy_types,
+static t_bool	match_fuzzy(t_range range, const e_token_type *fuzzy_types,
 			size_t fuzzy_types_len)
 {
 	size_t	i;
@@ -64,7 +60,7 @@ t_bool	match_fuzzy(t_range range, const e_token_type *fuzzy_types,
 	return (TRUE);
 }
 
-t_bool	match_fixed(t_range range, const e_token_type *fixed_types,
+static t_bool	match_fixed(t_range range, const e_token_type *fixed_types,
 			size_t fixed_types_len)
 {
 	size_t	i;
@@ -82,7 +78,7 @@ t_bool	match_fixed(t_range range, const e_token_type *fixed_types,
 	return (TRUE);
 }
 
-t_bool	is_bash_pattern(t_range r, const t_bash_pattern *pattern)
+static t_bool	is_bash_pattern(t_range r, const t_bash_pattern *pattern)
 {
 	return (match_fixed(r, pattern->fixed_types, pattern->fixed_types_len)
 		&& match_fuzzy(range(r.begin + pattern->fixed_types_len, r.end),
@@ -120,17 +116,4 @@ t_bash_pattern_type	bash_match_pattern(t_range range)
 		return (P_NO_TYPE);
 	else
 		return (candidate->pattern_type);
-}
-
-char	*pattern_dump_type(t_bash_pattern_type type)
-{
-	if (type == P_COMMAND)
-		return ("COMMAND");
-	if (type == P_PATH)
-		return ("PATH");
-	if (type == P_ASSIGNMENT)
-		return ("ASSIGNMENT");
-	if (type == P_NO_TYPE)
-		return ("NO_TYPE");
-	return (NULL);
 }
