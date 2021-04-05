@@ -15,18 +15,12 @@
 const size_t	g_pidvec_def_size = 16;
 static void		*g_pidvec__;
 
-static void	__pidvec_init(void)
-{
-	if (g_pidvec__)
-		return ;
-	assert(vector(&g_pidvec__, V_CREATE, g_pidvec_def_size, NULL));
-}
-
 t_bool	p_tab_push(pid_t pid)
 {
 	pid_t	*pid_ptr;
 
-	__pidvec_init();
+	if (!g_pidvec)
+		assert(vector(&g_pidvec__, V_CREATE, g_pidvec_def_size, NULL));
 	pid_ptr = p_allocate_pid(pid);
 	if (!pid_ptr)
 		return (FALSE);
