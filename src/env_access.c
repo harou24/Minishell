@@ -25,13 +25,3 @@ char	*env_get_home(void)
 {
 	return (env_get_s("HOME"));
 }
-
-char	*env_get_path(void)
-{
-	return (env_get_s("PATH"));
-}
-
-char	*env_get_cdpath(void)
-{
-	return (env_get_s("CDPATH"));
-}
