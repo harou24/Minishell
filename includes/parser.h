@@ -38,4 +38,7 @@ t_bool				parse_expand();
 
 void				parse_dump_match_area(t_range area);
 
+void parse_reset_match_area(void);
+t_execscheme	*parse_get_next_scheme(void);
+t_command	*parse_build_command(t_range area);
 #endif
