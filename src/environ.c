@@ -6,7 +6,7 @@
 
 #include "environ.h"
 
-static void	*g_environ_vec__;
+void	*g_environ_vec__;
 
 t_bool	environ_init(char **environ)
 {
@@ -37,14 +37,4 @@ t_bool	environ_add(char *line)
 {
 	return (vector(&g_environ_vec__, V_PUSHBACK, 0, line) != NULL
 		&& vector(&g_environ_vec__, V_PUSHBACK, 0, NULL) != NULL);
-}
-
-size_t	environ_size(void)
-{
-	return (*(size_t *)vector(&g_environ_vec__, V_SIZE, 0, NULL) - 1);
-}
-
-void	environ_remove(size_t index)
-{
-	free(vector(&g_environ_vec__, V_POPAT, index, NULL));
 }
