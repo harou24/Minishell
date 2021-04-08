@@ -1,6 +1,6 @@
-#!/bin/sh
+#!/bin/bash
 
-declare -a arr=( \
+declare -a testsArray=( \
 	"ls" \
 	"echo" \
 	"ls ; echo a" \
@@ -33,32 +33,62 @@ declare -a arr=( \
 	"exit" \
 	)
 
-cd ..
-./minimake.sh
-for op in "${arr[@]}"
-do
-	echo "Running OP :'$op'"
-	timeout 1 ./minishell -c "$op"
+run_tests()
+{
+	for op in "${testsArray[@]}"
+	do
+		echo "Running OP :'$op'"
+		timeout 3 ./minishell -c "$op" 1>/dev/null
+		err=$?
+		if [ ! $err -eq 0 ]; then
+			echo "OP '$op' failed!' with errorcode $err -> ./minimake.sh $1"
+			return 1
+		fi
+	done
+	
+	# ctrl c test
+	(
+	./build/apps/minishell -c 'sleep 3'
+	) &
+	pid=$!
+	
+	sleep 0.1
+	kill -INT $pid 
 	err=$?
 	if [ ! $err -eq 0 ]; then
-		echo "OP '$op' failed!' with errorcode $err"
-		exit 1
+		echo "Ctrl-C failed with kill errorcode $err -> ./minimake.sh $1"
+		return 1
 	fi
-done
+	
+	echo
+	echo "Tests ran succesfully -> ./minimake.sh $1"
+}
 
-# ctrl c test
-(
-./minishell -c 'sleep 3'
-) &
-pid=$!
+compile()
+{
+	[ $# -gt 0 ] && ./minimake.sh $1 || ./minimake.sh
+}
 
-sleep 0.1
-kill -INT $pid 
-err=$?
-if [ ! $err -eq 0 ]; then
-	echo "Ctrl-C failed with kill errorcode $err"
+run_tests_for()
+{
+	echo "Running $1 tests for './minimake.sh $2'"; sleep 2
+	for ((i = 1; i <= $1; i++ )); do
+		run_tests $2 || return 1
+	done
+}
+
+if [ $# -eq 0 ]; then
+	echo "usage: $0 [number of tests]"
 	exit 1
 fi
 
-echo
-echo "Tests ran succesfully"
+cd ../ || exit 1
+
+#FLAG=clean; compile $FLAG || exit 1
+FLAG=release; compile $FLAG && run_tests_for $1 $FLAG || exit 1
+FLAG=debug; compile $FLAG && run_tests_for $1 $FLAG || exit 1
+#FLAG=test; compile $FLAG && run_tests_for $1 $FLAG || exit 1
+#FLAG=testOpt; compile $FLAG && run_tests_for $1 $FLAG || exit 1
+
+echo -e "\033[0m"
+echo "Tests ran succesfully for $1 times."
