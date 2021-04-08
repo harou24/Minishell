@@ -12,7 +12,7 @@
 #include "vector.h"
 #include "process.h"
 
-static size_t	g_ready__;
+static volatile size_t	g_ready__;
 
 static void	__sighandler(int signal)
 {
