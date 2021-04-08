@@ -30,6 +30,7 @@ static t_bool	__correct_signal(t_waitcond cond, int status)
 		return (WIFSIGNALED(status) && WCOREDUMP(status));
 	else
 		assert(!"UNDEFINED WAIT CONDITION");
+	return (FALSE);
 }
 
 static int	__return_signal_status(t_waitcond cond, int status)
@@ -42,6 +43,7 @@ static int	__return_signal_status(t_waitcond cond, int status)
 		return (WCOREDUMP(status));
 	else
 		assert(!"UNDEFINED WAIT CONDITION");
+	return (FALSE);
 }
 
 int	p_waitpid(pid_t pid, t_waitcond cond)
