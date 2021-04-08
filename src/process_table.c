@@ -15,16 +15,21 @@
 const size_t	g_pidvec_def_size = 16;
 static void		*g_pidvec__;
 
+static void __pidvec_create()
+{
+	if (!g_pidvec__)
+		vector(&g_pidvec__, V_CREATE, g_pidvec_def_size, NULL);
+	assert(g_pidvec__);
+
+}
+
 t_bool	p_tab_push(pid_t pid)
 {
 	pid_t	*pid_ptr;
 
-	if (!g_pidvec__)
-		assert(vector(&g_pidvec__, V_CREATE, g_pidvec_def_size, NULL));
+	__pidvec_create();
 	pid_ptr = p_allocate_pid(pid);
-	if (!pid_ptr)
-		return (FALSE);
-	return (vector(&g_pidvec__, V_PUSHBACK, 0, pid_ptr) != NULL);
+	return (pid_ptr && vector(&g_pidvec__, V_PUSHBACK, 0, pid_ptr) != NULL);
 }
 
 pid_t	p_tab_at(size_t index)
