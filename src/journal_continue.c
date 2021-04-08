@@ -17,6 +17,7 @@ void	journal_build_linked_list(void)
 
 	if (size == 0)
 		return ;
+	last_token = NULL;
 	index = size - 1;
 	while (index >= 0)
 	{
