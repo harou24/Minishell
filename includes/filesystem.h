@@ -1,15 +1,15 @@
 #ifndef FILESYSTEM_H
 # define FILESYSTEM_H
 
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <unistd.h>
+# include <sys/types.h>
+# include <sys/stat.h>
+# include <fcntl.h>
+# include <unistd.h>
 
-#include "libft.h"
+# include "libft.h"
 
 /* standardized API for Unix files, see 'man 7 inode' */
-typedef enum	e_filetype
+typedef enum e_filetype
 {
 	F_SOCK = S_IFSOCK,
 	F_LINK = S_IFLNK,
@@ -20,7 +20,7 @@ typedef enum	e_filetype
 	S_FIFO = S_IFIFO
 }				t_filetype;
 
-typedef enum	e_filemode
+typedef enum e_filemode
 {
 	FM_EXEC = S_IXUSR,
 	FM_READ = S_IRUSR,

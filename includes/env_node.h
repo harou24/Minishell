@@ -1,17 +1,17 @@
 #ifndef ENV_NODE_H
 # define ENV_NODE_H
 
-#include "hashmap.h"
-#include "libft.h"
-#include "pair.h"
+# include "hashmap.h"
+# include "libft.h"
+# include "pair.h"
 
-typedef enum	s_scope
+typedef enum e_scope
 {
-				SCOPE_LOCAL,
-				SCOPE_ENVIRON
+	SCOPE_LOCAL,
+	SCOPE_ENVIRON
 }				e_scope;
 
-typedef struct	s_env_node
+typedef struct s_env_node
 {
 	char		*key;
 	char		*value;

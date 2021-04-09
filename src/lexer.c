@@ -13,7 +13,7 @@ t_journal	*lex(const char *str)
 	lex_clear();
 	g_lex__->input = ft_strdup(str);
 	g_lex__->input_len = ft_strlen(str);
-	return (lex_build_journal(str));
+	return (lex_build_journal((char *)str));
 }
 
 t_token	*lex_get_next_token(void)
