@@ -23,7 +23,10 @@ t_prompt	*prompt_init(void)
 void	prompt_deinit(t_prompt **prompt)
 {
 	if (g_prompt__)
+	{
 		prompt_destroy(g_prompt__);
+		g_prompt__ = NULL;
+	}
 	if (prompt)
 		*prompt = NULL;
 }
