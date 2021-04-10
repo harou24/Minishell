@@ -27,6 +27,7 @@ static int	executor_launch_processes(t_execscheme *scheme)
 	{
 		if (scheme->rel_type[NEXT_R] == REL_PIPE)
 		{
+			p_queue_wait_for_signals(1);
 			executor_launch_parallel_scheme(p_tab_at(pid_index));
 			pid_index++;
 		}
@@ -44,19 +45,18 @@ static int	executor_launch_processes(t_execscheme *scheme)
 
 static int	executor_prepare_processes(t_execscheme *scheme)
 {
-	p_tab_signal_all(SIGTERM);
 	while (scheme)
 	{
 		if (!(scheme->rel_type[PREV_R] & (REL_READ | REL_APPEND | REL_WRITE)))
 		{
-			dbg("executing scheme: %s, %s <- relation -> %s\n",
+			dbg("Preparing scheme: %s, %s <- relation -> %s\n",
 				execscheme_dump_op_type(scheme->op_type),
 				execscheme_dump_relation_type(scheme->rel_type[PREV_R]),
 				execscheme_dump_relation_type(scheme->rel_type[NEXT_R]));
 			if (execscheme_dispatch(scheme->rel_type[NEXT_R])(scheme) != 0)
 			{
-				dbg("%s\n", "failed to prepare scheme !");
-				//p_tab_signal_all(SIGTERM);
+				dbg("%s\n", "Failed to prepare scheme !");
+				p_tab_signal_all(SIGTERM);
 				return (-1);
 			}
 		}
@@ -69,15 +69,13 @@ int	execute(t_execscheme *scheme)
 {
 	int		error;
 
+	p_tab_signal_all(SIGKILL);
 	p_queue_register_signalhandler(SIGUSR1);
 	error = executor_prepare_processes(scheme);
 	if (error == 0)
-	{
-		p_queue_wait_for_signals(p_tab_size());
 		error = executor_launch_processes(scheme);
-	}
 	else
 		error = 0;
-	//p_tab_signal_all(SIGTERM);
+	p_tab_signal_all(SIGTERM);
 	return (error);
 }
