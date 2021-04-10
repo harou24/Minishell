@@ -61,18 +61,18 @@ t_exec_op_type	execscheme_get_op_type_for_token(t_token *token)
 	char			*key;
 	size_t			i;
 
+	key = journal_get_string_for_token(token);
 	i = 0;
 	while (i < tabsize)
 	{
-		key = journal_get_string_for_token(token);
 		if (ft_strcmp(key, g_optok_tab__[i].key) == 0)
 		{
 			free(key);
 			return (g_optok_tab__[i].type);
 		}
-		free(key);
 		i++;
 	}
+	free(key);
 	return (OP_COMMAND);
 }
 
