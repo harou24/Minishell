@@ -15,7 +15,11 @@ t_exec_op_type	parse_get_op_type_for_pattern(t_range area,
 	t_exec_op_type	op_type;
 
 	if (pat_type == P_COMMAND || pat_type == P_PATH)
+	{
+		if (journal_get(area.begin)->type == SPACE)
+			area.begin++;
 		op_type = execscheme_get_op_type_for_token(journal_get(area.begin));
+	}
 	else if (pat_type == P_ASSIGNMENT)
 		op_type = OP_ASSIGNMENT;
 	else if (pat_type == P_PATH)
