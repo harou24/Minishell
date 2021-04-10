@@ -512,3 +512,4 @@ obj
 *.bin
 *.a
 minishell
+vgcore.*
