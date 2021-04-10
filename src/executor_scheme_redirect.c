@@ -1,4 +1,3 @@
-#include <assert.h>
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
@@ -20,7 +19,6 @@ static t_bool	redirection_write_handle_fd(const char *fname,
 	int			fd;
 	t_bool		success;
 
-	assert(fname);
 	success = FALSE;
 	if (should_append)
 		fd = open(fname, O_WRONLY | O_CREAT | O_APPEND, 0644);
@@ -39,7 +37,6 @@ static t_bool	redirection_read_handle_fd(const char *fname)
 	int			fd;
 	t_bool		success;
 
-	assert(fname);
 	success = FALSE;
 	fd = fs_open(fname, O_RDONLY);
 	if (fd != -1)
@@ -53,6 +50,7 @@ static t_bool	redirection_read_handle_fd(const char *fname)
 static void	exec_child_process(t_execscheme *scheme, pid_t ppid)
 {
 	p_queue_register_signalhandler(SIGUSR1);
+	dbg("REGISTERED FOR SIGUSR1 SIGNAL\n%s", "");
 	if (scheme->rel_type[NEXT_R] & (REL_WRITE | REL_APPEND))
 	{
 		if (!redirection_write_handle_fd(scheme->next->cmd->path,
@@ -67,15 +65,19 @@ static void	exec_child_process(t_execscheme *scheme, pid_t ppid)
 	if (scheme->rel_type[PREV_R] == REL_PIPE)
 	{
 		if (!(scheme->rel_type[NEXT_R] & REL_READ))
-			assert(dup2(scheme->prev->pipe[PIPE_READ], STDIN) != -1);
+			if (dup2(scheme->prev->pipe[PIPE_READ], STDIN) == -1)
+				exit (1);
 		close(scheme->prev->pipe[PIPE_READ]);
 		close(scheme->prev->pipe[PIPE_WRITE]);
 	}
+	dbg("SENDING SIGUSR1 SIGNAL\n%s", "");
+	//usleep(100);
 	p_signal(ppid, SIGUSR1);
+	dbg("WAITING FOR SIGNAL\n%s", "");
 	p_queue_wait_for_signals(1);
+	dbg("GOT SIGNAL\n%s", "");
 	command_dispatch(scheme->op_type)(scheme->cmd);
 	dbg("FATAL: child process didn't exit! errno: %s\n", strerror(errno));
-	abort();
 }
 
 static void	exec_parent_process(t_execscheme *scheme)
@@ -107,10 +109,8 @@ int	handler_scheme_redirection(t_execscheme *scheme)
 	else
 	{
 		exec_parent_process(scheme);
-		if (p_tab_push(pid) == TRUE)
-			return (0);
-		else
-			return (-1);
+		p_tab_push(pid);
+		return (0);
 	}
 	return (-1);
 }

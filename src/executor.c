@@ -28,7 +28,7 @@ static t_bool	executor_is_builtin(t_execscheme *scheme)
 
 int	executor_launch_sequential_scheme(t_execscheme *scheme, pid_t pid)
 {
-	assert(pid != -1);
+	assert(pid > 0);
 	if (executor_is_builtin(scheme)
 		&& !(scheme->rel_type[NEXT_R] & (REL_READ | REL_WRITE | REL_APPEND)))
 	{

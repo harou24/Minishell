@@ -44,6 +44,7 @@ static int	executor_launch_processes(t_execscheme *scheme)
 
 static int	executor_prepare_processes(t_execscheme *scheme)
 {
+	p_tab_signal_all(SIGTERM);
 	while (scheme)
 	{
 		if (!(scheme->rel_type[PREV_R] & (REL_READ | REL_APPEND | REL_WRITE)))
@@ -55,7 +56,7 @@ static int	executor_prepare_processes(t_execscheme *scheme)
 			if (execscheme_dispatch(scheme->rel_type[NEXT_R])(scheme) != 0)
 			{
 				dbg("%s\n", "failed to prepare scheme !");
-				p_tab_signal_all(SIGTERM);
+				//p_tab_signal_all(SIGTERM);
 				return (-1);
 			}
 		}
@@ -77,6 +78,6 @@ int	execute(t_execscheme *scheme)
 	}
 	else
 		error = 0;
-	p_tab_signal_all(SIGTERM);
+	//p_tab_signal_all(SIGTERM);
 	return (error);
 }

@@ -1,4 +1,3 @@
-#include <assert.h>
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
@@ -15,21 +14,27 @@
 
 static void	exec_child_process(t_execscheme *scheme, pid_t ppid)
 {
-	assert(dup2(scheme->pipe[PIPE_WRITE], STDOUT) != -1);
+	p_queue_register_signalhandler(SIGUSR1);
+	dbg("REGISTERED FOR SIGUSR1 SIGNAL\n%s", "");
+	if (dup2(scheme->pipe[PIPE_WRITE], STDOUT) == -1)
+		exit (1);
 	close(scheme->pipe[PIPE_WRITE]);
 	close(scheme->pipe[PIPE_READ]);
 	if (scheme->rel_type[PREV_R] == REL_PIPE)
 	{
-		assert(dup2(scheme->prev->pipe[PIPE_READ], STDIN) != -1);
+		if (dup2(scheme->prev->pipe[PIPE_READ], STDIN) == -1)
+			exit (1);
 		close(scheme->prev->pipe[PIPE_READ]);
 		close(scheme->prev->pipe[PIPE_WRITE]);
 	}
-	p_queue_register_signalhandler(SIGUSR1);
+	dbg("SENDING SIGUSR1 SIGNAL\n%s", "");
+	//usleep(100);
 	p_signal(ppid, SIGUSR1);
+	dbg("WAITING FOR SIGNAL\n%s", "");
 	p_queue_wait_for_signals(1);
+	dbg("GOT SIGNAL\n%s", "");
 	command_dispatch(scheme->op_type)(scheme->cmd);
 	dbg("FATAL: child process didn't exit! errno: %s\n", strerror(errno));
-	abort();
 }
 
 static void	exec_parent_process(t_execscheme *scheme)
