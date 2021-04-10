@@ -14,15 +14,9 @@ pid_t	*p_allocate_pid(pid_t pid)
 
 int	p_register_signalhandler(int sig, void (*sighandler)(int sig))
 {
-	struct sigaction	sa;
-
-	sa.sa_handler = sighandler;
-	sigemptyset(&sa.sa_mask);
-	sa.sa_flags = SA_RESTART;
-	if (sigaction(sig, &sa, NULL) == -1)
+	if (signal(sig, sighandler) == SIG_ERR)
 	{
-		dbg("couldn't register handler for signal %s, errno: %s\n",
-			strsignal(sig), strerror(errno));
+		dbg("Failed to register handler for signum: %i, with errno: %s\n", sig, strerror(errno));
 		return (-1);
 	}
 	return (0);
