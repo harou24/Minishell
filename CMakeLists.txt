@@ -28,6 +28,11 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
 		include(CTest)
 	endif()
 
+	set(CMAKE_C_FLAGS "")
+	set(CMAKE_C_FLAGS_DEBUG "")
+	set(CMAKE_C_FLAGS_RELEASE "")
+	set(CMAKE_C_FLAGS_RELWITHDEBINFO "")
+
 	if(CMAKE_BUILD_TYPE STREQUAL "Debug" OR BUILD_TESTING)
 		set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address")
 		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address")
@@ -36,6 +41,8 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
 		add_compile_definitions(DEBUG_FILE="./minishell.log")
 	else()
 		add_compile_definitions(DEBUG=0)
+		#add_compile_definitions(DEBUG=1)
+		#add_compile_definitions(DEBUG_FILE="./minishell.log")
 	endif()
 
 	# Let's nicely support folders in IDEs
