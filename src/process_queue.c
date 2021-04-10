@@ -18,6 +18,8 @@ static void	__sighandler(int signal)
 {
 	if (signal == SIGUSR1)
 		g_ready__++;
+	else
+		exit (signal);
 	dbg("Pid %i received signal %s\n", getpid(), strsignal(signal));
 }
 
