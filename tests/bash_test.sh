@@ -1,5 +1,9 @@
 #!/bin/bash
 
+VALGRIND="valgrind\
+			--trace-children=yes\
+			"
+
 declare -a testsArray=( \
 	"ls" \
 	"echo" \
@@ -38,10 +42,11 @@ run_tests()
 	for op in "${testsArray[@]}"
 	do
 		echo "Running OP :'$op'"
-		timeout 3 ./minishell -c "$op" 1>/dev/null
+		timeout 3 ./build/apps/minishell -c "$op"
 		err=$?
 		if [ ! $err -eq 0 ]; then
 			echo "OP '$op' failed!' with errorcode $err -> ./minimake.sh $1"
+			pkill -9 minishell
 			return 1
 		fi
 	done
@@ -57,6 +62,7 @@ run_tests()
 	err=$?
 	if [ ! $err -eq 0 ]; then
 		echo "Ctrl-C failed with kill errorcode $err -> ./minimake.sh $1"
+		pkill -9 minishell
 		return 1
 	fi
 	
