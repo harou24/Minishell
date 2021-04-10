@@ -30,7 +30,7 @@ t_argv	*argv_create(int size)
 	if (argv)
 	{
 		argv->size = size;
-		argv->argv = ft_calloc(sizeof(char *), size);
+		argv->argv = ft_calloc(sizeof(char *), size + 1);
 	}
 	return (argv);
 }
