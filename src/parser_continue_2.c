@@ -57,7 +57,7 @@ t_execscheme	*parse_get_next_scheme(void)
 		pat_type = bash_match_pattern(range(my_area.begin, my_area.end - 1));
 		if (pat_type != P_NO_TYPE)
 		{
-			dbg("found pattern %s for range {%i, %i}\n",
+			dbg("Found pattern %s for range {%i, %i}\n",
 				pattern_dump_type(pat_type), my_area.begin, my_area.end);
 			g_parser__->matcharea.begin = my_area.end + 1;
 			return (parse_build_execscheme(my_area, pat_type));

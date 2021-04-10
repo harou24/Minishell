@@ -1,6 +1,7 @@
 #include <assert.h>
 #include <stdlib.h>
 
+#include "debugger.h"
 #include "libft.h"
 
 #include "parser.h"
@@ -27,13 +28,18 @@ t_execscheme	*parse_generate_execschemes(void)
 			execscheme_attach(root, scheme);
 		scheme = parse_get_next_scheme();
 	}
+	if (!root)
+		dbg("Failed to build execschemes!\n", "");
 	return (root);
 }
 
 t_execscheme	*parse(void)
 {
 	if (!parse_expand())
+	{
+		dbg("Failed to expand!\n", "");
 		return (NULL);
+	}
 	if (g_parser__->rootscheme)
 		execscheme_destroy(&g_parser__->rootscheme);
 	g_parser__->rootscheme = parse_generate_execschemes();
