@@ -45,13 +45,16 @@ int	_shell_exec(t_shell *shell, const char *command_string)
 	t_execscheme	*scheme;
 	int				error;
 
+	dbg("Executing command_string : '%s'\n", command_string);
 	if (!lex(command_string))
 	{
+		dbg("Failed lexing command_string: '%s'\n", command_string);
 		return (-1);
 	}
 	scheme = parse();
 	if (!scheme)
 	{
+		dbg("Failed parsing command_string: '%s'\n", command_string);
 		return (-1);
 	}
 	execscheme_pretty_dump(scheme, 15);
