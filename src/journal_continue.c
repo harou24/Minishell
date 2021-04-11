@@ -35,7 +35,6 @@ void	journal_build_linked_list(void)
 		cur_token->index = index;
 		index--;
 	}
-	return ;
 }
 
 char	*journal_get_string_for_token(t_token *token)
