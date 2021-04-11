@@ -38,9 +38,9 @@ t_pair	*env_pair_create_from_line(const char *line)
 	char	**split;
 
 	split = ft_strsplit(line, '=');
-	if (!split || ft_arraylen((const void **)split) != 2)
+	if (!split || ft_array_len((const void **)split) != 2)
 	{
-		ft_array_destroy((void **)split, ft_arraylen((const void **)split));
+		ft_array_destroy((void **)split, ft_array_len((const void **)split));
 		return (NULL);
 	}
 	pair = pair_create(split[0], split[1]);
