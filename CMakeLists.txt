@@ -28,14 +28,16 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
 		include(CTest)
 	endif()
 
-	set(CMAKE_C_FLAGS "")
-	set(CMAKE_C_FLAGS_DEBUG "")
-	set(CMAKE_C_FLAGS_RELEASE "")
-	set(CMAKE_C_FLAGS_RELWITHDEBINFO "")
+	set(CMAKE_VERBOSE_MAKEFILE ON)
+
+	set(CMAKE_C_FLAGS "-Wall -Wextra -Werror")
+	set(CMAKE_C_FLAGS_DEBUG "-g -fsanitize=address")
+	set(CMAKE_C_FLAGS_RELEASE "-O3")
+	set(CMAKE_C_FLAGS_RELWITHDEBINFO "-g -O3")
 
 	if(CMAKE_BUILD_TYPE STREQUAL "Debug" OR BUILD_TESTING)
-		set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address")
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address")
+		set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -fsanitize=address")
+		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -fsanitize=address")
 
 		add_compile_definitions(DEBUG=1)
 		add_compile_definitions(DEBUG_FILE="./minishell.log")
