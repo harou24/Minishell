@@ -80,7 +80,6 @@ int	p_tab_wait_all(t_waitcond cond)
 		p_tab_drop(*pid);
 		if (status == -1)
 			return (status);
-			
 		pid = vector(&g_pidvec__, V_PEEKAT, i++, NULL);
 	}
 	return (0);
