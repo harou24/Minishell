@@ -43,7 +43,6 @@ int	p_wait(pid_t *pid, t_waitcond cond)
 
 	if (cond == W_EXITED)
 		dbg("Waiting for pid %i to exit\n", pid);
-
 	waitpid(*pid, &status, 0);
 	dump_signal_status(status, *pid);
 	if (signal_status(cond, status) == -1)
