@@ -100,7 +100,7 @@ declare -a testsArrayCmp=( \
 run_tests()
 {
 	if [ ! "$VALGRIND" == "" ]; then
-		valgrind ./build/apps/minishell -c 'true' &>/dev/null
+		timeout 1 valgrind ./build/apps/minishell -c 'true' &>/dev/null
 		if [ $? -eq 0 ]; then
 			echo "enabling VALGRIND for tests!"
 			VALGRIND_ENABLED=true
