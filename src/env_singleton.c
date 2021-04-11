@@ -39,6 +39,21 @@ t_bool	env_set_s(const char *key, char *value, e_scope scope)
 	return (env_set(g_env__, key, value, scope));
 }
 
+t_bool	env_set_s_line(const char *line, e_scope scope)
+{
+	char	*key;
+	char	*value;
+	t_bool	succes;
+
+	if (!ft_strchr(line, '='))
+		return (FALSE);
+	key = ft_strsub(line, 0, ft_strclen(line, '='));
+	value = ft_strchr(line, '=') + 1;
+	succes = env_set_s(key, value, scope);
+	free(key);
+	return (succes);
+}
+
 t_bool	env_unset_s(const char *key)
 {
 	if (g_env__)
