@@ -2,6 +2,7 @@
 #include "libft.h"
 #include "debugger.h"
 
+#include "process.h"
 #include "journal.h"
 #include "execscheme.h"
 
@@ -97,6 +98,8 @@ t_execscheme	*execscheme_destroy(t_execscheme **execscheme)
 	{
 		execscheme_destroy(&(*execscheme)->next);
 		command_destroy(&(*execscheme)->cmd);
+		if ((*execscheme)->pid > 0)
+			p_signal((*execscheme)->pid, SIGTERM);
 		free(*execscheme);
 	}
 	return ((*execscheme = NULL));
