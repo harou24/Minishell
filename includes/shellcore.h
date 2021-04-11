@@ -1,16 +1,16 @@
 #ifndef SHELLCORE_H
 # define SHELLCORE_H
 
-#include "minishell.h"
+# include "minishell.h"
 
-#include <setjmp.h>
+# include <setjmp.h>
 
-#include "env.h"
-#include "lexer.h"
-#include "parser.h"
-#include "prompt.h"
+# include "env.h"
+# include "lexer.h"
+# include "parser.h"
+# include "prompt.h"
 
-typedef struct	s_shell
+typedef struct s_shell
 {
 	t_env		*env;
 	t_lex		*lexer;
@@ -27,7 +27,7 @@ t_shellerr		_shell_loop(t_shell *shell);
 
 /* shellsignals.c */
 
-t_bool			_shell_was_interrupted();
+t_bool			_shell_was_interrupted(void);
 int				_shell_register_sigint_handler(void);
 jmp_buf			*_shell_get_interrupt_jmpbuf(void);
 #endif

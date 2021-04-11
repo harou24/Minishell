@@ -1,15 +1,15 @@
 #ifndef RANGE_H
 # define RANGE_H
 
-#include <stddef.h>
-#include "libft.h"
+# include <stddef.h>
+# include "libft.h"
 
-typedef struct		s_range
+typedef struct s_range
 {
 	size_t			begin;
 	union {
-	size_t			end;
-	size_t			len;
+		size_t			end;
+		size_t			len;
 	};
 }					t_range;
 

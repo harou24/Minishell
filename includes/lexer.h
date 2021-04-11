@@ -1,25 +1,18 @@
 #ifndef LEXER_H
 # define LEXER_H
 
-#ifndef __VECTOR_TYPEDEF
-# define __VECTOR_TYPEDEF
-typedef void * t_vector;
-#endif
+# include <stddef.h>
+# include <stdlib.h>
+# include "libft.h"
+# include "hashmap.h"
+# include "journal.h"
 
-#include <stddef.h>
-#include <stdlib.h>
-#include "libft.h"
-#include "hashmap.h"
-#include "journal.h"
+# ifndef __VECTOR_TYPEDEF
+#  define __VECTOR_TYPEDEF
+typedef void	*t_vector;
+# endif
 
-/*
-#ifndef __HASHMAP_TYPEDEF
-# define __HASHMAP_TYPEDEF
-typedef void * t_hashmap;
-#endif
-*/
-
-typedef struct	s_lex
+typedef struct s_lex
 {
 	char		*input;
 	size_t		input_len;
@@ -29,11 +22,11 @@ typedef struct	s_lex
 
 t_journal	*lex(const char *str);
 
-t_token		*lex_get_next_token();
-t_journal	*lex_build_journal();
+t_token		*lex_get_next_token(void);
+t_journal	*lex_build_journal(char *str);
 
-void		lex_clear();
-t_lex     	*lex_create();
-t_lex     	*lex_destroy(t_lex **lex);
+void		lex_clear(void);
+t_lex		*lex_create(void);
+t_lex		*lex_destroy(t_lex **lex);
 
 #endif
