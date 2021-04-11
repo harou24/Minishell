@@ -1,5 +1,6 @@
 #include "ft_unistd.h"
 #include "env_access.h"
+#include <stdlib.h>
 
 char	*env_get_user(void)
 {
@@ -24,4 +25,13 @@ char	*env_get_prev_dir(void)
 char	*env_get_home(void)
 {
 	return (env_get_s("HOME"));
+}
+
+void	env_set_lasterror(int error)
+{
+	char    *errstring;
+	
+	errstring = ft_itoa(error);
+	env_set_s("?", errstring, SCOPE_LOCAL);
+	free(errstring);
 }

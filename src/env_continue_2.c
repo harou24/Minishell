@@ -1,5 +1,6 @@
 #include <stdlib.h>
 
+#include "debugger.h"
 #include "libft.h"
 #include "vector.h"
 #include "environ.h"
@@ -45,6 +46,7 @@ t_bool	env_add_to_environ(t_env_node *node, const char *key,
 
 	if (scope == SCOPE_ENVIRON || node->scope == SCOPE_ENVIRON)
 	{
+		dbg("Adding key{%s}, value{%s} to environ!\n", key, value);
 		line = ft_strjoin_multi(3, key, "=", value);
 		if (node->environ_index >= 0)
 		{
