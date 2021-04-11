@@ -6,6 +6,7 @@
 
 #include "shellcore.h"
 #include "env_singleton.h"
+#include "env_access.h"
 #include "prompt_singleton.h"
 #include "executor.h"
 
@@ -51,14 +52,21 @@ int	_shell_exec(t_shell *shell, const char *command_string)
 		dbg("Failed lexing command_string: '%s'\n", command_string);
 		return (-1);
 	}
-	scheme = parse();
+	preparser_reset();
+	scheme = parse(preparser_get_next_area());
 	if (!scheme)
 	{
 		dbg("Failed parsing command_string: '%s'\n", command_string);
 		return (-1);
 	}
-	execscheme_pretty_dump(scheme, 15);
-	error = execute(scheme);
+	env_set_lasterror(0);
+	while (scheme)
+	{
+		execscheme_pretty_dump(scheme, 15);
+		error = execute(scheme);
+		env_set_lasterror(error);
+		scheme = parse(preparser_get_next_area());
+	}
 	return (error);
 	(void)shell;
 }
