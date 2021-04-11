@@ -14,7 +14,7 @@
 
 static volatile size_t	g_ready__;
 
-pid_t g_ppid;
+pid_t					g_ppid;
 
 static void	__sighandler(int signal)
 {
@@ -22,10 +22,8 @@ static void	__sighandler(int signal)
 		g_ready__++;
 	else
 		exit (signal);
-
 	if (getpid() == g_ppid)
 		dbg("RECEIVED SIGNAL FROM CHILD!!\n", "");
-
 	dbg("Pid %i received signal %s\n", getpid(), strsignal(signal));
 }
 
@@ -44,8 +42,6 @@ void	p_callback_wait_for_signals(size_t signalcount)
 		getpid(), g_ready__, signalcount);
 	while (g_ready__ < signalcount)
 	{
-		//if (signalcount > 1)
-		//	dbg("Sigcount:%i\n", g_ready__);
 	}
 	dbg("Pid %i: signalcounter{%i} has reached signalcount{%i}!\n",
 		getpid(), g_ready__, signalcount);
