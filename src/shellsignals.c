@@ -15,7 +15,7 @@ static volatile int		g_sigint_last__;
 static void	shell_handle_sigint(int signum)
 {
 	dbg("Shell caught signal: %i\n", signum);
-	p_tab_signal_all(SIGTERM);
+	//p_tab_signal_all(SIGTERM);
 	g_sigint__++;
 }
 
