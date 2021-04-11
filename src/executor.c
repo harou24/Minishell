@@ -19,15 +19,11 @@
 t_bool	executor_should_run_in_parent(t_execscheme *scheme)
 {
 	return ((scheme->op_type != OP_COMMAND && scheme->op_type != OP_PATH)
-			|| scheme->op_type == OP_ASSIGNMENT);
+		|| scheme->op_type == OP_ASSIGNMENT);
 }
 
 int	executor_launch_scheme(t_execscheme *scheme)
 {
-	//if (executor_is_builtin(scheme) || executor_is_assignment(scheme))
-	//{
-	//	return (executor_launch_builtin(scheme));
-	//}
 	if (execscheme_dispatch(scheme->rel_type[NEXT_R])(scheme) != 0)
 	{
 		dbg("%s\n", "Failed to execute scheme !");
@@ -47,7 +43,8 @@ static int	executor_launch_processes(t_execscheme *scheme)
 		if (error != 0)
 			return (-1);
 		scheme = scheme->next;
-		if (scheme && scheme->rel_type[PREV_R] & (REL_READ | REL_WRITE | REL_APPEND))
+		if (scheme && scheme->rel_type[PREV_R]
+			& (REL_READ | REL_WRITE | REL_APPEND))
 			scheme = scheme->next;
 	}
 	return (error);
@@ -86,7 +83,7 @@ void	executor_kill_all(t_execscheme *scheme)
 
 int	execute(t_execscheme *rootscheme)
 {
-	int exitstatus;
+	int	exitstatus;
 
 	if (rootscheme == NULL)
 		return (0);

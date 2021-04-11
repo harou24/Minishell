@@ -14,7 +14,7 @@
 
 static void	child(t_execscheme *scheme)
 {
-	int exitstatus;
+	int	exitstatus;
 
 	if (scheme->rel_type[PREV_R] == REL_PIPE)
 	{
@@ -28,7 +28,7 @@ static void	child(t_execscheme *scheme)
 
 static int	run_in_parent(t_execscheme *scheme)
 {
-	int exitstatus;
+	int	exitstatus;
 
 	if (scheme->rel_type[PREV_R] == REL_PIPE)
 	{
