@@ -29,8 +29,8 @@ char	*env_get_home(void)
 
 void	env_set_lasterror(int error)
 {
-	char    *errstring;
-	
+	char	*errstring;
+
 	errstring = ft_itoa(error);
 	env_set_s("?", errstring, SCOPE_LOCAL);
 	free(errstring);
