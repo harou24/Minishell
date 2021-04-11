@@ -24,7 +24,8 @@ t_bool	redirection_stdout_to_pipe(const char *fname,
 		fd = open(fname, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
 	{
-		dbg("Failing opening file{%s} for dupping to stdout, errno %s\n", fname,  strerror(errno));
+		dbg("Failing opening file{%s} for dupping to stdout, errno %s\n",
+			fname, strerror(errno));
 		return (FALSE);
 	}
 	if (dup2(fd, STDOUT) == -1)
@@ -44,7 +45,8 @@ t_bool	redirection_file_to_stdin(const char *fname)
 	fd = fs_open(fname, O_RDONLY);
 	if (fd == -1)
 	{
-		dbg("Failing opening file{%s} for dupping to stdin, errno %s\n", fname,  strerror(errno));
+		dbg("Failing opening file{%s} for dupping to stdin, errno %s\n",
+			fname, strerror(errno));
 		return (FALSE);
 	}
 	if (dup2(fd, STDIN) == -1)
@@ -70,7 +72,7 @@ t_bool	redirection_pipe_to_stdin(int pipe[2])
 
 static void	child(t_execscheme *scheme)
 {
-	int exitstatus;
+	int	exitstatus;
 
 	if (scheme->rel_type[NEXT_R] & (REL_WRITE | REL_APPEND))
 	{
@@ -78,7 +80,8 @@ static void	child(t_execscheme *scheme)
 				scheme->rel_type[NEXT_R] & REL_APPEND))
 			exit (1);
 	}
-	else if (scheme->rel_type[NEXT_R] & REL_READ && scheme->rel_type[PREV_R] != REL_PIPE)
+	else if (scheme->rel_type[NEXT_R]
+		& REL_READ && scheme->rel_type[PREV_R] != REL_PIPE)
 	{
 		if (!redirection_file_to_stdin(scheme->next->cmd->path))
 			exit(1);
@@ -95,15 +98,16 @@ static void	child(t_execscheme *scheme)
 
 static int	run_in_parent(t_execscheme *scheme)
 {
-	int exitstatus;
+	int	exitstatus;
 
 	if (scheme->rel_type[NEXT_R] & (REL_WRITE | REL_APPEND))
 	{
-		if(!redirection_stdout_to_pipe(scheme->next->cmd->path,
+		if (! redirection_stdout_to_pipe(scheme->next->cmd->path,
 				scheme->rel_type[NEXT_R] & REL_APPEND))
 			return (1);
 	}
-	else if (scheme->rel_type[NEXT_R] & REL_READ && scheme->rel_type[PREV_R] != REL_PIPE)
+	else if (scheme->rel_type[NEXT_R]
+		& REL_READ && scheme->rel_type[PREV_R] != REL_PIPE)
 	{
 		if (!redirection_file_to_stdin(scheme->next->cmd->path))
 			return (1);
