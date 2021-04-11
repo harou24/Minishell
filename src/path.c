@@ -6,11 +6,11 @@
 
 #include "path.h"
 
-static char *__fullpath(const char *dir, const char *name)
+static char	*__fullpath(const char *dir, const char *name)
 {
-	char *fullpath;
+	char	*fullpath;
 
-	fullpath = ft_strjoin_multi(3, dir, "/", name); /* this could be very unsafe*/
+	fullpath = ft_strjoin_multi(3, dir, "/", name);
 	if (!fs_exists(fullpath))
 	{
 		free(fullpath);
@@ -19,12 +19,12 @@ static char *__fullpath(const char *dir, const char *name)
 	return (fullpath);
 }
 
-
 t_bool	path_contains(const char *path, const char *name)
 {
 	char	*fullpath;
 
-	if ((fullpath = path_expand(path, name)))
+	fullpath = path_expand(path, name);
+	if (fullpath)
 	{
 		free(fullpath);
 		return (TRUE);
@@ -40,7 +40,8 @@ char	*path_expand(const char *path, const char *name)
 	dir = ft_strtok((char *)path, ":");
 	while (dir)
 	{
-		if ((fullpath = __fullpath(dir, name)))
+		fullpath = __fullpath(dir, name);
+		if (fullpath)
 		{
 			free(dir);
 			return (fullpath);

@@ -22,7 +22,7 @@ int main (int argc, char **argv)
 				free(for_human);
 
 				t_execscheme *rootscheme;
-				rootscheme = parse(journal_create());
+				rootscheme = parse(range(0, journal_size()));
 				if (!rootscheme) {
 					printf("%30s\n", "PARSE FAILED");
 					break;

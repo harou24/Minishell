@@ -1,9 +1,9 @@
 #ifndef BASH_SYM_H
 # define BASH_SYM_H
 
-#include "token.h"
+# include "token.h"
 
-typedef struct					s_bash_sym
+typedef struct s_bash_sym
 {
 	const e_token_type			type;
 	const int					match_style;

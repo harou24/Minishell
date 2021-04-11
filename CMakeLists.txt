@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.12)
+cmake_minimum_required(VERSION 3.5)
 project(
 	minishell
 	VERSION 0.1
@@ -23,11 +23,19 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
 	set(CMAKE_CXX_STANDARD 98)
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -Wextra")
 
-	option(BUILD_TESTING "Build unittests and standlone torture 'apps' " ON)
-
+	option(BUILD_TESTING "Build unittests and standlone torture 'apps' " OFF)
 	if(BUILD_TESTING)
 		include(CTest)
+	endif()
 
+	set(CMAKE_VERBOSE_MAKEFILE ON)
+
+	set(CMAKE_C_FLAGS "-Wall -Wextra -Werror")
+	set(CMAKE_C_FLAGS_DEBUG "-g -fsanitize=address")
+	set(CMAKE_C_FLAGS_RELEASE "")
+	set(CMAKE_C_FLAGS_RELWITHDEBINFO "-g")
+
+	if(CMAKE_BUILD_TYPE STREQUAL "Debug" OR BUILD_TESTING)
 		set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -fsanitize=address")
 		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -fsanitize=address")
 
@@ -35,6 +43,8 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
 		add_compile_definitions(DEBUG_FILE="./minishell.log")
 	else()
 		add_compile_definitions(DEBUG=0)
+		#add_compile_definitions(DEBUG=1)
+		#add_compile_definitions(DEBUG_FILE="./minishell.log")
 	endif()
 
 	# Let's nicely support folders in IDEs

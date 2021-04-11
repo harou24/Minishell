@@ -9,7 +9,6 @@ int	builtin_unset(t_command *cmd)
 
 	if (cmd->argv->argc < 2)
 	{
-		/*later use error handler ?*/
 		ft_dprintf(STDERR, "unset: not enough arguments");
 		return (-1);
 	}
@@ -21,5 +20,5 @@ int	builtin_unset(t_command *cmd)
 			exit_status = EXIT_FAILURE;
 		index++;
 	}
-	return(exit_status);
+	return (exit_status);
 }

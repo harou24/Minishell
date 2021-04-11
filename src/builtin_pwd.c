@@ -9,8 +9,9 @@ int	builtin_pwd(t_command *cmd)
 
 	pwd = fs_get_cur_dir_name();
 	if (!pwd)
-		return(1);
+		return (1);
 	ft_printf("%s\n", pwd);
-	return(0);
+	free(pwd);
+	return (0);
 	(void)cmd;
 }

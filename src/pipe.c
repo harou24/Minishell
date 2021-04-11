@@ -1,4 +1,3 @@
-#include <assert.h>
 #include <stdlib.h>
 
 #include <unistd.h>
@@ -12,7 +11,12 @@
 ** might have to hack around pipe() to pass this project.
 */
 
-int		ft_pipe(int pipefd[2])
+int	ft_pipe(int pipefd[2])
 {
 	return (pipe(pipefd));
+}
+
+int	drop_pipe(int pipefd[2])
+{
+	return (close(pipefd[0]) | close(pipefd[1]));
 }

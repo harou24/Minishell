@@ -1,39 +1,37 @@
 #include "ft_unistd.h"
 #include "env_access.h"
+#include <stdlib.h>
 
-char	*env_get_user()
+char	*env_get_user(void)
 {
 	return (env_get_s("USER"));
 }
 
-char	*env_get_host()
+char	*env_get_host(void)
 {
 	return (ft_gethostname());
-	/* POSIX does not require HOST to be set
-	return (env_get_s("HOST")); */
 }
 
-char	*env_get_current_dir()
+char	*env_get_current_dir(void)
 {
 	return (env_get_s("PWD"));
 }
 
-char	*env_get_prev_dir()
+char	*env_get_prev_dir(void)
 {
 	return (env_get_s("OLDPWD"));
 }
 
-char	*env_get_home()
+char	*env_get_home(void)
 {
 	return (env_get_s("HOME"));
 }
 
-char	*env_get_path()
+void	env_set_lasterror(int error)
 {
-	return (env_get_s("PATH"));
-}
-
-char	*env_get_cdpath()
-{
-	return (env_get_s("CDPATH"));
+	char    *errstring;
+	
+	errstring = ft_itoa(error);
+	env_set_s("?", errstring, SCOPE_LOCAL);
+	free(errstring);
 }

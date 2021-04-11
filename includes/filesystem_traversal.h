@@ -1,11 +1,11 @@
-#ifndef FILESYSTEM_TRAVERSAL
-# define FILESYSTEM_TRAVERSAL
+#ifndef FILESYSTEM_TRAVERSAL_H
+# define FILESYSTEM_TRAVERSAL_H
 
-#undef PATH_DEF
-#define PATH_DEF	256
+# undef PATH_DEF
+# define PATH_DEF	256
 
-#undef PATH_MAX
-#define PATH_MAX	4096
+# undef PATH_MAX
+# define PATH_MAX	4096
 
 char	*fs_get_cur_dir_name(void);
 

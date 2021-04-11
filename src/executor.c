@@ -16,95 +16,83 @@
 #include <stdio.h>
 #include <string.h>
 
-int			executor_launch_builtin(t_execscheme *scheme)
+t_bool	executor_should_run_in_parent(t_execscheme *scheme)
 {
-	return (command_dispatch(scheme->op_type)(scheme->cmd));
+	return ((scheme->op_type != OP_COMMAND && scheme->op_type != OP_PATH)
+			|| scheme->op_type == OP_ASSIGNMENT);
 }
 
-t_bool		executor_is_builtin(t_execscheme *scheme)
+int	executor_launch_scheme(t_execscheme *scheme)
 {
-	return (scheme->op_type != OP_COMMAND && scheme->op_type != OP_PATH);
-}
-
-int			executor_launch_sequential_scheme(t_execscheme *scheme, pid_t pid)
-{
-	assert(pid != -1);
-	if (executor_is_builtin(scheme) && !(scheme->rel_type[NEXT_R] & (REL_READ | REL_WRITE | REL_APPEND)))
+	//if (executor_is_builtin(scheme) || executor_is_assignment(scheme))
+	//{
+	//	return (executor_launch_builtin(scheme));
+	//}
+	if (execscheme_dispatch(scheme->rel_type[NEXT_R])(scheme) != 0)
 	{
-		p_signal(pid, SIGTERM); /* not particularly pretty eh */
-		return (executor_launch_builtin(scheme));
-	}
-	p_signal(pid, SIGUSR1);
-	return(p_waitpid(pid, W_EXITED));
-}
-
-void		executor_launch_parallel_scheme(pid_t pid)
-{
-	assert(pid != -1);
-	p_signal(pid, SIGUSR1);
-}
-
-int			executor_launch_processes(t_execscheme *scheme)
-{
-	int		error;
-	size_t	pid_index;
-
-	error = 0;
-	pid_index = 0;
-	while (scheme)
-	{
-		if (scheme->rel_type[NEXT_R] == REL_PIPE)
-		{
-			/* parallel operation */
-			executor_launch_parallel_scheme(p_tab_at(pid_index));
-			pid_index++;
-		}
-		else if (!(scheme->rel_type[PREV_R] & (REL_READ | REL_APPEND | REL_WRITE)))
-		{
-			/* sequential operation */
-			error = executor_launch_sequential_scheme(scheme, p_tab_at(pid_index));
-			pid_index++;
-		}
-		scheme = scheme->next;
-	}
-	return (error);
-}
-
-int		executor_prepare_processes(t_execscheme *scheme)
-{
-	while (scheme)
-	{
-		/* dispatch for execscheme type */
-		if (!(scheme->rel_type[PREV_R] & (REL_READ | REL_APPEND | REL_WRITE)))
-		{
-			dbg("executing scheme: %s, %s <- relation -> %s\n", execscheme_dump_op_type(scheme->op_type), execscheme_dump_relation_type(scheme->rel_type[PREV_R]), execscheme_dump_relation_type(scheme->rel_type[NEXT_R]));
-			if (execscheme_dispatch(scheme->rel_type[NEXT_R])(scheme) != 0)
-			{
-				dbg("%s\n", "failed to prepare scheme !");
-				p_tab_signal_all(SIGTERM);
-				return (-1);
-			}
-		}
-		scheme = scheme->next;
+		dbg("%s\n", "Failed to execute scheme !");
+		return (-1);
 	}
 	return (0);
 }
 
-int			execute(t_execscheme *scheme)
+static int	executor_launch_processes(t_execscheme *scheme)
 {
 	int		error;
 
 	error = 0;
-	p_queue_register_signalhandler(SIGUSR1);
-
-	if ((error = executor_prepare_processes(scheme)) == 0)
+	while (scheme)
 	{
-		/* wait for children to register signal handlers */
-		p_queue_wait_for_signals(p_tab_size());
-		error = executor_launch_processes(scheme);
+		error = executor_launch_scheme(scheme);
+		if (error != 0)
+			return (-1);
+		scheme = scheme->next;
+		if (scheme && scheme->rel_type[PREV_R] & (REL_READ | REL_WRITE | REL_APPEND))
+			scheme = scheme->next;
 	}
-
-	/* kill the kids */
-	p_tab_signal_all(SIGTERM);
 	return (error);
+}
+
+static int 	executor_get_exitstatus(t_execscheme *scheme)
+{
+	int	exitstatus;
+
+	exitstatus = 0;
+	while (scheme)
+	{
+		if (scheme->pid > 0 )
+		{
+			exitstatus = p_wait(&scheme->pid, W_EXITED);
+			if (exitstatus != 0)
+				return (exitstatus);
+		}
+		scheme = scheme->next;
+	}
+	return (exitstatus);
+}
+
+void	executor_kill_all(t_execscheme *scheme)
+{
+	while (scheme)
+	{
+		if (scheme->pid > 0)
+		{
+			p_signal(scheme->pid, SIGTERM);
+			scheme->pid = -1;
+		}
+		scheme = scheme->next;
+	}
+}
+
+int	execute(t_execscheme *rootscheme)
+{
+	int exitstatus;
+
+	if (rootscheme == NULL)
+		return (0);
+	exitstatus = -1;
+	if (executor_launch_processes(rootscheme) == 0)
+		exitstatus = executor_get_exitstatus(rootscheme);
+	executor_kill_all(rootscheme);
+	return (exitstatus);
 }

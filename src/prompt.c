@@ -6,6 +6,7 @@
 #include "ft_printf.h"
 
 #include "env_singleton.h"
+#include "env_access.h"
 #include "filesystem.h"
 #include "filesystem_traversal.h"
 #include "prompt.h"
@@ -16,7 +17,7 @@
 
 t_prompt 	*prompt_create(const char *_username, const char *_hostname)
 {
-	t_prompt *prompt;
+	t_prompt	*prompt;
 
 	assert(_username);
 	assert(_hostname);
@@ -28,7 +29,8 @@ t_prompt 	*prompt_create(const char *_username, const char *_hostname)
 	prompt->error_code = 0;
 	prompt->buffer = ft_calloc(sizeof(char), __PROMPT_BUFF_SIZE);
 	prompt->current_path = fs_get_cur_dir_name();
-	if (!prompt->current_path || !prompt->buffer || !prompt->username || !prompt->hostname)
+	if (!prompt->current_path || !prompt->buffer
+		|| !prompt->username || !prompt->hostname)
 	{
 		prompt_destroy(prompt);
 		return (NULL);
@@ -46,17 +48,22 @@ void	prompt_init_indexes(t_prompt *_prompt)
 	_prompt->host_index = _prompt->at_index + 1;
 	_prompt->colon_index = _prompt->host_index + ft_strlen(_prompt->hostname);
 	_prompt->path_index = _prompt->colon_index + 1;
-	_prompt->bracket_index = _prompt->path_index + ft_strlen(_prompt->current_path);
+	_prompt->bracket_index = _prompt->path_index + ft_strlen(
+			_prompt->current_path);
 }
 
 void	prompt_prepare_buffer(t_prompt *_prompt)
 {
-	ft_snprintf(_prompt->buffer, __ERROR_LENGTH, "%-*d", __ERROR_LENGTH,_prompt->error_code);
-	ft_snprintf(_prompt->buffer + _prompt->user_index, ft_strlen(_prompt->username) + 1, "%s", _prompt->username);
-	ft_snprintf(_prompt->buffer + _prompt->at_index , 2, "@");
-	ft_snprintf(_prompt->buffer + _prompt->host_index, ft_strlen(_prompt->hostname) + 1, "%s", _prompt->hostname);
+	ft_snprintf(_prompt->buffer, __ERROR_LENGTH, "%-*d",
+		__ERROR_LENGTH, _prompt->error_code);
+	ft_snprintf(_prompt->buffer + _prompt->user_index,
+		ft_strlen(_prompt->username) + 1, "%s", _prompt->username);
+	ft_snprintf(_prompt->buffer + _prompt->at_index, 2, "@");
+	ft_snprintf(_prompt->buffer + _prompt->host_index,
+		ft_strlen(_prompt->hostname) + 1, "%s", _prompt->hostname);
 	ft_snprintf(_prompt->buffer + _prompt->colon_index, 2, ":");
-	ft_snprintf(_prompt->buffer + _prompt->path_index, ft_strlen(_prompt->current_path) + 1, "%s", _prompt->current_path);
+	ft_snprintf(_prompt->buffer + _prompt->path_index,
+		ft_strlen(_prompt->current_path) + 1, "%s", _prompt->current_path);
 	ft_snprintf(_prompt->buffer + _prompt->bracket_index, 3, "> ");
 }
 
@@ -71,50 +78,6 @@ int	prompt_update_current_path(t_prompt *_prompt)
 
 void	prompt_set_error_code(t_prompt *_prompt, int _error_code)
 {
-	char *errstring;
-
-	errstring = ft_itoa(_error_code);
-	env_set_s("?", errstring, SCOPE_LOCAL);
-	free(errstring);
+	env_set_lasterror(_error_code);
 	_prompt->error_code = _error_code;
-}
-
-void	set_current_path(t_prompt *_prompt, const char *_path)
-{
-	_prompt->current_path = (char *)_path;
-}
-
-void 	prompt_print(t_prompt *_prompt)
-{
-	ft_dprintf(STDERR, "%s", _prompt->buffer);
-}
-
-void	prompt_destroy(t_prompt *_prompt)
-{
-	free(_prompt->username);
-	free(_prompt->hostname);
-	free(_prompt->current_path);
-	free(_prompt->buffer);
-	free(_prompt);
-}
-
-int	prompt_update(t_prompt *_prompt)
-{
-	if (!prompt_update_current_path(_prompt))
-		return (0);
-	prompt_prepare_buffer(_prompt);
-	return (1);
-}
-
-char	*prompt_read(void)
-{
-	char	*command_line;
-
-	command_line = NULL;
-	if (!(get_next_line(STDIN, &command_line) > 0))
-	{
-		free(command_line);
-		return (NULL);
-	}
-	return (command_line);
 }
