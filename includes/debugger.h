@@ -23,9 +23,9 @@ t_bool				debug_init_tofd(int fd);
 void				debug_deinit();
 int					debug(const char *format, ...);
 
-#define DBG_FILENAME_LEN	50
+#define DBG_FILENAME_LEN	55
 #define DBG_LINE_LEN		5
-#define DBG_FUNCNAME_LEN	25
+#define DBG_FUNCNAME_LEN	35
 
 /* https://stackoverflow.com/questions/1644868/define-macro-for-debug-printing-in-c */
 #define dbg(fmt, ...) \
