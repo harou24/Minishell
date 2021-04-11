@@ -35,6 +35,7 @@ t_bool	environ_set(size_t index, char *line)
 
 t_bool	environ_add(char *line)
 {
-	return (vector(&g_environ_vec__, V_PUSHBACK, 0, line) != NULL
-		&& vector(&g_environ_vec__, V_PUSHBACK, 0, NULL) != NULL);
+	vector(&g_environ_vec__, V_REPLACE, environ_size(), line);
+	vector(&g_environ_vec__, V_PUSHBACK, 0, NULL);
+	return (TRUE);
 }

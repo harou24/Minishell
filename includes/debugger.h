@@ -21,9 +21,11 @@ t_bool				debug_init_tofd(int fd);
 void				debug_deinit(void);
 int					debug(const char *format, ...);
 
-# define DBG_FILENAME_LEN 50
+
+# define DBG_FILENAME_LEN 55
 # define DBG_LINE_LEN 5
-# define DBG_FUNCNAME_LEN 25
+# define DBG_FUNCNAME_LEN 35
+
 
 # define dbg(fmt, ...) \
         do { if (DEBUG) debug("%-*s%*d%*s(): " fmt, \

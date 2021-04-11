@@ -24,7 +24,7 @@ int	exec_bin(t_command *cmd)
 	{
 		execve(abspath, cmd->argv->argv, environ);
 		dbg("execve failed for %s with error : %s\n", abspath, strerror(errno));
-		return (-1);
+		exit (1);
 	}
 	exit(127);
 }

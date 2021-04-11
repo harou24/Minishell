@@ -1,6 +1,7 @@
 #include <assert.h>
 #include <stdlib.h>
 
+#include "debugger.h"
 #include "libft.h"
 
 #include "parser.h"
@@ -13,7 +14,6 @@ t_execscheme	*parse_generate_execschemes(void)
 	t_execscheme	*scheme;
 
 	root = NULL;
-	parse_reset_match_area();
 	parse_dump_match_area(g_parser__->matcharea);
 	scheme = parse_get_next_scheme();
 	while (scheme)
@@ -27,13 +27,21 @@ t_execscheme	*parse_generate_execschemes(void)
 			execscheme_attach(root, scheme);
 		scheme = parse_get_next_scheme();
 	}
+	if (!root)
+		dbg("Failed to build execschemes!\n", "");
 	return (root);
 }
 
-t_execscheme	*parse(void)
+t_execscheme	*parse(t_range matcharea)
 {
-	if (!parse_expand())
+	if (range_cmp(matcharea, range(0, 0)) == 0)
 		return (NULL);
+	g_parser__->matcharea = matcharea;
+	if (!parse_expand())
+	{
+		dbg("Failed to expand!\n", "");
+		return (NULL);
+	}
 	if (g_parser__->rootscheme)
 		execscheme_destroy(&g_parser__->rootscheme);
 	g_parser__->rootscheme = parse_generate_execschemes();

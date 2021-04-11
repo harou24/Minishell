@@ -13,7 +13,7 @@ typedef struct s_parser
 	t_env			*env;
 }					t_parser;
 
-t_execscheme		*parse();
+t_execscheme		*parse(t_range matcharea);
 
 t_parser			*parser_create(void);
 t_parser			*parser_destroy(t_parser **parser);
@@ -46,4 +46,8 @@ void				parse_dump_match_area(t_range area);
 void				parse_reset_match_area(void);
 t_execscheme		*parse_get_next_scheme(void);
 t_command			*parse_build_command(t_range area);
+
+void				preparser_reset(void);
+t_range				preparser_get_next_area(void);
+
 #endif

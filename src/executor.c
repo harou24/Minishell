@@ -16,31 +16,83 @@
 #include <stdio.h>
 #include <string.h>
 
-static int	executor_launch_builtin(t_execscheme *scheme)
+t_bool	executor_should_run_in_parent(t_execscheme *scheme)
 {
-	return (command_dispatch(scheme->op_type)(scheme->cmd));
+	return ((scheme->op_type != OP_COMMAND && scheme->op_type != OP_PATH)
+			|| scheme->op_type == OP_ASSIGNMENT);
 }
 
-static t_bool	executor_is_builtin(t_execscheme *scheme)
+int	executor_launch_scheme(t_execscheme *scheme)
 {
-	return (scheme->op_type != OP_COMMAND && scheme->op_type != OP_PATH);
-}
-
-int	executor_launch_sequential_scheme(t_execscheme *scheme, pid_t pid)
-{
-	assert(pid != -1);
-	if (executor_is_builtin(scheme)
-		&& !(scheme->rel_type[NEXT_R] & (REL_READ | REL_WRITE | REL_APPEND)))
+	//if (executor_is_builtin(scheme) || executor_is_assignment(scheme))
+	//{
+	//	return (executor_launch_builtin(scheme));
+	//}
+	if (execscheme_dispatch(scheme->rel_type[NEXT_R])(scheme) != 0)
 	{
-		p_signal(pid, SIGTERM);
-		return (executor_launch_builtin(scheme));
+		dbg("%s\n", "Failed to execute scheme !");
+		return (-1);
 	}
-	p_signal(pid, SIGUSR1);
-	return (p_waitpid(pid, W_EXITED));
+	return (0);
 }
 
-void	executor_launch_parallel_scheme(pid_t pid)
+static int	executor_launch_processes(t_execscheme *scheme)
 {
-	assert(pid != -1);
-	p_signal(pid, SIGUSR1);
+	int		error;
+
+	error = 0;
+	while (scheme)
+	{
+		error = executor_launch_scheme(scheme);
+		if (error != 0)
+			return (-1);
+		scheme = scheme->next;
+		if (scheme && scheme->rel_type[PREV_R] & (REL_READ | REL_WRITE | REL_APPEND))
+			scheme = scheme->next;
+	}
+	return (error);
+}
+
+static int 	executor_get_exitstatus(t_execscheme *scheme)
+{
+	int	exitstatus;
+
+	exitstatus = 0;
+	while (scheme)
+	{
+		if (scheme->pid > 0 )
+		{
+			exitstatus = p_wait(&scheme->pid, W_EXITED);
+			if (exitstatus != 0)
+				return (exitstatus);
+		}
+		scheme = scheme->next;
+	}
+	return (exitstatus);
+}
+
+void	executor_kill_all(t_execscheme *scheme)
+{
+	while (scheme)
+	{
+		if (scheme->pid > 0)
+		{
+			p_signal(scheme->pid, SIGTERM);
+			scheme->pid = -1;
+		}
+		scheme = scheme->next;
+	}
+}
+
+int	execute(t_execscheme *rootscheme)
+{
+	int exitstatus;
+
+	if (rootscheme == NULL)
+		return (0);
+	exitstatus = -1;
+	if (executor_launch_processes(rootscheme) == 0)
+		exitstatus = executor_get_exitstatus(rootscheme);
+	executor_kill_all(rootscheme);
+	return (exitstatus);
 }

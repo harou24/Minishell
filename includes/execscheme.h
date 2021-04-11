@@ -43,6 +43,7 @@ typedef struct s_execscheme
 	t_exec_op_type			op_type;
 	t_exec_relation_type	rel_type[2];
 	int						pipe[2];
+	pid_t					pid;
 	t_command				*cmd;
 	struct s_execscheme		*prev;
 	struct s_execscheme		*next;

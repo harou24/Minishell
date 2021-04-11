@@ -11,6 +11,7 @@ int	builtin_pwd(t_command *cmd)
 	if (!pwd)
 		return (1);
 	ft_printf("%s\n", pwd);
+	free(pwd);
 	return (0);
 	(void)cmd;
 }

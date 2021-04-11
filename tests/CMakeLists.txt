@@ -1,7 +1,9 @@
 FetchContent_Declare(
   Catch2
   GIT_REPOSITORY https://github.com/catchorg/Catch2.git
-  GIT_TAG        v2.13.4)
+  GIT_TAG        v2.13.4
+  GIT_PROGRESS   TRUE
+  USES_TERMINAL_DOWNLOAD TRUE)
 FetchContent_MakeAvailable(Catch2)
 
 file(GLOB TEST_FILES src/*.cpp)

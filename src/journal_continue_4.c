@@ -35,7 +35,8 @@ char	*journal_dump_tokens_for_range(t_range r)
 	t_token		*token;
 	size_t		i;
 
-	assert(r.end <= journal_size());
+	if(r.end > journal_size())
+		return (NULL);
 	i = r.begin;
 	buf = ft_calloc(sizeof(char), buflen);
 	while (i < r.end)

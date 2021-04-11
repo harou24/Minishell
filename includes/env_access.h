@@ -11,4 +11,6 @@ char	*env_get_home(void);
 char	*env_get_path(void);
 char	*env_get_cdpath(void);
 
+void	env_set_lasterror(int error);
+
 #endif

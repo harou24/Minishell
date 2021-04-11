@@ -1,4 +1,6 @@
 #include <assert.h>
+
+#include "debugger.h"
 #include "parser.h"
 
 extern t_parser	*g_parser__;
@@ -6,22 +8,6 @@ extern t_parser	*g_parser__;
 t_bool	parse_keep_matching(void)
 {
 	return (g_parser__->matcharea.begin < g_parser__->matcharea.end);
-}
-
-char	*parse_build_argument(size_t index)
-{
-	t_token		*token;
-	char		*arg;
-
-	token = journal_get(index);
-	assert(token);
-	if (token && token->type != SPACE && token->type != NULLBYTE)
-	{
-		arg = journal_get_string_for_index(index);
-		assert(arg);
-		return (arg);
-	}
-	return (NULL);
 }
 
 char	*parse_build_path(t_range *area)
@@ -37,6 +23,23 @@ char	*parse_build_path(t_range *area)
 	}
 }
 
+char	*parse_build_argument(size_t *index, int *len)
+{
+	t_token		*token;
+	char		*arg;
+
+	token = journal_get(*index);
+	arg = NULL;
+	while (token && token->type != SPACE && token->type != NULLBYTE && *len > 0)
+	{
+		arg = ft_strjoin_noreuse(arg, journal_get_string_for_index(*index));
+		(*len)--;
+		(*index)++;
+		token = journal_get(*index);
+	}
+	return (arg);
+}
+
 t_argv	*parse_build_argv(t_range area)
 {
 	char		*arg;
@@ -49,7 +52,7 @@ t_argv	*parse_build_argv(t_range area)
 	{
 		while (len > 0)
 		{
-			arg = parse_build_argument(area.begin);
+			arg = parse_build_argument(&area.begin, &len);
 			if (arg)
 				argv_push(argv, arg);
 			area.begin++;

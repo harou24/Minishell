@@ -15,3 +15,8 @@ int	ft_pipe(int pipefd[2])
 {
 	return (pipe(pipefd));
 }
+
+int	drop_pipe(int pipefd[2])
+{
+	return (close(pipefd[0]) | close(pipefd[1]));
+}
