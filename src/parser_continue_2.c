@@ -67,11 +67,6 @@ t_execscheme	*parse_get_next_scheme(void)
 	return (NULL);
 }
 
-void	parse_reset_match_area(void)
-{
-	g_parser__->matcharea = range(0, journal_size());
-}
-
 void	parse_dump_match_area(t_range area)
 {
 	char	*range;

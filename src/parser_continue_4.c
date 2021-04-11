@@ -35,6 +35,9 @@ t_bool	parse_expand_variables(void)
 	while (journal_has_tokentype(VARIABLE) > 0)
 	{
 		assert(journal_find_nth_type(VARIABLE, 0));
+		if (journal_find_nth_type(VARIABLE, 0)->index
+			>= g_parser__->matcharea.end)
+			break ;
 		parse_expand_first_variable(tokens, journal_find_nth_type(VARIABLE, 0));
 	}
 	return (TRUE);
