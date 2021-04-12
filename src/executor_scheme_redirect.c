@@ -13,63 +13,6 @@
 
 #define CHILD 0
 
-t_bool	redirection_stdout_to_pipe(const char *fname,
-						t_bool should_append)
-{
-	int			fd;
-
-	if (should_append)
-		fd = open(fname, O_WRONLY | O_CREAT | O_APPEND, 0644);
-	else
-		fd = open(fname, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (fd == -1)
-	{
-		dbg("Failing opening file{%s} for dupping to stdout, errno %s\n",
-			fname, strerror(errno));
-		return (FALSE);
-	}
-	if (dup2(fd, STDOUT) == -1)
-	{
-		dbg("Failing dupping to stdout, errno %s\n", strerror(errno));
-		close(fd);
-		return (FALSE);
-	}
-	close (fd);
-	return (TRUE);
-}
-
-t_bool	redirection_file_to_stdin(const char *fname)
-{
-	int			fd;
-
-	fd = fs_open(fname, O_RDONLY);
-	if (fd == -1)
-	{
-		dbg("Failing opening file{%s} for dupping to stdin, errno %s\n",
-			fname, strerror(errno));
-		return (FALSE);
-	}
-	if (dup2(fd, STDIN) == -1)
-	{
-		dbg("Failing dupping stdin, errno %s\n", strerror(errno));
-		close(fd);
-		return (FALSE);
-	}
-	close(fd);
-	return (TRUE);
-}
-
-t_bool	redirection_pipe_to_stdin(int pipe[2])
-{
-	if (dup2(pipe[PIPE_READ], STDIN) == -1)
-	{
-		dbg("Failing dupping stdin, errno %s\n", strerror(errno));
-		return (FALSE);
-	}
-	drop_pipe(pipe);
-	return (TRUE);
-}
-
 static void	child(t_execscheme *scheme)
 {
 	int	exitstatus;
@@ -100,6 +43,7 @@ static int	run_in_parent(t_execscheme *scheme)
 {
 	int	exitstatus;
 
+	redirection_std_push();
 	if (scheme->rel_type[NEXT_R] & (REL_WRITE | REL_APPEND))
 	{
 		if (! redirection_stdout_to_pipe(scheme->next->cmd->path,
@@ -118,6 +62,7 @@ static int	run_in_parent(t_execscheme *scheme)
 			return (1);
 	}
 	exitstatus = command_dispatch(scheme->op_type)(scheme->cmd);
+	redirection_std_pop();
 	return (exitstatus);
 }
 
@@ -133,7 +78,6 @@ int	handler_scheme_redirection(t_execscheme *scheme)
 {
 	pid_t	pid;
 
-	dbg("PICKING UP REDIRECTION SCHEME!\n", "");
 	if (!scheme->next || (scheme->rel_type[NEXT_R]
 			& REL_READ && !fs_exists(scheme->next->cmd->path)))
 		return (-1);
