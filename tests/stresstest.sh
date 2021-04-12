@@ -76,7 +76,7 @@ declare -a testsArrayNonCrash=( \
 	'echo > "build/stress.tmp"' \
 	'echo $PWD; echo "$PWD"' \
 	'echo $PWD ; echo $HOME ; echo "$PWD" ; ' \
-	'echo hallo daar | echo hoi maran' \
+	'echo hello | echo' \
 	'export | grep -e "PWD="' \
 	'echo > build/stress.tmp multi file ; wc build/stress.tmp' \
 	'echo a b cd > build/stress.tmp multi file ; wc build/stress.tmp' \
