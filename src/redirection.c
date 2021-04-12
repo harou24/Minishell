@@ -9,7 +9,7 @@
 
 #include "libft.h"
 
-static int g_fd__[2];
+static int	g_fd__[2];
 
 void	redirection_std_push(void)
 {
