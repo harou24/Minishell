@@ -23,6 +23,8 @@ const char	*token_dump_type(e_token_type type)
 {
 	if (type == WORD)
 		return ("WORD");
+	if (type == SYM)
+		return ("SYM");
 	if (type == STRING)
 		return ("STRING");
 	if (type == LITERAL)

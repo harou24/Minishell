@@ -1,12 +1,14 @@
 #include <assert.h>
 
+#include "debugger.h"
 #include "parser.h"
 
 extern t_parser	*g_parser__;
 
 t_bool	parse_is_variable(t_token *var_name)
 {
-	return (var_name && var_name->type == WORD);
+	assert(var_name);
+	return (var_name && (var_name->type == WORD || var_name->type == SYM || var_name->type == ASSIGNMENT || var_name->type == VARIABLE));
 }
 
 t_bool	parse_expand_first_variable(t_vector tokens, t_token *var_sym)
