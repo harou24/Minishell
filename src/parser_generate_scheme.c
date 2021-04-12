@@ -67,14 +67,26 @@ t_execscheme	*parse_get_next_scheme(void)
 	return (NULL);
 }
 
-void	parse_dump_match_area(t_range area)
+t_execscheme	*parse_generate_execschemes(void)
 {
-	char	*range;
-	char	*tokens;
+	t_execscheme	*root;
+	t_execscheme	*scheme;
 
-	range = range_dump(area);
-	tokens = journal_dump_tokens_for_range(area);
-	dbg("area: %s, tokens: %s\n", range, tokens);
-	free(range);
-	free(tokens);
+	root = NULL;
+	scheme = parse_get_next_scheme();
+	while (scheme)
+	{
+		if (!root)
+		{
+			root = scheme;
+			scheme->rel_type[PREV_R] = REL_START;
+		}
+		else
+			execscheme_attach(root, scheme);
+		scheme = parse_get_next_scheme();
+	}
+	if (!root)
+		dbg("Failed to build execschemes!\n", "");
+	parse_flush_tokens(g_parser__->matcharea);
+	return (root);
 }
