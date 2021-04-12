@@ -47,7 +47,6 @@ void				parse_reset_match_area(void);
 t_execscheme		*parse_get_next_scheme(void);
 t_command			*parse_build_command(t_range area);
 
-void				preparser_reset(void);
 t_range				preparser_get_next_area(void);
 
 #endif
