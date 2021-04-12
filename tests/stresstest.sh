@@ -73,6 +73,14 @@ declare -a testsArrayNonCrash=( \
 	'cat < build/stress.tmp' \
 	'touch build/stress.tmp' \
 	'touch build/stress.tmp; rm build/stress.tmp' \
+	'echo > "build/stress.tmp"' \
+	'echo $PWD; echo "$PWD"' \
+	'echo $PWD ; echo $HOME ; echo "$PWD" ; ' \
+	'echo hello | echo' \
+	'export | grep -e "PWD="' \
+	'echo > build/stress.tmp multi file ; wc build/stress.tmp' \
+	'echo a b cd > build/stress.tmp multi file ; wc build/stress.tmp' \
+	'export PATH="$PATHtest:working:multiplepath:directory1:directory2"' \
 	)
 
 declare -a testsArrayCmp=( \
@@ -123,6 +131,9 @@ declare -a testsArrayCmp=( \
 	'touch build/stress.tmp; rm build/stress.tmp' \
 	'rm build/stress.tmp' \
 	'FAULTY; ls'
+	'export PATH="$PATHtest:working:multiplepath:directory1:directory2"; echo $PATH' \
+	'echo > build/stress.tmp multi file ; wc build/stress.tmp' \
+	'echo a b cd > build/stress.tmp multi file ; wc build/stress.tmp' \
 	)
 
 run_tests()
