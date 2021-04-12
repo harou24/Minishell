@@ -73,17 +73,14 @@ declare -a testsArrayNonCrash=( \
 	'cat < build/stress.tmp' \
 	'touch build/stress.tmp' \
 	'touch build/stress.tmp; rm build/stress.tmp' \
-	'echo > "hardesttest.txt"'\
-	'echo adding stuff >> working.txt'\
-	'echo more stuff >> working.txt'\
-	'echo > working.txt'\
-	'export | grep -e "HOME="'\
-	'echo hallo daar | echo hoi maran'\
-	'export | grep -e "PWD="'\
-	'echo > ilovewords.txt count me ; wc ilovewords.txt'\
-	'export PATH="test:working:multiplepath:directory1:directory2"'\
-	'export'\
-	'echo $PWD ; echo $HOME ; echo "$PWD" ; echo '$PWD' ; echo "$HOME"'
+	'echo > "build/stress.tmp"' \
+	'echo $PWD; echo "$PWD"' \
+	'echo $PWD ; echo $HOME ; echo "$PWD" ; ' \
+	'echo hallo daar | echo hoi maran' \
+	'export | grep -e "PWD="' \
+	'echo > build/stress.tmp multi file ; wc build/stress.tmp' \
+	'echo a b cd > build/stress.tmp multi file ; wc build/stress.tmp' \
+	'export PATH="$PATHtest:working:multiplepath:directory1:directory2"' \
 	)
 
 declare -a testsArrayCmp=( \
@@ -134,6 +131,9 @@ declare -a testsArrayCmp=( \
 	'touch build/stress.tmp; rm build/stress.tmp' \
 	'rm build/stress.tmp' \
 	'FAULTY; ls'
+	'export PATH="$PATHtest:working:multiplepath:directory1:directory2"; echo $PATH' \
+	'echo > build/stress.tmp multi file ; wc build/stress.tmp' \
+	'echo a b cd > build/stress.tmp multi file ; wc build/stress.tmp' \
 	)
 
 run_tests()
