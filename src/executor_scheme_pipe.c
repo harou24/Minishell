@@ -41,7 +41,6 @@ int	handler_scheme_pipe(t_execscheme *scheme)
 {
 	pid_t			pid;
 
-	 dbg("PICKING UP PIPE SCHEME!\n", "");
 	if (pipe(scheme->pipe) == -1)
 	{
 		dbg("Pipe syscall failed with error : %s\n", strerror(errno));

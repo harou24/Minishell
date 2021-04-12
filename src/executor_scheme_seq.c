@@ -30,12 +30,14 @@ static int	run_in_parent(t_execscheme *scheme)
 {
 	int	exitstatus;
 
+	redirection_std_push();
 	if (scheme->rel_type[PREV_R] == REL_PIPE)
 	{
 		if (!redirection_pipe_to_stdin(scheme->prev->pipe))
 			return (1);
 	}
 	exitstatus = command_dispatch(scheme->op_type)(scheme->cmd);
+	redirection_std_pop();
 	return (exitstatus);
 }
 
@@ -51,12 +53,8 @@ int	handler_scheme_seq(t_execscheme *scheme)
 {
 	pid_t	pid;
 
-	dbg("PICKING UP SEQUENTIAL SCHEME!\n", "");
 	if (executor_should_run_in_parent(scheme))
-	{
-		dbg("RUNNING IN PARENT!\n", "");
 		return (run_in_parent(scheme));
-	}
 	pid = fork();
 	if (pid == -1)
 	{
