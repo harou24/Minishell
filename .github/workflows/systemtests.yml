@@ -19,7 +19,7 @@ jobs:
 
     - name: Run all systemtests
       run: |
-        ./tests/stresstest 1
+        ./tests/stresstest.sh 1
   osx:
     runs-on: macos-latest
     name: Run Systemtests (OSx)
@@ -30,4 +30,4 @@ jobs:
 
     - name: Run all systemtests
       run: |
-        ./tests/stresstest 1
+        ./tests/stresstest.sh 1
