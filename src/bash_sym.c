@@ -17,7 +17,8 @@
 
 static const t_bash_sym	g_bash_sym_list[] = {
 	{WORD, FUZZY,		"0123456789abcdefghijklmnopqrstuvwxyz\
-				ABCDEFGHIJKLMNOPQRSTUVWXYZ@%^(~)-_+]}[{:/?.,&"},
+				ABCDEFGHIJKLMNOPQRSTUVWXYZ"},
+	{SYM, FUZZY,		"@%^(~)-_+]}[{:/?.,&"},
 	{LITERAL, EXACT,	"\'"},
 	{STRING, EXACT,		"\""},
 	{ASSIGNMENT, EXACT,	"="},
