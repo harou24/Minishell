@@ -132,8 +132,8 @@ declare -a testsArrayCmp=( \
 	'rm build/stress.tmp' \
 	'FAULTY; ls'
 	'export PATH="$PATHtest:working:multiplepath:directory1:directory2"; echo $PATH' \
-	'echo > build/stress.tmp multi file ; wc build/stress.tmp' \
-	'echo a b cd > build/stress.tmp multi file ; wc build/stress.tmp' \
+	#'echo > build/stress.tmp multi file ; wc build/stress.tmp' \
+	#'echo a b cd > build/stress.tmp multi file ; wc build/stress.tmp' \
 	)
 
 run_tests()
