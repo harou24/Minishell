@@ -32,7 +32,7 @@ static int	run_in_parent(t_execscheme *scheme)
 
 	if (scheme->rel_type[PREV_R] == REL_PIPE)
 	{
-		if (redirection_pipe_to_stdin(scheme->prev->pipe))
+		if (!redirection_pipe_to_stdin(scheme->prev->pipe))
 			return (1);
 	}
 	exitstatus = command_dispatch(scheme->op_type)(scheme->cmd);
