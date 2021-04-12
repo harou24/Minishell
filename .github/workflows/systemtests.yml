@@ -11,18 +11,7 @@ on:
 jobs:
   ubuntu:
     runs-on: ubuntu-latest
-    name: Run Systemtests (Linux)
-
-    steps:
-    - name: Checkout repository and submodules
-      uses: actions/checkout@v2
-
-    - name: Run all systemtests
-      run: |
-        ./tests/stresstest.sh 1
-  osx:
-    runs-on: macos-latest
-    name: Run Systemtests (OSx)
+    name: Run Systemtests
 
     steps:
     - name: Checkout repository and submodules
