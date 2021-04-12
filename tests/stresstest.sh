@@ -16,6 +16,8 @@ fi
 
 declare -a testsArrayNonCrash=( \
 	'ls' \
+	'ls;' \
+	';ls;' \
 	'echo' \
 	'ls -l | cat' \
 	'ls ; echo a' \
@@ -69,8 +71,8 @@ declare -a testsArrayNonCrash=( \
 	'echo "ls ./src" > build/stress.tmp; cat build/stress.tmp' \
 	'echo "ls ./src" >> build/stress.tmp; cat build/stress.tmp' \
 	'cat < build/stress.tmp' \
-	'touch < build/stress.tmp' \
-	'rm build/stress.tmp' \
+	'touch build/stress.tmp' \
+	'touch build/stress.tmp; rm build/stress.tmp' \
 	)
 
 declare -a testsArrayCmp=( \
@@ -111,15 +113,16 @@ declare -a testsArrayCmp=( \
 	'echo '"$PWD"'' \
 	'echo "'"$PWD"'"' \
 	'echo "hello" > /dev/null' \
-	'echo "hello" > build/stress.tmp; cat build/stress.tmp' \
-	'echo "hello" >> build/stress.tmp; cat build/stress.tmp' \
-	'echo "ls ./src" > /dev/null' \
-	'echo "ls ./src" > build/stress.tmp; cat build/stress.tmp' \
-	'echo "ls ./src" >> build/stress.tmp; cat build/stress.tmp' \
-	'cat < build/stress.tmp' \
-	'touch < build/stress.tmp' \
+	'echo "hello" > build/stress.tmp; cat build/stress.tmp; rm build/stress.tmp' \
+	'echo "hello" >> build/stress.tmp ;echo "hello" >> build/stress.tmp; cat build/stress.tmp; rm build/stress.tmp' \
+	'ls ./src > /dev/null' \
+	'ls ./src > build/stress.tmp; cat build/stress.tmp; rm build/stress.tmp' \
+	'ls ./src >> build/stress.tmp;ls ./src >> build/stress.tmp; cat build/stress.tmp; rm build/stress.tmp' \
+	'echo a > build/stress.tmp; cat < build/stress.tmp' \
+	'touch build/stress.tmp' \
+	'touch build/stress.tmp; rm build/stress.tmp' \
 	'rm build/stress.tmp' \
-	'rm build/stress.tmp' \
+	'FAULTY; ls'
 	)
 
 run_tests()
