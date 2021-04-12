@@ -20,7 +20,7 @@ TEST_CASE( "basic pattern matching", "[bash_pattern]" ) {
 									{"echo", 1, P_PATH},
 									{" echo", 2, P_PATH},
 									{"echo ", 2, P_PATH},
-									{" echo ", 3, P_PATH},
+									{" echo ", 3, P_COMMAND},
 									{"echo hello", 3, P_COMMAND},
 									{" echo hello", 4, P_COMMAND},
 									{"echo hello ", 4, P_COMMAND},
@@ -45,7 +45,7 @@ TEST_CASE( "basic pattern matching", "[bash_pattern]" ) {
 		if (matched_type != tst.type) {
 			const char *ours = pattern_dump_type(tst.type);
 			const char *yours = pattern_dump_type(matched_type);
-			printf("MISMATCH: ours:%s vs yours:%s, with matchlen:%zu\n", ours, yours, tst.match_len);
+			printf("MISMATCH for str'%s': ours:%s vs yours:%s, with matchlen:%zu\n", tst.str, ours, yours, tst.match_len);
 			CHECK(matched_type == tst.type);
 		}
 	}
