@@ -7,28 +7,22 @@
 #include "bash_pattern.h"
 #include "parser.h"
 #include "env_singleton.h"
-
-static size_t	g_begin;
-
-void	preparser_reset(void)
-{
-	g_begin = 0;
-}
+#include "journal.h"
 
 t_range	preparser_get_next_area(void)
 {
 	t_token			*token;
 	t_range			matchrange;
 
-	matchrange = range(g_begin, g_begin);
+	matchrange = range(0, 0);
+	while (journal_get(0) && journal_get(0)->type == SEMICOLON)
+		journal_remove(0);
+	journal_rebuild_tokens();
 	token = journal_get(matchrange.end);
 	while (token)
 	{
 		if (token->type == SEMICOLON || token->type == NULLBYTE)
-		{
-			g_begin = matchrange.end + 1;
-			return (matchrange);
-		}
+			return (range(matchrange.begin, matchrange.end + 1));
 		matchrange.end++;
 		token = journal_get(matchrange.end);
 	}

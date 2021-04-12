@@ -9,4 +9,7 @@ int				drop_pipe(int pipefd[2]);
 
 char			*ft_gethostname(void);
 
+void			redirection_std_push(void);
+void			redirection_std_pop(void);
+
 #endif

@@ -8,13 +8,25 @@
 
 extern t_parser	*g_parser__;
 
+static void		parse_flush_tokens(t_range area)
+{
+	size_t		len;
+
+	len = area.begin;
+	while (len > 0)
+	{
+		journal_remove(0);
+		len--;
+	}
+	journal_rebuild_tokens();
+}
+
 t_execscheme	*parse_generate_execschemes(void)
 {
 	t_execscheme	*root;
 	t_execscheme	*scheme;
 
 	root = NULL;
-	parse_dump_match_area(g_parser__->matcharea);
 	scheme = parse_get_next_scheme();
 	while (scheme)
 	{
@@ -29,6 +41,7 @@ t_execscheme	*parse_generate_execschemes(void)
 	}
 	if (!root)
 		dbg("Failed to build execschemes!\n", "");
+	parse_flush_tokens(g_parser__->matcharea);
 	return (root);
 }
 
@@ -37,6 +50,7 @@ t_execscheme	*parse(t_range matcharea)
 	if (range_cmp(matcharea, range(0, 0)) == 0)
 		return (NULL);
 	g_parser__->matcharea = matcharea;
+	parse_dump_match_area(g_parser__->matcharea);
 	if (!parse_expand())
 	{
 		dbg("Failed to expand!\n", "");

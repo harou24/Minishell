@@ -52,7 +52,6 @@ int	_shell_exec(t_shell *shell, const char *command_string)
 		dbg("Failed lexing command_string: '%s'\n", command_string);
 		return (-1);
 	}
-	preparser_reset();
 	scheme = parse(preparser_get_next_area());
 	if (!scheme)
 	{

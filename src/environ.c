@@ -12,7 +12,7 @@ t_bool	environ_init(char **environ)
 {
 	return (g_environ_vec__ != NULL
 		|| vector(&g_environ_vec__, V_ADOPT,
-			ft_arraylen((const void **)environ) + 1, environ));
+			ft_array_len((const void **)environ) + 1, environ));
 }
 
 t_bool	environ_deinit(void)

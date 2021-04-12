@@ -18,15 +18,4 @@ int		builtin_cd(t_command *cmd);
 
 char	*ft_realpath(char *path);
 
-int		__go_to_prev_dir(void);
-int		__go_to_home(void);
-int		__go_to_path(const char *path);
-void	__print_cur_path(void);
-
-t_bool	__update_dir_change(char *new_path);
-t_bool	__is_tilde(const char *str);
-t_bool	__is_dash(const char *str);
-t_bool	__is_path_in_cdpath(const char *path);
-t_bool	__is_print_path_needed(const char *path);
-
 #endif

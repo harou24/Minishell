@@ -20,7 +20,7 @@ TEST_CASE( "env size", "[env]" ) {
 	extern char **environ;
 
 	t_env *env = env_create((const char **)environ);
-	CHECK(ft_arraylen((const void **)environ) == env_size(env));
+	CHECK(ft_array_len((const void **)environ) == env_size(env));
 	env_destroy(&env);
 }
 

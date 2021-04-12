@@ -2,21 +2,42 @@
 #include <stdlib.h>
 
 #include "ft_printf.h"
+#include "debugger.h"
 #include "environ.h"
 #include "env_singleton.h"
 #include "bash_ops.h"
 
+static char	**environ_sorted(char **environ)
+{
+	char **sorted_environ;
+
+	sorted_environ = ft_calloc(sizeof(char *), ft_array_len((const void **)environ) + 1);
+	if (sorted_environ)
+	{
+		ft_memcpy(sorted_environ, environ, sizeof(char *) * ft_array_len((const void **)environ));
+		bubblesort_lexical(sorted_environ);
+	}
+	return (sorted_environ);
+}
+
 static int	__dump_environ(void)
 {
 	char	**environ;
+	size_t	i;
 
-	environ = environ_get();
-	assert(environ);
-	while (*environ != NULL)
+	environ = environ_sorted(environ_get());
+	if (!environ)
 	{
-		ft_printf("%s\n", *environ);
-		environ++;
+		dbg("Failed to get environ for dumping!\n", "");
+		return (-1);
 	}
+	i = 0;
+	while (environ[i] != NULL)
+	{
+		ft_printf("%s\n", environ[i]);
+		i++;
+	}
+	free(environ);
 	return (0);
 }
 
