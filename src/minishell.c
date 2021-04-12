@@ -33,6 +33,7 @@ t_shellerr	shell_init(char **env)
 	else
 		g_shell__ = _shell_create(env);
 	_shell_register_sigint_handler();
+	__shell_load_process_env();
 	if (g_shell__ != NULL)
 		return (SHELL_OK);
 	else
