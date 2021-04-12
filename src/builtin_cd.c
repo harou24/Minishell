@@ -16,7 +16,9 @@
 
 static int	update_dir_change(char *new_path)
 {
-	char *new_path_tmp = ft_strdup(new_path);
+	char	*new_path_tmp;
+
+	new_path_tmp = ft_strdup(new_path);
 	env_set_s("OLDPWD", env_get_current_dir(), SCOPE_ENVIRON);
 	env_set_s("PWD", new_path_tmp, SCOPE_ENVIRON);
 	free(new_path_tmp);
@@ -55,11 +57,12 @@ static int	__exec_cd(char *fname)
 	return (0);
 }
 
-static int __handle_cd_tilde(char *fname)
+static int	__handle_cd_tilde(char *fname)
 {
 	char	*path;
 
-	if (!fname || ft_strncmp("~", fname, 2) == 0 || ft_strncmp("~/", fname, 3) == 0)
+	if (!fname || ft_strncmp("~", fname, 2) == 0
+		|| ft_strncmp("~/", fname, 3) == 0)
 		return (cd(env_get_home()));
 	path = ft_strjoin_multi(3, env_get_home(), "/", fname + 2);
 	if (!path)

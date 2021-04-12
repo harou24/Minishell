@@ -9,12 +9,14 @@
 
 static char	**environ_sorted(char **environ)
 {
-	char **sorted_environ;
+	char	**sorted_environ;
 
-	sorted_environ = ft_calloc(sizeof(char *), ft_array_len((const void **)environ) + 1);
+	sorted_environ = ft_calloc(sizeof(char *),
+			ft_array_len((const void **)environ) + 1);
 	if (sorted_environ)
 	{
-		ft_memcpy(sorted_environ, environ, sizeof(char *) * ft_array_len((const void **)environ));
+		ft_memcpy(sorted_environ, environ,
+			sizeof(char *) * ft_array_len((const void **)environ));
 		bubblesort_lexical(sorted_environ);
 	}
 	return (sorted_environ);
