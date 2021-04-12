@@ -24,6 +24,7 @@ t_shell			*_shell_destroy(t_shell **shell);
 int				_shell_exec(t_shell *shell, const char *command_string);
 
 t_shellerr		_shell_loop(t_shell *shell);
+t_bool			__shell_load_process_env(void);
 
 /* shellsignals.c */
 
