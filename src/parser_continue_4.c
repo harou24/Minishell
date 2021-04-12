@@ -55,6 +55,8 @@ t_bool	parse_should_expand_literals(void)
 
 t_bool	parse_expand(void)
 {
+	size_t jsize = journal_size();
+
 	if (parse_should_expand_literals())
 	{
 		if (!parse_expand_strings(LITERAL))
@@ -64,5 +66,7 @@ t_bool	parse_expand(void)
 		return (FALSE);
 	if (!parse_expand_strings(STRING))
 		return (FALSE);
+
+	g_parser__->matcharea.end -= jsize - journal_size();
 	return (TRUE);
 }
