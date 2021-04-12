@@ -167,10 +167,10 @@ run_tests()
 	for op in "${testsArrayCmp[@]}"
 	do
 		echo "Running compare OP :'$op'"
-		timeout 3 ./build/apps/minishell -c "$op" > /tmp/minishell.out
+		timeout 3 ./build/apps/minishell -c "$op" > /tmp/minishell.out 2>/dev/null
 		minishell_err=$?
 
-		bash -c "$op" > /tmp/bash.out
+		bash -c "$op" > /tmp/bash.out 2>/dev/null
 		bash_err=$?
 
 		if [ ! $bash_err -eq $minishell_err ]; then
