@@ -32,7 +32,8 @@ declare -a testsArrayNonCrash=( \
 	'ls -l;echo;' \
 	'ls -l ./;echo;' \
 	'ls -l| cat ' \
-	'ls -l | cat| cat | cat | cat' \
+	'ls -l | cat| cat | cat | cat | cat | cat | cat' \
+	'echo a | cat| cat | cat | cat | cat | cat | cat' \
 	'ls -l; echo $?' \
 	'  ls -l| cat ' \
 	'  ls -l   | cat ' \
@@ -40,14 +41,12 @@ declare -a testsArrayNonCrash=( \
 	'echo User:$USER' \
 	'pwd' \
 	'pwd; ls -l ' \
-	'cd /' \
-	'env' \
-	'export a=5' \
-	'a=5' \
-	'exit 0' \
-	'exit' \
 	'pwd; ls -l ./src' \
+	'env' \
+	'export' \
 	'export a=5' \
+	'exit' \
+	'exit 0' \
 	'a=5' \
 	'a=5; echo $a' \
 	'echo $a; a=5; echo $a' \
@@ -56,6 +55,13 @@ declare -a testsArrayNonCrash=( \
 	'echo "'$PWD'"' \
 	'echo '"$PWD"'' \
 	'echo "'"$PWD"'"' \
+	'unset a; a=5; unset a;'
+	'cd ~' \
+	'cd ~/' \
+	'cd ~/' \
+	'cd -' \
+	'cd /' \
+	'cd -; cd -' \
 	)
 
 declare -a testsArrayCmp=( \
