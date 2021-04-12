@@ -62,39 +62,10 @@ t_bool	parse_expand_strings(e_token_type string_type)
 		return (FALSE);
 	tokens = journal_get_token_vector();
 	while (journal_has_tokentype(string_type) > 0)
+	{
 		parse_expand_first_string(tokens,
 			journal_find_nth_type(string_type, 0),
 			journal_find_nth_type(string_type, 1));
+	}
 	return (TRUE);
-}
-
-char	*parse_retreive_var_from_env_for_token(t_token *token)
-{
-	char	*key;
-	char	*var;
-
-	key = ft_strsub(journal_get_input_str(),
-			token->range.begin, 1 + token->range.end - token->range.begin);
-	assert(key);
-	var = env_get_s(key);
-	if (var == NULL)
-		var = ft_strdup("");
-	else
-		var = ft_strdup(var);
-	free(key);
-	return (var);
-}
-
-void	parse_perform_var_substitution(t_vector tokens,
-					t_token *var_sym, t_token *var_name)
-{
-	t_token	*token;
-
-	assert(var_sym->index == var_name->index - 1);
-	token = token_create(
-			range(var_name->range.begin - 1, var_name->range.end), WORD);
-	assert(token);
-	token->string = parse_retreive_var_from_env_for_token(var_name);
-	assert(token->string);
-	parse_replace_tokens_with_token(tokens, var_sym, var_name, token);
 }
