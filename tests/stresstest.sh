@@ -238,9 +238,9 @@ if [ $# -eq 0 ]; then
 	exit 1
 fi
 
-cd ../ || exit 1
+test -f ./minimake.sh ||  { cd ../ && test -f ./minimake.sh || exit 1; }
 
-#FLAG=clean; compile $FLAG || exit 1
+FLAG=clean; compile $FLAG || exit 1
 FLAG=debug; compile $FLAG && run_tests_for $1 $FLAG || exit 1
 FLAG=release; compile $FLAG && run_tests_for $1 $FLAG || exit 1
 FLAG=test; compile $FLAG && run_tests_for $1 $FLAG || exit 1
