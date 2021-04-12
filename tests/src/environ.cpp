@@ -12,8 +12,8 @@ extern char **environ;
 
 char **environ_malloced(char **environ)
 {
-	char **buf = (char **)calloc(sizeof(char *), ft_arraylen((const void **)environ) + 1);
-	printf("environ length : %zu\n", ft_arraylen((const void **)environ));
+	char **buf = (char **)calloc(sizeof(char *), ft_array_len((const void **)environ) + 1);
+	printf("environ length : %zu\n", ft_array_len((const void **)environ));
 	REQUIRE(buf);
 
 	for (size_t i = 0; environ[i] != NULL; i++) {

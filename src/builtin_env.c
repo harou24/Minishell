@@ -18,7 +18,7 @@ void	dump_scope(e_scope scope)
 		ft_printf("%s\n", arr[i]);
 		i++;
 	}
-	ft_array_destroy((void **)arr, ft_arraylen((const void **)arr));
+	ft_array_destroy((void **)arr, ft_array_len((const void **)arr));
 }
 
 int	builtin_env(t_command *cmd)

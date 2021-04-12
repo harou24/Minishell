@@ -86,5 +86,7 @@ t_bool	env_set(t_env *env, const char *key, char *value, e_scope scope)
 		hm_set(env->hm_store, key, node);
 	}
 	env_add_to_environ(node, key, value, scope);
+	if (scope == SCOPE_ENVIRON)
+		env_set(env, key, value, SCOPE_LOCAL);
 	return (TRUE);
 }
