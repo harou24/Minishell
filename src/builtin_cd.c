@@ -59,8 +59,7 @@ static int __handle_cd_tilde(char *fname)
 {
 	char	*path;
 
-	assert(fname);
-	if (ft_strncmp("~", fname, 2) == 0 || ft_strncmp("~/", fname, 3) == 0)
+	if (!fname || ft_strncmp("~", fname, 2) == 0 || ft_strncmp("~/", fname, 3) == 0)
 		return (cd(env_get_home()));
 	path = ft_strjoin_multi(3, env_get_home(), "/", fname + 2);
 	if (!path)
