@@ -77,24 +77,13 @@ declare -a testsArrayNonCrash=( \
 	'echo adding stuff >> working.txt'\
 	'echo more stuff >> working.txt'\
 	'echo > working.txt'\
-	'echo dit > test1 gaat > test2 goed > test3'\
-	'echo dit > test1 gaat > test2 goed > test3 > test4'\
-	'cat < test4'\
-	'< test4 cat'\
-	'> newfile ; > working.txt'\
-	'< working.txt'\
-	'< notworking.txt'\
-	'echo > doethet ; echo hoi >> doethet "of niet" ; echo clear > "doethet" ; echo test > working.txt ; echo > newfile.txt hardertest'\
 	'export | grep -e "HOME="'\
 	'echo hallo daar | echo hoi maran'\
-	'cat working.txt | grep stuff | echo tim'\
-	'cat | cat -e | cat'\
-	'ls filedoesnotexist | grep notme | echo "TEST"'\
 	'export | grep -e "PWD="'\
 	'echo > ilovewords.txt count me ; wc ilovewords.txt'\
-	'awk '{ print }' /etc/passwd'\
 	'export PATH="test:working:multiplepath:directory1:directory2"'\
-	'export'
+	'export'\
+	'echo $PWD ; echo $HOME ; echo "$PWD" ; echo '$PWD' ; echo "$HOME"'
 	)
 
 declare -a testsArrayCmp=( \
