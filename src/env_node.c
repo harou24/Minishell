@@ -1,7 +1,6 @@
 #include <stdlib.h>
 
 #include "libft.h"
-
 #include "env_node.h"
 
 t_env_node	*env_node_create_from_pair(t_pair *pair, e_scope scope)
@@ -59,9 +58,4 @@ void	env_node_destroy_hm(void *_node)
 		free(node->value);
 		free(node);
 	}
-}
-
-void	env_node_set_environ_index(t_env_node *node, int index)
-{
-	node->environ_index = index;
 }

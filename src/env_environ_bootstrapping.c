@@ -28,19 +28,7 @@ void	*env_bootstrap_from_environ(const char **env)
 	return (hm_store);
 }
 
-char	*env_get(t_env *env, const char *key)
-{
-	t_env_node	*node;
-
-	node = env_get_node_for_key(env, key);
-	if (node != NULL)
-		return (node->value);
-	else
-		return (NULL);
-}
-
-t_bool	env_add_to_environ(t_env_node *node, const char *key,
-				char *value, e_scope scope)
+t_bool	env_add_to_environ(t_env_node *node, const char *key, char *value, e_scope scope)
 {
 	char	*line;
 
@@ -65,28 +53,4 @@ t_bool	env_add_to_environ(t_env_node *node, const char *key,
 	{
 		return (FALSE);
 	}
-}
-
-t_bool	env_set(t_env *env, const char *key, char *value, e_scope scope)
-{
-	t_env_node	*node;
-
-	node = hm_get(env->hm_store, key);
-	if (node)
-	{
-		if (node->value != value)
-		{
-			free(node->value);
-			node->value = ft_strdup(value);
-		}
-	}
-	else
-	{
-		node = env_node_create(key, value, scope);
-		hm_set(env->hm_store, key, node);
-	}
-	env_add_to_environ(node, key, value, scope);
-	if (scope == SCOPE_ENVIRON)
-		env_set(env, key, value, SCOPE_LOCAL);
-	return (TRUE);
 }
