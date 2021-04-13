@@ -52,13 +52,13 @@ t_bool	parse_expand_first_string(t_vector tokens,
 	return (TRUE);
 }
 
-static t_bool	is_string_in_matcharea(e_token_type string_type)
+static t_bool	is_string_in_matcharea(t_token_type_e string_type)
 {
 	return (parse_is_token_in_matcharea(journal_find_nth_type(string_type, 0))
 		&& parse_is_token_in_matcharea(journal_find_nth_type(string_type, 0)));
 }
 
-t_bool	parse_expand_strings(e_token_type string_type)
+t_bool	parse_expand_strings(t_token_type_e string_type)
 {
 	t_vector	*tokens;
 

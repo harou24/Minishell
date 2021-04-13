@@ -6,7 +6,7 @@
 # include "libft.h"
 # include "range.h"
 
-typedef enum e_token_type
+typedef enum e_token_type_e
 {
 	WORD,
 	SYM,
@@ -25,12 +25,12 @@ typedef enum e_token_type
 	NULLBYTE,
 	NO_TYPE,
 	TOKEN_TYPE_SIZE
-}	e_token_type;
+}	t_token_type_e;
 
 struct	s_token;
 typedef struct s_token
 {
-	enum e_token_type	type;
+	t_token_type_e		type;
 	t_range				range;
 	char				*string;
 	size_t				index;
@@ -39,11 +39,11 @@ typedef struct s_token
 
 int					token_cmp(const t_token *a, const t_token *b);
 
-t_token				token(t_range range, e_token_type type);
+t_token				token(t_range range, t_token_type_e type);
 
-t_token				*token_create(t_range range, e_token_type type);
+t_token				*token_create(t_range range, t_token_type_e type);
 t_token				*token_destroy(t_token *token);
 
-const char			*token_dump_type(e_token_type type);
+const char			*token_dump_type(t_token_type_e type);
 
 #endif

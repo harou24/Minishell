@@ -10,8 +10,8 @@ static t_token	*lex_get_next_token(void)
 {
 	const size_t	og_index = g_lex__->index;
 	size_t			slen;
-	e_token_type	og_type;
-	e_token_type	type;
+	t_token_type_e	og_type;
+	t_token_type_e	type;
 
 	slen = 1;
 	og_type = bash_match(&g_lex__->input[g_lex__->index], slen);

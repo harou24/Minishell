@@ -20,7 +20,7 @@ void	journal_clear_input_str(void)
 	g_journal__->str = NULL;
 }
 
-void	journal_remove_tokens_with_type(e_token_type type)
+void	journal_remove_tokens_with_type(t_token_type_e type)
 {
 	t_token				*token;
 

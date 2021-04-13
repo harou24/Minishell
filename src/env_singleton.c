@@ -11,7 +11,7 @@ char	*env_get_s(const char *key)
 	return (env_get(g_env__, key));
 }
 
-t_bool	env_set_s(const char *key, char *value, e_scope scope)
+t_bool	env_set_s(const char *key, char *value, t_scope_e scope)
 {
 	return (env_set(g_env__, key, value, scope));
 }
@@ -23,12 +23,12 @@ t_bool	env_unset_s(const char *key)
 	return (TRUE);
 }
 
-char	**env_to_array_s(e_scope scope)
+char	**env_to_array_s(t_scope_e scope)
 {
 	return (env_to_array(g_env__, scope));
 }
 
-t_bool	env_set_s_line(const char *line, e_scope scope)
+t_bool	env_set_s_line(const char *line, t_scope_e scope)
 {
 	char	*key;
 	char	*value;

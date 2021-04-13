@@ -3,7 +3,7 @@
 
 extern t_journal	*g_journal__;
 
-t_token	*journal_find_nth_type(const e_token_type type, int n)
+t_token	*journal_find_nth_type(const t_token_type_e type, int n)
 {
 	const size_t		size = journal_size();
 	size_t				index;
@@ -35,12 +35,12 @@ t_token	*journal_find_last_token(const t_token *token)
 	return (journal_find_last_type(token->type));
 }
 
-t_token	*journal_find_first_type(const e_token_type type)
+t_token	*journal_find_first_type(const t_token_type_e type)
 {
 	return (journal_find_nth_type(type, 0));
 }
 
-t_token	*journal_find_last_type(const e_token_type type)
+t_token	*journal_find_last_type(const t_token_type_e type)
 {
 	const size_t		size = journal_size();
 	ssize_t				index;

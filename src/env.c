@@ -19,7 +19,7 @@ t_bool	env_unset(t_env *env, const char *key)
 	return (TRUE);
 }
 
-t_bool	env_set(t_env *env, const char *key, char *value, e_scope scope)
+t_bool	env_set(t_env *env, const char *key, char *value, t_scope_e scope)
 {
 	t_env_node	*node;
 
@@ -59,7 +59,7 @@ size_t	env_size(t_env *env)
 	return (hm_size(env->hm_store));
 }
 
-char	**env_to_array(t_env *env, e_scope scope)
+char	**env_to_array(t_env *env, t_scope_e scope)
 {
 	char		**environ;
 	size_t		index;

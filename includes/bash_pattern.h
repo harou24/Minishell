@@ -18,22 +18,22 @@ typedef enum e_bash_pattern_type
 	P_COMMAND,
 	P_ASSIGNMENT,
 	P_NO_TYPE
-}		t_bash_pattern_type;
+}	t_bash_pattern_type;
 
 typedef struct s_bash_pattern
 {
 	const t_bash_pattern_type	pattern_type;
 	const size_t				fixed_types_len;
-	const e_token_type			fixed_types[B_PAT_MAXLEN];
+	const t_token_type_e		fixed_types[B_PAT_MAXLEN];
 	const size_t				fuzzy_types_len;
-	const e_token_type			fuzzy_types[B_PAT_MAXLEN];
-}		t_bash_pattern;
+	const t_token_type_e		fuzzy_types[B_PAT_MAXLEN];
+}	t_bash_pattern;
 
 t_bash_pattern_type				bash_match_pattern(t_range range);
 
-/* sub functions */
+/* internal */
 t_bool							match_token_to_type(t_token *token,
-									const e_token_type type);
+									const t_token_type_e type);
 char							*pattern_dump_type(t_bash_pattern_type type);
 
 #endif

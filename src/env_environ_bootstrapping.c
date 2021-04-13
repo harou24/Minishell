@@ -31,7 +31,7 @@ void	*env_bootstrap_from_environ(const char **env)
 t_bool	env_add_to_environ(t_env_node *node,
 							const char *key,
 							char *value,
-							e_scope scope)
+							t_scope_e scope)
 {
 	char	*line;
 

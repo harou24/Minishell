@@ -28,7 +28,7 @@ void				parse_perform_string_substitution(t_vector tokens,
 						t_token *first, t_token *last, t_vector subtokens);
 t_bool				parse_expand_first_string(t_vector tokens,
 						t_token *first, t_token *last);
-t_bool				parse_expand_strings(e_token_type string_type);
+t_bool				parse_expand_strings(t_token_type_e string_type);
 t_bool				parse_should_expand_literals(void);
 
 char				*parse_retreive_var_from_env_for_token(t_token *token);

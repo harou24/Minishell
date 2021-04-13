@@ -6,7 +6,7 @@
 #include "env_singleton.h"
 #include "bash_ops.h"
 
-void	dump_scope(e_scope scope)
+void	dump_scope(t_scope_e scope)
 {
 	char	**arr;
 	size_t	i;

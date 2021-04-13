@@ -65,7 +65,7 @@ t_bool	is_bash_sym(const char *str, size_t len, const t_bash_sym *token)
 	return (FALSE);
 }
 
-e_token_type	bash_match(const char *str, size_t len)
+t_token_type_e	bash_match(const char *str, size_t len)
 {
 	const size_t	token_count = sizeof(g_bash_sym_list)
 					/ sizeof(g_bash_sym_list[0]);

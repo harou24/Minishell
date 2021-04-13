@@ -8,7 +8,7 @@ int	token_cmp(const t_token *a, const t_token *b)
 		return (1);
 }
 
-t_token	token(t_range range, e_token_type type)
+t_token	token(t_range range, t_token_type_e type)
 {
 	t_token	token;
 
@@ -17,7 +17,7 @@ t_token	token(t_range range, e_token_type type)
 	return (token);
 }
 
-t_token	*token_create(t_range range, e_token_type type)
+t_token	*token_create(t_range range, t_token_type_e type)
 {
 	t_token	*token;
 

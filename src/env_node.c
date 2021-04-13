@@ -3,7 +3,7 @@
 #include "libft.h"
 #include "env_node.h"
 
-t_env_node	*env_node_create_from_pair(t_pair *pair, e_scope scope)
+t_env_node	*env_node_create_from_pair(t_pair *pair, t_scope_e scope)
 {
 	t_env_node	*node;
 
@@ -18,7 +18,9 @@ t_env_node	*env_node_create_from_pair(t_pair *pair, e_scope scope)
 	return (node);
 }
 
-t_env_node	*env_node_create(const char *key, const char *value, e_scope scope)
+t_env_node	*env_node_create(const char *key,
+							const char *value,
+							t_scope_e scope)
 {
 	t_env_node	*node;
 
