@@ -37,8 +37,3 @@ t_bool	fs_has_mode(const char *fname, t_filemode fmode)
 
 	return (stat(fname, &buffer) == 0 && (buffer.st_mode & fmode));
 }
-
-t_bool	file_exists(const char *fname)
-{
-	return (fs_has_type(fname, F_REG));
-}

@@ -13,7 +13,6 @@
 
 #include "bash_ops.h"
 
-#include <stdio.h>
 #include <string.h>
 
 t_bool	executor_should_run_in_parent(t_execscheme *scheme)
@@ -66,19 +65,6 @@ static int 	executor_get_exitstatus(t_execscheme *scheme)
 		scheme = scheme->next;
 	}
 	return (exitstatus);
-}
-
-void	executor_kill_all(t_execscheme *scheme)
-{
-	while (scheme)
-	{
-		if (scheme->pid > 0)
-		{
-			p_signal(scheme->pid, SIGTERM);
-			scheme->pid = -1;
-		}
-		scheme = scheme->next;
-	}
 }
 
 int	execute(t_execscheme *rootscheme)

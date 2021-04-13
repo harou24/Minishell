@@ -76,34 +76,12 @@ int	p_signal(pid_t pid, int signal)
 	return (error);
 }
 
-pid_t	*p_allocate_pid(pid_t pid)
-{
-	return ((pid_t *)ft_memdup(&pid, sizeof(pid_t)));
-}
-
 int	p_register_signalhandler(int sig, void (*sighandler)(int sig))
 {
-	struct sigaction sa;
+	struct sigaction	sa;
 
 	sa.sa_handler = sighandler;
-  	if (sigaction(sig, &sa, 0) == -1)
+	if (sigaction(sig, &sa, 0) == -1)
 		return (-1);
 	return (0);
 }
-
-/*
-int	p_register_signalhandler(int sig, void (*sighandler)(int sig))
-	if (signal(sig, sighandler) == SIG_ERR)
-	{
-		dbg("Failed to register handler for signum: %i, with errno: %s\n",
-			sig, strerror(errno));
-		return (-1);
-	}
-	else
-	{
-		dbg("Succesfully registered handler for signum: %i for pid %i\n",
-			sig, getpid());
-	}
-	return (0);
-}
-*/

@@ -40,7 +40,7 @@ static const t_bash_pattern	g_pat_list[] = {
 						};
 
 static t_bool	match_token_to_any_type(t_token *token,
-				const e_token_type *types,
+				const t_token_type_e *types,
 				size_t types_len)
 {
 	while (types_len > 0)
@@ -52,7 +52,7 @@ static t_bool	match_token_to_any_type(t_token *token,
 	return (FALSE);
 }
 
-static t_bool	match_fuzzy(t_range range, const e_token_type *fuzzy_types,
+static t_bool	match_fuzzy(t_range range, const t_token_type_e *fuzzy_types,
 			size_t fuzzy_types_len)
 {
 	size_t	i;
@@ -70,7 +70,7 @@ static t_bool	match_fuzzy(t_range range, const e_token_type *fuzzy_types,
 	return (TRUE);
 }
 
-static t_bool	match_fixed(t_range range, const e_token_type *fixed_types,
+static t_bool	match_fixed(t_range range, const t_token_type_e *fixed_types,
 			size_t fixed_types_len)
 {
 	size_t	i;

@@ -43,12 +43,12 @@ static	int	(*g_comtab__[OP_TAB_SIZE])(t_command	*cmd) = {
 				[OP_NO_TYPE] = op_stub
 			};
 
-relation_handler_f	execscheme_dispatch(t_exec_relation_type type)
+t_relation_handler_f	execscheme_dispatch(t_exec_relation_type type)
 {
 	return (g_schemetab__[type]);
 }
 
-command_handler_f	command_dispatch(t_exec_op_type type)
+t_command_handler_f	command_dispatch(t_exec_op_type type)
 {
 	return (g_comtab__[type]);
 }

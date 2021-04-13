@@ -40,7 +40,7 @@ TEST_CASE("push_get_size_clear", "[journal]") {
 	for (unsigned int i = 0; i < lim; i++)
 	{
 		CHECK(journal_size() == i);
-		CHECK(journal_push(token_create(range(0, 1), (e_token_type)(TOKEN_TYPE_SIZE - 1))));
+		CHECK(journal_push(token_create(range(0, 1), (t_token_type_e)(TOKEN_TYPE_SIZE - 1))));
 		CHECK(journal_get(i));
 	}
 	CHECK(journal_size() == lim);
@@ -76,11 +76,11 @@ TEST_CASE("find_first_last_token_type", "[journal]") {
 
 	t_range sample_range = range(0, 1);
 	for (size_t i = 0; i < TOKEN_TYPE_SIZE - 1; i++) {
-		t_token *t = token_create(sample_range, (e_token_type)i);
+		t_token *t = token_create(sample_range, (t_token_type_e)i);
 		journal_push(t);
 	}
 	for (size_t i = 0; i < TOKEN_TYPE_SIZE - 1; i++) {
-		t_token *t = token_create(sample_range, (e_token_type)i);
+		t_token *t = token_create(sample_range, (t_token_type_e)i);
 		CHECK(journal_find_first_token(t)->type == t->type);
 		CHECK(journal_find_first_type(t->type)->type == t->type);
 		CHECK(journal_find_last_token(t)->type == t->type);
@@ -103,7 +103,7 @@ TEST_CASE("creeper_next_reset_set_get", "[journal]") {
 
 	t_range sample_range = range(0, 1);
 	for (size_t i = 0; i < TOKEN_TYPE_SIZE; i++) {
-		t_token *t = token_create(sample_range, (e_token_type)i);
+		t_token *t = token_create(sample_range, (t_token_type_e)i);
 		journal_push(t);
 	}
 
@@ -112,7 +112,7 @@ TEST_CASE("creeper_next_reset_set_get", "[journal]") {
 	for (size_t i = 0; i < TOKEN_TYPE_SIZE; i++) {
 		t_token *t = journal_creeper_next();
 		REQUIRE(t);
-		CHECK(t->type == (e_token_type)i);
+		CHECK(t->type == (t_token_type_e)i);
 	}
 	CHECK(journal_creeper_next() == NULL);
 
@@ -121,7 +121,7 @@ TEST_CASE("creeper_next_reset_set_get", "[journal]") {
 	for (size_t i = 0; i < TOKEN_TYPE_SIZE; i++) {
 		t_token *t = journal_creeper_next();
 		REQUIRE(t);
-		CHECK(t->type == (e_token_type)i);
+		CHECK(t->type == (t_token_type_e)i);
 	}
 	CHECK(journal_creeper_next() == NULL);
 	

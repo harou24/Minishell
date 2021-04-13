@@ -22,9 +22,6 @@ typedef struct s_lex
 
 t_journal	*lex(const char *str);
 
-t_token		*lex_get_next_token(void);
-t_journal	*lex_build_journal(char *str);
-
 void		lex_clear(void);
 t_lex		*lex_create(void);
 t_lex		*lex_destroy(t_lex **lex);

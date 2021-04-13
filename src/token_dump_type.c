@@ -1,6 +1,6 @@
 #include "token.h"
 
-static const char	*token_dump_type_continue(e_token_type type)
+static const char	*token_dump_type_continue(t_token_type_e type)
 {
 	if (type == NEWLINE)
 		return ("NEWLINE");
@@ -19,7 +19,7 @@ static const char	*token_dump_type_continue(e_token_type type)
 	return ("UNKNOWN");
 }
 
-const char	*token_dump_type(e_token_type type)
+const char	*token_dump_type(t_token_type_e type)
 {
 	if (type == WORD)
 		return ("WORD");

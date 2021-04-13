@@ -43,7 +43,7 @@ t_token					*journal_get(size_t index);
 t_bool					journal_remove(size_t index);
 
 t_bool					journal_at_index_is_type(size_t index,
-							e_token_type type);
+							t_token_type_e type);
 
 size_t					journal_size(void);
 
@@ -51,17 +51,18 @@ char					*journal_dump_tokens(void);
 char					*journal_dump_tokens_for_range(t_range r);
 
 int						journal_has_token(const t_token *token);
-int						journal_has_tokentype(const e_token_type type);
+int						journal_has_tokentype(const t_token_type_e type);
 
 t_token					*journal_find_nth_token(const t_token *token, int n);
-t_token					*journal_find_nth_type(const e_token_type type, int n);
+t_token					*journal_find_nth_type(const t_token_type_e type,
+							int n);
 
 t_token					*journal_find_first_token(const t_token *token);
 t_token					*journal_find_last_token(const t_token *token);
-t_token					*journal_find_first_type(const e_token_type type);
-t_token					*journal_find_last_type(const e_token_type type);
+t_token					*journal_find_first_type(const t_token_type_e type);
+t_token					*journal_find_last_type(const t_token_type_e type);
 
-void					journal_remove_tokens_with_type(e_token_type type);
+void					journal_remove_tokens_with_type(t_token_type_e type);
 
 t_token					*journal_creeper_next(void);
 void					journal_creeper_reset(void);

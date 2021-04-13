@@ -1,10 +1,9 @@
 #include <stdlib.h>
 
 #include "libft.h"
-
 #include "env_node.h"
 
-t_env_node	*env_node_create_from_pair(t_pair *pair, e_scope scope)
+t_env_node	*env_node_create_from_pair(t_pair *pair, t_scope_e scope)
 {
 	t_env_node	*node;
 
@@ -19,7 +18,9 @@ t_env_node	*env_node_create_from_pair(t_pair *pair, e_scope scope)
 	return (node);
 }
 
-t_env_node	*env_node_create(const char *key, const char *value, e_scope scope)
+t_env_node	*env_node_create(const char *key,
+							const char *value,
+							t_scope_e scope)
 {
 	t_env_node	*node;
 
@@ -59,9 +60,4 @@ void	env_node_destroy_hm(void *_node)
 		free(node->value);
 		free(node);
 	}
-}
-
-void	env_node_set_environ_index(t_env_node *node, int index)
-{
-	node->environ_index = index;
 }

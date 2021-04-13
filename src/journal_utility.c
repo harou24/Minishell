@@ -39,7 +39,7 @@ t_bool	journal_remove(size_t index)
 	return (FALSE);
 }
 
-t_bool	journal_at_index_is_type(size_t index, e_token_type type)
+t_bool	journal_at_index_is_type(size_t index, t_token_type_e type)
 {
 	t_token				*token;
 

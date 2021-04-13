@@ -6,74 +6,82 @@
 
 #include "env.h"
 
-t_env	*env_create(const char **environ)
-{
-	t_env	*this_env;
-
-	this_env = ft_calloc(sizeof(t_env), 1);
-	if (this_env)
-	{
-		this_env->hm_store = env_bootstrap_from_environ(environ);
-		if (!this_env->hm_store)
-			return (env_destroy(&this_env));
-	}
-	return (this_env);
-}
-
-t_env	*env_destroy(t_env **env)
-{
-	if (env)
-	{
-		if ((*env)->hm_store)
-			hm_destroy((*env)->hm_store, env_node_destroy_hm);
-		free(*env);
-		*env = NULL;
-	}
-	return (NULL);
-}
-
-t_pair	*env_pair_create_from_line(const char *line)
-{
-	t_pair	*pair;
-	char	**split;
-
-	split = ft_strsplit(line, '=');
-	if (!split || ft_array_len((const void **)split) != 2)
-	{
-		ft_array_destroy((void **)split, ft_array_len((const void **)split));
-		return (NULL);
-	}
-	pair = pair_create(split[0], split[1]);
-	free(split);
-	return (pair);
-}
-
-t_env_node	*env_node_create_from_line(const char *line)
-{
-	t_env_node	*node;
-	int			equal_sign_index;
-	char		*key;
-	char		*value;
-
-	equal_sign_index = ft_strclen(line, '=');
-	key = ft_strsub(line, 0, equal_sign_index);
-	value = ft_strchr(line, '=') + 1;
-	node = env_node_create(key, value, SCOPE_ENVIRON);
-	if (!key || !value || !node)
-	{
-		env_node_destroy(&node);
-		node = NULL;
-	}
-	free(key);
-	return (node);
-}
-
-t_bool	env_insert_from_line(const char *envline, void *hm_store)
+t_bool	env_unset(t_env *env, const char *key)
 {
 	t_env_node	*node;
 
-	node = env_node_create_from_line(envline);
-	if (!node || !hm_set(hm_store, node->key, node))
+	if (!env_get_node_for_key(env, key))
 		return (FALSE);
+	node = env_get_node_for_key(env, key);
+	if (node->environ_index >= 0)
+		environ_remove(node->environ_index);
+	hm_remove(env->hm_store, key, env_node_destroy_hm);
 	return (TRUE);
+}
+
+t_bool	env_set(t_env *env, const char *key, char *value, t_scope_e scope)
+{
+	t_env_node	*node;
+
+	node = hm_get(env->hm_store, key);
+	if (node)
+	{
+		if (node->value != value)
+		{
+			free(node->value);
+			node->value = ft_strdup(value);
+		}
+	}
+	else
+	{
+		node = env_node_create(key, value, scope);
+		hm_set(env->hm_store, key, node);
+	}
+	env_add_to_environ(node, key, value, scope);
+	if (scope == SCOPE_ENVIRON)
+		env_set(env, key, value, SCOPE_LOCAL);
+	return (TRUE);
+}
+
+char	*env_get(t_env *env, const char *key)
+{
+	t_env_node	*node;
+
+	node = env_get_node_for_key(env, key);
+	if (node != NULL)
+		return (node->value);
+	else
+		return (NULL);
+}
+
+size_t	env_size(t_env *env)
+{
+	return (hm_size(env->hm_store));
+}
+
+char	**env_to_array(t_env *env, t_scope_e scope)
+{
+	char		**environ;
+	size_t		index;
+	size_t		count;
+	t_env_node	*node;
+
+	hm_get_seq(NULL);
+	environ = (char **)ft_calloc(sizeof(char *), env_size(env) + 1);
+	if (!environ)
+		return (NULL);
+	index = 0;
+	count = 0;
+	while (count < env_size(env))
+	{
+		node = env_get_next_node(env);
+		if (node && node->scope == scope)
+		{
+			environ[index] = ft_strjoin_multi(3, node->key, "=", node->value);
+			node->environ_index = index;
+			index++;
+		}
+		count++;
+	}
+	return (environ);
 }

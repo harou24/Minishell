@@ -26,7 +26,7 @@ extern "C" {
 TEST_CASE( "basics", "[bash_sym]" ) {
 	struct					t_tst {
 		const char			*str;
-		const e_token_type	type;
+		const t_token_type_e	type;
 	};
 	
 	const static t_tst tsts[] =	{

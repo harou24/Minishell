@@ -4,42 +4,31 @@
 #include "env_singleton.h"
 #include "env.h"
 
-t_env	*g_env__;
-
-t_env	*env_init(char **env)
-{
-	if (g_env__)
-		return (g_env__);
-	g_env__ = env_create((const char **)env);
-	if (g_env__)
-	{
-		if (!environ_init(env_to_array(g_env__, SCOPE_ENVIRON)))
-			return (NULL);
-	}
-	return (g_env__);
-}
-
-void	env_deinit(t_env **env)
-{
-	if (g_env__)
-		env_destroy(&g_env__);
-	environ_deinit();
-	if (env)
-		*env = NULL;
-	g_env__ = NULL;
-}
+extern t_env	*g_env__;
 
 char	*env_get_s(const char *key)
 {
 	return (env_get(g_env__, key));
 }
 
-t_bool	env_set_s(const char *key, char *value, e_scope scope)
+t_bool	env_set_s(const char *key, char *value, t_scope_e scope)
 {
 	return (env_set(g_env__, key, value, scope));
 }
 
-t_bool	env_set_s_line(const char *line, e_scope scope)
+t_bool	env_unset_s(const char *key)
+{
+	if (g_env__)
+		env_unset(g_env__, key);
+	return (TRUE);
+}
+
+char	**env_to_array_s(t_scope_e scope)
+{
+	return (env_to_array(g_env__, scope));
+}
+
+t_bool	env_set_s_line(const char *line, t_scope_e scope)
 {
 	char	*key;
 	char	*value;
@@ -52,11 +41,4 @@ t_bool	env_set_s_line(const char *line, e_scope scope)
 	succes = env_set_s(key, value, scope);
 	free(key);
 	return (succes);
-}
-
-t_bool	env_unset_s(const char *key)
-{
-	if (g_env__)
-		env_unset(g_env__, key);
-	return (TRUE);
 }
