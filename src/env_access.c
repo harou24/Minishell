@@ -2,11 +2,6 @@
 #include "env_access.h"
 #include <stdlib.h>
 
-char	*env_get_user(void)
-{
-	return (env_get_s("USER"));
-}
-
 char	*env_get_host(void)
 {
 	return (ft_gethostname());
