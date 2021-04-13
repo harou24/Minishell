@@ -4,7 +4,7 @@
 #include "token.h"
 #include "bash_sym.h"
 
-t_lex	*g_lex__;
+extern t_lex	*g_lex__;
 
 static t_token	*lex_get_next_token(void)
 {
