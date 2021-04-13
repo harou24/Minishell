@@ -1,4 +1,4 @@
-NAME = minishellaa
+NAME = MINISHELL_MOCKTARGET
 
 MINIMAKE = ./minimake.sh
 
