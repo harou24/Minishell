@@ -1,3 +1,15 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         ::::::::             #
+#    CMakeLists.txt                                     :+:    :+:             #
+#                                                      +:+                     #
+#    By: sverschu <sverschu@student.codam.n>          +#+                      #
+#                                                    +#+                       #
+#    Created: 2021/04/13 21:15:46 by sverschu      #+#    #+#                  #
+#    Updated: 2021/04/13 21:15:47 by sverschu      ########   odam.nl          #
+#                                                                              #
+# **************************************************************************** #
+
 cmake_minimum_required(VERSION 3.5)
 project(
 	minishell

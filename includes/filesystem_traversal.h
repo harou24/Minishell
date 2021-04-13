@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   filesystem_traversal.h                             :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: sverschu <sverschu@student.codam.n>          +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2021/04/13 21:09:44 by sverschu      #+#    #+#                 */
+/*   Updated: 2021/04/13 21:09:45 by sverschu      ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef FILESYSTEM_TRAVERSAL_H
 # define FILESYSTEM_TRAVERSAL_H
 
