@@ -6,17 +6,7 @@
 
 t_lex	*g_lex__;
 
-t_journal	*lex(const char *str)
-{
-	if (!g_lex__)
-		return (NULL);
-	lex_clear();
-	g_lex__->input = ft_strdup(str);
-	g_lex__->input_len = ft_strlen(str);
-	return (lex_build_journal((char *)str));
-}
-
-t_token	*lex_get_next_token(void)
+static t_token	*lex_get_next_token(void)
 {
 	const size_t	og_index = g_lex__->index;
 	size_t			slen;
@@ -41,7 +31,7 @@ t_token	*lex_get_next_token(void)
 	return (token_create(range(og_index, og_index + slen), og_type));
 }
 
-void	lex_add_nullbyte(void)
+static void	lex_add_nullbyte(void)
 {
 	t_token		*token;
 
@@ -50,7 +40,7 @@ void	lex_add_nullbyte(void)
 	journal_push(token);
 }
 
-t_journal	*lex_build_journal(char *str)
+static t_journal	*lex_build_journal(char *str)
 {
 	t_token	*token;
 
@@ -64,4 +54,14 @@ t_journal	*lex_build_journal(char *str)
 	lex_add_nullbyte();
 	journal_build_linked_list();
 	return (g_lex__->journal);
+}
+
+t_journal	*lex(const char *str)
+{
+	if (!g_lex__)
+		return (NULL);
+	lex_clear();
+	g_lex__->input = ft_strdup(str);
+	g_lex__->input_len = ft_strlen(str);
+	return (lex_build_journal((char *)str));
 }
