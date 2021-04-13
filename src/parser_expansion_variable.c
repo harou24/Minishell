@@ -59,6 +59,12 @@ t_bool	parse_expand_first_variable(t_vector tokens, t_token *var_sym)
 	return (TRUE);
 }
 
+static t_bool is_variable_in_matcharea(void)
+{
+	return (journal_find_nth_type(VARIABLE, 0)->index + 1
+		<= g_parser__->matcharea.end);
+}
+
 t_bool	parse_expand_variables(void)
 {
 	t_vector	*tokens;
@@ -66,7 +72,7 @@ t_bool	parse_expand_variables(void)
 	if (journal_has_tokentype(VARIABLE) == 0)
 		return (TRUE);
 	tokens = journal_get_token_vector();
-	while (journal_has_tokentype(VARIABLE) > 0)
+	while (journal_has_tokentype(VARIABLE) > 0 && is_variable_in_matcharea())
 	{
 		assert(journal_find_nth_type(VARIABLE, 0));
 		if (journal_find_nth_type(VARIABLE, 0)->index

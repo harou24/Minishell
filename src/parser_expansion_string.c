@@ -52,6 +52,12 @@ t_bool	parse_expand_first_string(t_vector tokens,
 	return (TRUE);
 }
 
+static t_bool is_string_in_matcharea(e_token_type string_type)
+{
+	return (parse_is_token_in_matcharea(journal_find_nth_type(string_type, 0))
+		&& parse_is_token_in_matcharea(journal_find_nth_type(string_type, 0)));
+}
+
 t_bool	parse_expand_strings(e_token_type string_type)
 {
 	t_vector	*tokens;
@@ -61,7 +67,8 @@ t_bool	parse_expand_strings(e_token_type string_type)
 	if (!(journal_has_tokentype(string_type) % 2 == 0))
 		return (FALSE);
 	tokens = journal_get_token_vector();
-	while (journal_has_tokentype(string_type) > 0)
+	while (journal_has_tokentype(string_type) > 0
+			&& is_string_in_matcharea(string_type))
 	{
 		parse_expand_first_string(tokens,
 			journal_find_nth_type(string_type, 0),

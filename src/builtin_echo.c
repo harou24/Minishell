@@ -21,9 +21,12 @@ static void	print_for_argv(t_argv *argv)
 		index++;
 	while (index < argv->argc)
 	{
-		ft_printf("%s", argv_get(argv, index));
-		if (index != argv->argc - 1)
-			ft_printf(" ");
+		if (ft_strlen(argv_get(argv, index)) > 0)
+		{
+			ft_printf("%s", argv_get(argv, index));
+			if (index != argv->argc - 1)
+				ft_printf(" ");
+		}
 		index++;
 	}
 	if (!has_n_flag)
