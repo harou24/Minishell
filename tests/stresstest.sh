@@ -7,8 +7,6 @@ VALGRIND="valgrind\
 			--trace-children=yes\
 			"
 
-export OLDPWD="$PWD"
-
 if ! which valgrind; then
 	echo "no valgrind."; unset VALGRIND
 fi
@@ -140,6 +138,8 @@ declare -a testsArrayCmp=( \
 
 run_tests()
 {
+	export OLDPWD="$PWD" # needed for 'cd -' functionality (not set in Github CI)
+
 	if [ ! "$VALGRIND" == "" ]; then
 		timeout 1 valgrind ./build/apps/minishell -c 'true' &>/dev/null
 		if [ $? -eq 0 ]; then
