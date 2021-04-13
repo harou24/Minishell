@@ -21,6 +21,8 @@ t_bool	parse_expand(void)
 	size_t	jsize;
 
 	jsize = journal_size();
+	dbg("Pre expansion tokens : \n", "");
+	parse_dump_match_area(g_parser__->matcharea);
 	if (parse_should_expand_literals())
 	{
 		if (!parse_expand_strings(LITERAL))
@@ -30,6 +32,9 @@ t_bool	parse_expand(void)
 		return (FALSE);
 	if (!parse_expand_strings(STRING))
 		return (FALSE);
+	assert(journal_size() <= jsize);
 	g_parser__->matcharea.end -= jsize - journal_size();
+	dbg("Post expansion tokens : \n", "");
+	parse_dump_match_area(g_parser__->matcharea);
 	return (TRUE);
 }

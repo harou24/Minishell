@@ -51,4 +51,6 @@ t_execscheme		*parse_generate_execschemes(void);
 
 void				parse_flush_tokens(t_range area);
 
+t_bool				parse_is_token_in_matcharea(t_token *token);
+
 #endif
