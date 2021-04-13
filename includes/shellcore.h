@@ -28,7 +28,8 @@ t_bool			__shell_load_process_env(void);
 
 /* shellsignals.c */
 
-t_bool			_shell_was_interrupted(void);
+int				_shell_received_signal(void);
 int				_shell_register_sigint_handler(void);
-jmp_buf			*_shell_get_interrupt_jmpbuf(void);
+void			_shell_manage_interrupts(int *last_error);
+void			_shell_manage_prompt_interrupts(int *last_error, char *line);
 #endif

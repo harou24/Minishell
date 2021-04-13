@@ -1,8 +1,11 @@
 #include <assert.h>
 #include <stdlib.h>
 
+#include <signal.h>
+
 #include "debugger.h"
 #include "libft.h"
+#include "ft_printf.h"
 
 #include "shellcore.h"
 #include "env_singleton.h"
@@ -92,12 +95,12 @@ t_shellerr	_shell_loop(t_shell *shell)
 	while (1)
 	{
 		line = prompt(last_error);
-		if (line == NULL)
-			exit(0);
-		last_error = _shell_exec(shell, line);
+		last_error = 0;
+		_shell_manage_prompt_interrupts(&last_error, line);
+		if (line && ft_strlen(line) > 0)
+			last_error = _shell_exec(shell, line);
+		_shell_manage_interrupts(&last_error);
 		free(line);
-		if (_shell_was_interrupted())
-			last_error = 130;
 	}
 	return (SHELL_ERRNO);
 }
