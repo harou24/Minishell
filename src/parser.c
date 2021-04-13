@@ -10,7 +10,7 @@
 
 #define VEC_SIZE 128
 
-t_parser	*g_parser__;
+t_parser	*g_parser__ = NULL;
 
 t_execscheme	*parse(t_range matcharea)
 {

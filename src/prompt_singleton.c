@@ -4,7 +4,7 @@
 #include "env_access.h"
 #include "prompt_singleton.h"
 
-static t_prompt	*g_prompt__;
+static t_prompt	*g_prompt__ = NULL;
 
 static void	__prompt_init(void)
 {

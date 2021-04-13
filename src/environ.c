@@ -6,7 +6,7 @@
 
 #include "environ.h"
 
-void	*g_environ_vec__;
+void	*g_environ_vec__ = NULL;
 
 t_bool	environ_init(char **environ)
 {
