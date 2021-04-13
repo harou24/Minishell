@@ -11,10 +11,6 @@
 
 #include "debugger.h"
 
-/*
-** obvious problem here is that you cannot debug to STDIN, but why would you?
-*/
-
 int			g_dbg_fd__;
 
 static void	__debug_init(void)
@@ -25,6 +21,15 @@ static void	__debug_init(void)
 			debug_init_tofile(DEBUG_FILE);
 		else
 			debug_init_tofd(STDERR);
+	}
+}
+
+void	debug_deinit(void)
+{
+	if (g_dbg_fd__ > 0)
+	{
+		close(g_dbg_fd__);
+		g_dbg_fd__ = 0;
 	}
 }
 

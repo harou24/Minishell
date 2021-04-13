@@ -46,12 +46,3 @@ t_bool	debug_init_tofd(int fd)
 	}
 	return (FALSE);
 }
-
-void	debug_deinit(void)
-{
-	if (g_dbg_fd__ > 0)
-	{
-		close(g_dbg_fd__);
-		g_dbg_fd__ = 0;
-	}
-}
