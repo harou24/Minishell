@@ -4,7 +4,7 @@
 #include "env_singleton.h"
 #include "env.h"
 
-t_env	*g_env__;
+t_env	*g_env__ = NULL;
 
 t_env	*env_init(char **env)
 {

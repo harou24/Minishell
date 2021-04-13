@@ -3,7 +3,7 @@
 
 #define V_DEF_SIZE 128
 
-t_journal	*g_journal__;
+t_journal	*g_journal__ = NULL;
 
 t_journal	*journal_create(void)
 {

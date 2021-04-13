@@ -11,7 +11,7 @@
 
 #include "debugger.h"
 
-int			g_dbg_fd__;
+int			g_dbg_fd__ = 0;
 
 static void	__debug_init(void)
 {

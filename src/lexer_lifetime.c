@@ -1,6 +1,6 @@
 #include "lexer.h"
 
-t_lex	*g_lex__;
+t_lex	*g_lex__ = NULL;
 
 t_lex	*lex_create(void)
 {
