@@ -28,8 +28,8 @@ extern "C" {
  TEST_CASE( "fs_get_cur_dir_name", "[dir]" ) {
 	 char *cur_dir = fs_get_cur_dir_name();
 	 char buffer[1024];
-	 getcwd(buffer, 1024);
-	 CHECK(strcmp(cur_dir, buffer) == 0);
+	 
+	 CHECK(strcmp(cur_dir, getcwd(buffer, 1024)) == 0);
 	 free(cur_dir);
  }
 
