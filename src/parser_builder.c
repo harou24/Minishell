@@ -10,17 +10,24 @@ t_bool	parse_keep_matching(void)
 	return (g_parser__->matcharea.begin < g_parser__->matcharea.end);
 }
 
-char	*parse_build_path(t_range *area)
+char	*parse_build_path(t_range *_area)
 {
-	if (journal_at_index_is_type(area->begin, SPACE))
+	t_token	*token;
+	char	*path;
+	t_range	area;
+
+	if (journal_at_index_is_type(_area->begin, SPACE))
+		_area->begin += 1;
+	area = range(_area->begin, _area->end);
+	path = NULL;
+	token = journal_get(area.begin);
+	while (token && area.begin <= area.end && (token->type == WORD || token->type == SYM))
 	{
-		area->begin += 1;
-		return (journal_get_string_for_index(area->begin));
-	}
-	else
-	{
-		return (journal_get_string_for_index(area->begin));
-	}
+		path = ft_strjoin_noreuse(path, journal_get_string_for_token(token));
+		area.begin++;
+		token = journal_get(area.begin);
+	} 
+	return (path);
 }
 
 char	*parse_build_argument(size_t *index, int *len)
@@ -48,6 +55,7 @@ t_argv	*parse_build_argv(t_range area)
 
 	len = range_len(area);
 	argv = argv_create(len);
+	assert(argv);
 	if (argv)
 	{
 		while (len > 0)

@@ -12,40 +12,44 @@
 
 t_parser	*g_parser__;
 
-t_vector	parse_get_subtokens(t_token *first, t_token *last)
+t_execscheme	*parse(t_range matcharea)
 {
-	t_vector	subtokens;
-
-	assert(first);
-	assert(last);
-	vector(&subtokens, V_CREATE, VEC_SIZE, NULL);
-	if (!subtokens)
+	if (range_cmp(matcharea, range(0, 0)) == 0)
 		return (NULL);
-	while (first->next && first->next != last)
+	g_parser__->matcharea = matcharea;
+	parse_dump_match_area(g_parser__->matcharea);
+	if (!parse_expand())
 	{
-		vector(&subtokens, V_PUSHBACK, 0, first->next);
-		first = first->next;
+		dbg("Failed to expand!\n", "");
+		return (NULL);
 	}
-	return (subtokens);
+	if (g_parser__->rootscheme)
+		execscheme_destroy(&g_parser__->rootscheme);
+	g_parser__->rootscheme = parse_generate_execschemes();
+	return (g_parser__->rootscheme);
 }
 
-void	parse_replace_tokens_with_token(t_vector tokens, t_token *first,
-						t_token *last, t_token *token)
+t_parser	*parser_create(void)
 {
-	const ssize_t	index_of_first = first->index;
-	ssize_t			index;
+	t_parser	*parser;
 
-	index = last->index;
-	assert(index > 0);
-	while (index >= index_of_first)
+	if (g_parser__)
+		return (g_parser__);
+	parser = ft_calloc(sizeof(t_parser), 1);
+	if (parser)
 	{
-		token_destroy(vector(&tokens, V_POPAT, index, NULL));
-		index--;
 	}
-	if (index_of_first < (ssize_t)journal_size())
-		vector(&tokens, V_PUSHAT, (size_t)index_of_first, token);
-	else
-		vector(&tokens, V_PUSHAT, journal_size(), token);
-	assert(journal_size() > 0);
-	journal_rebuild_tokens();
+	return ((g_parser__ = parser));
+}
+
+t_parser	*parser_destroy(t_parser **parser)
+{
+	if (!g_parser__)
+		return (NULL);
+	execscheme_destroy(&g_parser__->rootscheme);
+	free(g_parser__);
+	g_parser__ = NULL;
+	if (parser)
+		*parser = NULL;
+	return ((g_parser__ = NULL));
 }

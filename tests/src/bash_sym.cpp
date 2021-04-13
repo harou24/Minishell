@@ -31,7 +31,9 @@ TEST_CASE( "basics", "[bash_sym]" ) {
 	
 	const static t_tst tsts[] =	{
 									{"word", 					WORD},
-									{"echo@%^()-+_[]{}:,./?",	WORD},
+									{"wordWORD", 				WORD},
+									{"WORD", 					WORD},
+									{"@%^()-+_[]{}:,./?",		SYM},
 									{"$",						VARIABLE},
 									{"|",						PIPE},
 									{" ",						SPACE},

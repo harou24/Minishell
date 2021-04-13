@@ -73,6 +73,14 @@ declare -a testsArrayNonCrash=( \
 	'cat < build/stress.tmp' \
 	'touch build/stress.tmp' \
 	'touch build/stress.tmp; rm build/stress.tmp' \
+	'echo > "build/stress.tmp"' \
+	'echo $PWD; echo "$PWD"' \
+	'echo $PWD ; echo $HOME ; echo "$PWD" ; ' \
+	'echo hello | echo' \
+	'export | grep -e "PWD="' \
+	'echo > build/stress.tmp multi file ; wc build/stress.tmp' \
+	'echo a b cd > build/stress.tmp multi file ; wc build/stress.tmp' \
+	'export PATH="$PATHtest:working:multiplepath:directory1:directory2"' \
 	)
 
 declare -a testsArrayCmp=( \
@@ -123,10 +131,15 @@ declare -a testsArrayCmp=( \
 	'touch build/stress.tmp; rm build/stress.tmp' \
 	'rm build/stress.tmp' \
 	'FAULTY; ls'
+	'export PATH="$PATHtest:working:multiplepath:directory1:directory2"; echo $PATH' \
+	#'echo > build/stress.tmp multi file ; wc build/stress.tmp' \
+	#'echo a b cd > build/stress.tmp multi file ; wc build/stress.tmp' \
 	)
 
 run_tests()
 {
+	export OLDPWD="$PWD" # needed for 'cd -' functionality (not set in Github CI)
+
 	if [ ! "$VALGRIND" == "" ]; then
 		timeout 1 valgrind ./build/apps/minishell -c 'true' &>/dev/null
 		if [ $? -eq 0 ]; then
@@ -167,10 +180,10 @@ run_tests()
 	for op in "${testsArrayCmp[@]}"
 	do
 		echo "Running compare OP :'$op'"
-		timeout 3 ./build/apps/minishell -c "$op" > /tmp/minishell.out
+		timeout 3 ./build/apps/minishell -c "$op" > /tmp/minishell.out 2>/dev/null
 		minishell_err=$?
 
-		bash -c "$op" > /tmp/bash.out
+		bash -c "$op" > /tmp/bash.out 2>/dev/null
 		bash_err=$?
 
 		if [ ! $bash_err -eq $minishell_err ]; then
@@ -227,9 +240,9 @@ if [ $# -eq 0 ]; then
 	exit 1
 fi
 
-cd ../ || exit 1
+test -f ./minimake.sh ||  { cd ../ && test -f ./minimake.sh || exit 1; }
 
-#FLAG=clean; compile $FLAG || exit 1
+FLAG=clean; compile $FLAG || exit 1
 FLAG=debug; compile $FLAG && run_tests_for $1 $FLAG || exit 1
 FLAG=release; compile $FLAG && run_tests_for $1 $FLAG || exit 1
 FLAG=test; compile $FLAG && run_tests_for $1 $FLAG || exit 1

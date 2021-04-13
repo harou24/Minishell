@@ -9,6 +9,7 @@
 typedef enum e_token_type
 {
 	WORD,
+	SYM,
 	STRING,
 	LITERAL,
 	ASSIGNMENT,

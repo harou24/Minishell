@@ -10,6 +10,18 @@
 #include "prompt_singleton.h"
 #include "executor.h"
 
+#include <unistd.h>
+
+t_bool	__shell_load_process_env(void)
+{
+	char	*procid;
+
+	procid = ft_itoa(getpid());
+	env_set_s ("$", procid, SCOPE_LOCAL);
+	free (procid);
+	return (TRUE);
+}
+
 t_shell	*_shell_create(char **env)
 {
 	t_shell	*shell;
