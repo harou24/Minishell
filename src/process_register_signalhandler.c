@@ -22,4 +22,3 @@ int	p_register_signalhandler(int sig, void (*sighandler)(int sig))
 	}
 	return (0);
 }
-
