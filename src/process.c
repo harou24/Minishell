@@ -76,11 +76,6 @@ int	p_signal(pid_t pid, int signal)
 	return (error);
 }
 
-pid_t	*p_allocate_pid(pid_t pid)
-{
-	return ((pid_t *)ft_memdup(&pid, sizeof(pid_t)));
-}
-
 int	p_register_signalhandler(int sig, void (*sighandler)(int sig))
 {
 	struct sigaction sa;
