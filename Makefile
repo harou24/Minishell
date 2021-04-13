@@ -18,7 +18,7 @@ all: $(NAME)
 
 $(NAME): 
 	@which cmake || { [[ "$OSTYPE" == "darwin"* ]] && brew install cmake; } \
-		|| echo "Install cmake first."
+		|| { echo "Install cmake first."; exit 1; }
 	$(MINIMAKE) release
 
 clean:
