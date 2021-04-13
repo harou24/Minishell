@@ -53,10 +53,3 @@ t_bool	env_set_s_line(const char *line, e_scope scope)
 	free(key);
 	return (succes);
 }
-
-t_bool	env_unset_s(const char *key)
-{
-	if (g_env__)
-		env_unset(g_env__, key);
-	return (TRUE);
-}
