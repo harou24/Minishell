@@ -1,0 +1,22 @@
+name: Systemtests
+
+on:
+  push:
+    branches:
+      - master
+      - develop
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  ubuntu:
+    runs-on: ubuntu-latest
+    name: Run Systemtests
+
+    steps:
+    - name: Checkout repository and submodules
+      uses: actions/checkout@v2
+
+    - name: Run all systemtests
+      run: |
+        ./tests/stresstest.sh 1
