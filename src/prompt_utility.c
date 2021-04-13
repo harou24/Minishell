@@ -3,7 +3,7 @@
 #include "ft_printf.h"
 #include "prompt.h"
 
-static char *__adjustedbuffer(t_prompt *_prompt)
+static char	*__adjustedbuffer(t_prompt *_prompt)
 {
 	if (_prompt->error_code == 0)
 		return (&_prompt->buffer[_prompt->user_index]);

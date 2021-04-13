@@ -77,7 +77,7 @@ int	p_signal(pid_t pid, int signal)
 	error = kill(pid, signal);
 	if (error == -1)
 	{
-		dbg("couldn't send signal %s to pid %i, errno: %s\n",
+		dbg("Couldn't send signal %s to pid %i, errno: %s\n",
 			strsignal(signal), pid, strerror(errno));
 	}
 	else
@@ -93,7 +93,9 @@ int	p_register_signalhandler(int sig, void (*sighandler)(int sig))
 	struct sigaction	sa;
 
 	sa.sa_handler = sighandler;
-	if (sigaction(sig, &sa, 0) == -1)
+	sa.sa_flags = 0;
+	sigemptyset(&sa.sa_mask);
+	if (sigaction(sig, &sa, NULL) == -1)
 		return (-1);
 	return (0);
 }

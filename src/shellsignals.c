@@ -13,6 +13,7 @@
 #include <assert.h>
 #include <stdlib.h>
 
+#include <errno.h>
 #include <setjmp.h>
 
 #include "debugger.h"
@@ -21,13 +22,12 @@
 #include "process.h"
 #include "libprintf.h"
 
-static volatile int		g_sigint__;
-static volatile int		g_sigint_last__;
-static volatile int		g_sigquit__;
+static volatile sig_atomic_t	g_sigint__;
+static volatile sig_atomic_t	g_sigint_last__;
+static volatile sig_atomic_t	g_sigquit__;
 
 static void	shell_handle_sigint(int signum)
 {
-	dbg("Shell caught signal: %i\n", signum);
 	if (signum == SIGINT)
 		g_sigint__++;
 	else if (signum == SIGQUIT)
@@ -36,8 +36,6 @@ static void	shell_handle_sigint(int signum)
 
 int	_shell_received_signal(void)
 {
-	if (g_sigquit__ > 0)
-		return (SIGQUIT);
 	if (g_sigint__ > g_sigint_last__)
 	{
 		g_sigint_last__ = g_sigint__;
@@ -48,19 +46,21 @@ int	_shell_received_signal(void)
 
 int	_shell_register_sigint_handler(void)
 {
-	p_register_signalhandler(SIGQUIT, shell_handle_sigint);
-	return (p_register_signalhandler(SIGINT, shell_handle_sigint));
+	return (p_register_signalhandler(SIGQUIT, shell_handle_sigint)
+		+ p_register_signalhandler(SIGINT, shell_handle_sigint));
 }
 
 void	_shell_manage_prompt_interrupts(int *last_error, char *line)
 {
-	if (line == NULL && _shell_received_signal() == SIGINT)
+	if (_shell_received_signal() == SIGINT)
 	{
+		printf("\n");
 		*last_error = 130;
-		ft_dprintf(STDERR, "\n");
 	}
 	else if (line == NULL)
+	{
 		exit (0);
+	}
 }
 
 void	_shell_manage_interrupts(int *last_error)
