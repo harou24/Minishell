@@ -3,7 +3,7 @@
 
 #define V_DEF_SIZE 128
 
-extern t_journal	*g_journal__;
+t_journal	*g_journal__;
 
 t_journal	*journal_create(void)
 {
@@ -21,13 +21,16 @@ t_journal	*journal_create(void)
 	return (g_journal__);
 }
 
-void	journal_set_input_str(char *str)
+t_journal	*journal_destroy(t_journal **journal)
 {
+	if (!g_journal__)
+		return (NULL);
+	journal_clear();
 	journal_clear_input_str();
-	g_journal__->str = ft_strdup(str);
-}
-
-char	*journal_get_input_str(void)
-{
-	return (g_journal__->str);
+	vector(&g_journal__->tokens, V_DESTROY, FALSE, 0);
+	free(g_journal__->counter);
+	free(g_journal__);
+	if (journal)
+		*journal = NULL;
+	return ((g_journal__ = NULL));
 }
