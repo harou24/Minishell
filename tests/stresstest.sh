@@ -132,8 +132,14 @@ declare -a testsArrayCmp=( \
 	'rm build/stress.tmp' \
 	'FAULTY; ls'
 	'export PATH="$PATHtest:working:multiplepath:directory1:directory2"; echo $PATH' \
-	#'echo > build/stress.tmp multi file ; wc build/stress.tmp' \
-	#'echo a b cd > build/stress.tmp multi file ; wc build/stress.tmp' \
+	'export FOO=bar; /usr/bin/env | grep FOO' \
+	'export FOO=bar; /usr/bin/env | wc -l' \
+	'export FOO=bar; export | grep -v "_=" | wc -l' \
+	'FOO=bar; /usr/bin/env | grep FOO' \
+	'FOO=bar; /usr/bin/env | wc -l' \
+	'FOO=bar; export | grep -v "_=" | wc -l' \
+	#'echo > build/stress.tmp multi file ; wc -l build/stress.tmp' \
+	#'echo a b cd > build/stress.tmp multi file ; wc -l build/stress.tmp' \
 	)
 
 run_tests()

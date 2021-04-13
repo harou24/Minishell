@@ -7,6 +7,7 @@
 #include "debugger.h"
 
 #include "filesystem.h"
+#include "environ.h"
 #include "env_access.h"
 #include "bash_ops.h"
 #include "path.h"
@@ -37,7 +38,6 @@ t_bool	is_relative_path(char *fname)
 
 int	exec_bin(t_command *cmd)
 {
-	extern char	**environ;
 	char		*abspath;
 
 	if (is_absolute_path(cmd->path))
@@ -48,7 +48,7 @@ int	exec_bin(t_command *cmd)
 		abspath = path_expand(env_get_path(), cmd->path);
 	if (abspath && file_is_executable(abspath))
 	{
-		execve(abspath, cmd->argv->argv, environ);
+		execve(abspath, cmd->argv->argv, environ_get());
 		dbg("execve failed for %s with error : %s\n", abspath, strerror(errno));
 		exit (1);
 	}
