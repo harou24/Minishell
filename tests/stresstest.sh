@@ -7,6 +7,8 @@ VALGRIND="valgrind\
 			--trace-children=yes\
 			"
 
+export OLDPWD="$PWD"
+
 if ! which valgrind; then
 	echo "no valgrind."; unset VALGRIND
 fi
