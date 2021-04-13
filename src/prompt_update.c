@@ -20,6 +20,7 @@ static void	prompt_init_indexes(t_prompt *_prompt)
 
 static void	prompt_prepare_buffer(t_prompt *_prompt)
 {
+	prompt_init_indexes(_prompt);
 	ft_snprintf(_prompt->buffer, __ERROR_LENGTH, "%-*d",
 		__ERROR_LENGTH, _prompt->error_code);
 	ft_snprintf(_prompt->buffer + _prompt->user_index,
@@ -38,15 +39,14 @@ static int	prompt_update_current_path(t_prompt *_prompt)
 	free(_prompt->current_path);
 	_prompt->current_path = fs_get_cur_dir_name();
 	if (!_prompt->current_path)
-		return (1);
-	return (0);
+		return (0);
+	return (1);
 }
 
 int	prompt_update(t_prompt *_prompt)
 {
 	if (!prompt_update_current_path(_prompt))
-		return (1);
-	prompt_init_indexes(_prompt);
+		return (0);
 	prompt_prepare_buffer(_prompt);
-	return (0);
+	return (1);
 }
