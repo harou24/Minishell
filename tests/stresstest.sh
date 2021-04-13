@@ -81,6 +81,12 @@ declare -a testsArrayNonCrash=( \
 	'echo > build/stress.tmp multi file ; wc build/stress.tmp' \
 	'echo a b cd > build/stress.tmp multi file ; wc build/stress.tmp' \
 	'export PATH="$PATHtest:working:multiplepath:directory1:directory2"' \
+	'export FOO=bar; /usr/bin/env | grep FOO' \
+	'export FOO=bar; /usr/bin/env | wc -l' \
+	'export FOO=bar; export | grep -v "_=" | wc -l' \
+	'echo $1 123' \
+	#'echo > build/stress.tmp multi file ; wc -l build/stress.tmp' \
+	#'echo a b cd > build/stress.tmp multi file ; wc -l build/stress.tmp' \
 	)
 
 declare -a testsArrayCmp=( \
@@ -138,6 +144,7 @@ declare -a testsArrayCmp=( \
 	'FOO=bar; /usr/bin/env | grep FOO' \
 	'FOO=bar; /usr/bin/env | wc -l' \
 	'FOO=bar; export | grep -v "_=" | wc -l' \
+	'echo $1 123' \
 	#'echo > build/stress.tmp multi file ; wc -l build/stress.tmp' \
 	#'echo a b cd > build/stress.tmp multi file ; wc -l build/stress.tmp' \
 	)
