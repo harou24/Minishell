@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   parser_expansion_variable_continue.c               :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: sverschu <sverschu@student.codam.n>          +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2021/04/13 21:04:03 by sverschu      #+#    #+#                 */
+/*   Updated: 2021/04/13 21:04:05 by sverschu      ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <assert.h>
 
 #include "env_singleton.h"

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   bash_pattern_dump_type.c                           :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: sverschu <sverschu@student.codam.n>          +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2021/04/13 20:56:28 by sverschu      #+#    #+#                 */
+/*   Updated: 2021/04/13 20:56:30 by sverschu      ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "bash_pattern.h"
 
 char	*pattern_dump_type(t_bash_pattern_type type)

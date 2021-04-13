@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   token_debugging.c                                  :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: sverschu <sverschu@student.codam.n>          +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2021/04/13 21:08:28 by sverschu      #+#    #+#                 */
+/*   Updated: 2021/04/13 21:08:31 by sverschu      ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "token.h"
 
 static const char	*token_dump_type_continue(t_token_type_e type)

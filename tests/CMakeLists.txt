@@ -1,3 +1,15 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         ::::::::             #
+#    CMakeLists.txt                                     :+:    :+:             #
+#                                                      +:+                     #
+#    By: sverschu <sverschu@student.codam.n>          +#+                      #
+#                                                    +#+                       #
+#    Created: 2021/04/13 21:15:57 by sverschu      #+#    #+#                  #
+#    Updated: 2021/04/13 21:15:58 by sverschu      ########   odam.nl          #
+#                                                                              #
+# **************************************************************************** #
+
 FetchContent_Declare(
   Catch2
   GIT_REPOSITORY https://github.com/catchorg/Catch2.git

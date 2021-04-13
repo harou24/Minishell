@@ -1,23 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   bash_sym.cpp                                       :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: sverschu <sverschu@student.codam.n>          +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2021/04/13 21:11:39 by sverschu      #+#    #+#                 */
+/*   Updated: 2021/04/13 21:11:57 by sverschu      ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <cstring>
 #include <stdio.h>
 #include <catch2/catch.hpp>
-/*
- * Catch2: examples
- * for more examples checkout:
- *   https://github.com/catchorg/Catch2/tree/devel/examples
- *
- * Catch has two natural expression assertion macro's:
- * - REQUIRE() stops at first failure.
- * - CHECK() continues after failure.
- *
- * There are two variants to support decomposing negated expressions:
- * - REQUIRE_FALSE() stops at first failure.
- * - CHECK_FALSE() continues after failure.
- *
- * TEST_CASE( "Title here", "[short name]" ) {
- *     REQUIRE( [BOOLEAN CONDITION] ) ;
- * }
- */
 
 extern "C" {
 #include "bash_sym.h"
