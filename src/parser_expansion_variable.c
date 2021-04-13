@@ -5,23 +5,6 @@
 
 extern t_parser	*g_parser__;
 
-char	*parse_retreive_var_from_env_for_token(t_token *token)
-{
-	char	*key;
-	char	*var;
-
-	key = ft_strsub(journal_get_input_str(),
-			token->range.begin, 1 + token->range.end - token->range.begin);
-	assert(key);
-	var = env_get_s(key);
-	if (var == NULL)
-		var = ft_strdup("");
-	else
-		var = ft_strdup(var);
-	free(key);
-	return (var);
-}
-
 void	parse_perform_var_substitution(t_vector tokens,
 					t_token *var_sym, t_token *var_name)
 {
@@ -59,7 +42,7 @@ t_bool	parse_expand_first_variable(t_vector tokens, t_token *var_sym)
 	return (TRUE);
 }
 
-static t_bool is_variable_in_matcharea(void)
+static t_bool	is_variable_in_matcharea(void)
 {
 	return (journal_find_nth_type(VARIABLE, 0)->index + 1
 		<= g_parser__->matcharea.end);

@@ -78,10 +78,10 @@ int	p_signal(pid_t pid, int signal)
 
 int	p_register_signalhandler(int sig, void (*sighandler)(int sig))
 {
-	struct sigaction sa;
+	struct sigaction	sa;
 
 	sa.sa_handler = sighandler;
-  	if (sigaction(sig, &sa, 0) == -1)
+	if (sigaction(sig, &sa, 0) == -1)
 		return (-1);
 	return (0);
 }
