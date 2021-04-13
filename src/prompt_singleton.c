@@ -13,6 +13,7 @@
 #include <assert.h>
 #include <stdlib.h>
 
+#include "libprintf.h"
 #include "env_access.h"
 #include "prompt_singleton.h"
 
