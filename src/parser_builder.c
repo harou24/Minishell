@@ -21,12 +21,13 @@ char	*parse_build_path(t_range *_area)
 	area = range(_area->begin, _area->end);
 	path = NULL;
 	token = journal_get(area.begin);
-	while (token && area.begin <= area.end && (token->type == WORD || token->type == SYM))
+	while (token && area.begin <= area.end
+		&& (token->type == WORD || token->type == SYM))
 	{
 		path = ft_strjoin_noreuse(path, journal_get_string_for_token(token));
 		area.begin++;
 		token = journal_get(area.begin);
-	} 
+	}
 	return (path);
 }
 

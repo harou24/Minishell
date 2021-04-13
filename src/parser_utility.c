@@ -10,7 +10,7 @@
 
 extern t_parser	*g_parser__;
 
-void		parse_flush_tokens(t_range area)
+void	parse_flush_tokens(t_range area)
 {
 	size_t		len;
 

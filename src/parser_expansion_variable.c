@@ -39,7 +39,8 @@ void	parse_perform_var_substitution(t_vector tokens,
 t_bool	parse_is_variable(t_token *var_name)
 {
 	assert(var_name);
-	return (var_name && (var_name->type == WORD || var_name->type == SYM || var_name->type == ASSIGNMENT || var_name->type == VARIABLE));
+	return (var_name && (var_name->type == WORD || var_name->type == SYM
+			|| var_name->type == ASSIGNMENT || var_name->type == VARIABLE));
 }
 
 t_bool	parse_expand_first_variable(t_vector tokens, t_token *var_sym)
