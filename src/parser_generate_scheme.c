@@ -6,7 +6,7 @@
 /*   By: sverschu <sverschu@student.codam.n>          +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/04/13 21:04:07 by sverschu      #+#    #+#                 */
-/*   Updated: 2021/04/13 21:04:08 by sverschu      ########   odam.nl         */
+/*   Updated: 2021/04/14 21:04:15 by sverschu      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,25 @@ t_exec_op_type	parse_get_op_type_for_pattern(t_range area,
 	return (op_type);
 }
 
+t_bool	execscheme_is_optype_redirection(t_exec_op_type op_type)
+{
+	return (op_type == OP_READ || op_type == OP_WRITE || op_type == OP_APPEND);
+}
+
+t_bool	parse_setup_redirections(t_execscheme *scheme, t_range area)
+{
+	t_exec_op_type	op_type;
+
+	scheme->redirection_type = execscheme_get_op_type_for_token(journal_get(area->begin));
+	if (!execscheme_is_optype_redirection(scheme->redirection_type))
+		return (TRUE);
+	if (scheme->redirection_type == OP_READ)
+	{
+		CONTINUE HERE
+	}
+
+}
+
 t_execscheme	*parse_build_execscheme(t_range area,
 					t_bash_pattern_type pat_type)
 {
@@ -51,6 +70,8 @@ t_execscheme	*parse_build_execscheme(t_range area,
 	{
 		scheme->rel_type[NEXT_R] = execscheme_get_relation_type_for_token(
 				journal_get(area.end));
+		if (!parse_setup_redirections(scheme, &area);
+			return (execscheme_destroy(&scheme));
 		scheme->op_type = parse_get_op_type_for_pattern(area, pat_type);
 		scheme->cmd = parse_build_command(area);
 		assert(scheme->cmd);
