@@ -35,7 +35,7 @@ t_bool	executor_should_run_in_parent(t_execscheme *scheme)
 
 int	executor_launch_scheme(t_execscheme *scheme)
 {
-	int exitstatus;
+	int	exitstatus;
 
 	exitstatus = execscheme_dispatch(scheme->rel_type[NEXT_R])(scheme);
 	if (exitstatus != 0)
