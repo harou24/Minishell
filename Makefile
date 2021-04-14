@@ -6,7 +6,7 @@
 #    By: sverschu <sverschu@student.codam.n>          +#+                      #
 #                                                    +#+                       #
 #    Created: 2021/04/13 21:15:17 by sverschu      #+#    #+#                  #
-#    Updated: 2021/04/13 21:15:19 by sverschu      ########   odam.nl          #
+#    Updated: 2021/04/14 19:35:35 by sverschu      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,15 +16,27 @@ MINIMAKE = ./minimake.sh
 
 all: $(NAME)
 
-$(NAME): 
-	@which cmake || { [[ "$OSTYPE" == "darwin"* ]] && brew install cmake; } \
+cmake:
+	@which cmake || { [[ `uname` == "Darwin" ]] && brew install cmake; } \
 		|| { echo "Install cmake first."; exit 1; }
-	$(MINIMAKE) release
+
+$(NAME): cmake
+	@$(MINIMAKE) release
+debug: cmake
+	@$(MINIMAKE) debug
+test: cmake
+	@$(MINIMAKE) test
 
 clean:
-	$(MINIMAKE) clean
+	@mv minishell minishell.DONTTOUCHME || true
+	@mv libminishell.a libminishell.a.DONTTOUCHME || true
+	@$(MINIMAKE) clean
+	@mv minishell.DONTTOUCHME minishell || true
+	@mv libminishell.a.DONTTOUCHME libminishell.a || true
 
 fclean: clean
-	$(MINIMAKE) clean
+	@$(MINIMAKE) clean
 
 re: fclean all
+
+.PHONY = cmake clean fclean re $(NAME)
