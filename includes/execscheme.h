@@ -21,13 +21,17 @@ typedef enum e_exec_relation_type
 	REL_START =		1<<1,
 	REL_SEQ =		1<<2,
 	REL_PIPE =		1<<3,
-	REL_READ =		1<<4,
-	REL_APPEND =	1<<5,
-	REL_WRITE =		1<<6,
 	REL_END =		1<<7,
 	REL_NO_TYPE =	1<<8,
 	REL_TAB_SIZE
-}		t_exec_relation_type;
+}	t_exec_relation_type;
+
+typedef enum e_exec_redirection_type
+{
+	RED_READ =		1<<1,
+	RED_APPEND =	1<<2,
+	RED_WRITE =		1<<3,
+}	t_exec_redirection_type;
 
 typedef enum e_exec_op_type
 {
@@ -57,7 +61,7 @@ typedef struct s_execscheme
 	int						pipe[2];
 	pid_t					pid;
 	char					*file[2];
-	t_exec_op_type			redirection_type;
+	t_exec_redirection_type	redirection_type;
 	t_command				*cmd;
 	struct s_execscheme		*prev;
 	struct s_execscheme		*next;
@@ -73,7 +77,9 @@ t_exec_relation_type	execscheme_get_relation_type_for_token(t_token *token);
 t_exec_op_type			execscheme_get_op_type_for_token(t_token *token);
 
 const char				*execscheme_dump_op_type(t_exec_op_type type);
-const char				*execscheme_dump_rel(t_exec_relation_type type);
+const char				*execscheme_dump_relation_type(t_exec_relation_type type);
 
 void					execscheme_pretty_dump(t_execscheme *root, int indent);
+
+char					*parse_build_path(t_range *_area);
 #endif
