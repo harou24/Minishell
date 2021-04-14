@@ -62,7 +62,11 @@ int	exec_bin(t_command *cmd)
 	if (abspath && file_exists(abspath))
 	{
 		if (!file_is_executable(abspath))
+		{
+			ft_dprintf(STDERR, "%s: %s\n", "minishell: permission denied ",
+				cmd->path);
 			exit(128);
+		}
 		execve(abspath, cmd->argv->argv, environ_get());
 		dbg("execve failed for %s with error : %s\n", abspath, strerror(errno));
 		exit (1);
