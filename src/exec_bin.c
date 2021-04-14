@@ -58,8 +58,10 @@ int	exec_bin(t_command *cmd)
 		abspath = get_relative_path(cmd->path);
 	else
 		abspath = path_expand(env_get_path(), cmd->path);
-	if (abspath && file_is_executable(abspath))
+	if (abspath && file_exists(abspath))
 	{
+		if (!file_is_executable(abspath))
+			exit(128);
 		execve(abspath, cmd->argv->argv, environ_get());
 		dbg("execve failed for %s with error : %s\n", abspath, strerror(errno));
 		exit (1);
