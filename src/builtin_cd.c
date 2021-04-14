@@ -29,7 +29,7 @@ static int	cd(char *fname)
 {
 	if (fs_change_dir(fname) == 0 && update_dir_change(fname) == 0)
 		return (0);
-	return (-1);
+	return (1);
 }
 
 static int	__exec_cd(char *fname)
@@ -51,7 +51,7 @@ static int	__exec_cd(char *fname)
 			ft_dprintf(STDOUT, "cd: no such file or directory: %s\n",
 				fname);
 		free(new_path);
-		return (-1);
+		return (1);
 	}
 	free(new_path);
 	return (0);
@@ -66,14 +66,14 @@ static int	__handle_cd_tilde(char *fname)
 		return (cd(env_get_home()));
 	path = ft_strjoin_multi(3, env_get_home(), "/", fname + 2);
 	if (!path)
-		return (-1);
+		return (1);
 	if (cd(path) == 0)
 	{
 		free(path);
 		return (0);
 	}
 	free(path);
-	return (-1);
+	return (1);
 }
 
 int	builtin_cd(t_command *cmd)
@@ -90,5 +90,5 @@ int	builtin_cd(t_command *cmd)
 		else
 			return (__exec_cd(cmd->argv->argv[1]));
 	}
-	return (-1);
+	return (1);
 }
