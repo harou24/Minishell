@@ -46,9 +46,9 @@ static int	__exec_cd(char *fname)
 	if (cd(new_path) != 0)
 	{
 		if (!directory_exists(new_path))
-			ft_dprintf(STDOUT, "cd: not a directory: %s\n", fname);
+			ft_dprintf(STDERR, "cd: not a directory: %s\n", fname);
 		else if (!directory_is_openable(new_path))
-			ft_dprintf(STDOUT, "cd: no such file or directory: %s\n",
+			ft_dprintf(STDERR, "cd: no such file or directory: %s\n",
 				fname);
 		free(new_path);
 		return (1);
