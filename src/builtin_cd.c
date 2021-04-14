@@ -36,7 +36,9 @@ static int	__exec_cd(char *fname)
 {
 	char	*new_path;
 
-	if (path_contains(env_get_cdpath(), fname))
+	if (ft_strcmp(fname, "/") != 0
+		&& ft_strcmp(fname, ".") != 0
+		&& path_contains(env_get_cdpath(), fname))
 	{
 		new_path = path_expand(env_get_cdpath(), fname);
 		ft_dprintf(STDOUT, "%s\n", new_path);
