@@ -6,7 +6,7 @@
 /*   By: sverschu <sverschu@student.codam.n>          +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/04/13 21:09:33 by sverschu      #+#    #+#                 */
-/*   Updated: 2021/04/13 21:09:35 by sverschu      ########   odam.nl         */
+/*   Updated: 2021/04/14 21:02:37 by sverschu      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,8 @@ typedef struct s_execscheme
 	t_exec_relation_type	rel_type[2];
 	int						pipe[2];
 	pid_t					pid;
+	char					*file[2];
+	t_exec_op_type			redirection_type;
 	t_command				*cmd;
 	struct s_execscheme		*prev;
 	struct s_execscheme		*next;
