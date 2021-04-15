@@ -40,9 +40,9 @@ static const t_bash_sym	g_bash_sym_list[] = {
 	{PIPE, EXACT,		"|"},
 	{NEWLINE, EXACT,	"\n"},
 	{SEMICOLON, EXACT,	";"},
-	{OP_READ, EXACT,	"<"},
-	{OP_APPEND, EXACT,	">>"},
-	{OP_WRITE, EXACT,	">"}
+	{LEFTSHIFT, EXACT,	"<"},
+	{DOUBLERIGHTSHIFT, EXACT,	">>"},
+	{RIGHTSHIFT, EXACT,	">"}
 						};
 
 t_bool	is_bash_sym_exact(const char *str, size_t len, const t_bash_sym *token)

@@ -26,7 +26,6 @@ typedef void *t_vector;
 
 typedef enum e_bash_pattern_type
 {
-	P_PATH,
 	P_COMMAND,
 	P_ASSIGNMENT,
 	P_NO_TYPE
