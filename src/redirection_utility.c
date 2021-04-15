@@ -88,8 +88,7 @@ t_bool	redir_pipe_to_stdin(int pipe[2])
 		dbg("Failing dupping stdin, errno %s\n", strerror(errno));
 		return (FALSE);
 	}
-	drop_pipe(pipe);
-	return (TRUE);
+	return (close(pipe[PIPE_READ]) != -1);
 }
 
 t_bool	redir_stdout_to_pipe(int pipe[2])
@@ -99,6 +98,5 @@ t_bool	redir_stdout_to_pipe(int pipe[2])
 		dbg("Failing dupping stdout, errno %s\n", strerror(errno));
 		return (FALSE);
 	}
-	drop_pipe(pipe);
-	return (TRUE);
+	return (close(pipe[PIPE_WRITE]) != -1);
 }

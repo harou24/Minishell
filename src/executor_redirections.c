@@ -21,7 +21,6 @@
 #include "ft_unistd.h"
 #include "executor.h"
 
-
 t_bool	executor_handle_redirections_pre(t_execscheme *scheme)
 {
 	redir_std_push();
@@ -31,6 +30,9 @@ t_bool	executor_handle_redirections_pre(t_execscheme *scheme)
 		return (FALSE);
 	if (redir_has_redirections(scheme->redir) && !redir_perform_redirections(scheme->redir))
 		return (FALSE);
+	if (scheme->prev)
+		drop_pipe(scheme->prev->pipe);
+	drop_pipe(scheme->pipe);
 	return (TRUE);
 }
 

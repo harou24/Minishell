@@ -41,7 +41,8 @@ static int	parent(t_execscheme *scheme, pid_t childprocess)
 {
 	/* move this into redirection ? */
 	if (scheme->rel_type[PREV_R] == REL_PIPE)
-		close(scheme->prev->pipe[PIPE_WRITE]);
+		close(scheme->prev->pipe[PIPE_READ]);
+	close(scheme->pipe[PIPE_WRITE]);
 	scheme->pid = childprocess;
 	return (0);
 }
