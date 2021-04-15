@@ -13,48 +13,39 @@
 #include "execscheme.h"
 #include "debugger.h"
 
+static char	*g_op_types__[OP_TAB_SIZE] = {
+		[OP_COMMAND] = "OP_COMMAND",
+		[OP_PATH] = "PATH",
+		[OP_ASSIGNMENT] = "OP_ASSIGNMENT",
+		[OP_BUILTIN_ECHO] = "OP_BUILTIN_ECHO",
+		[OP_BUILTIN_CD] = "OP_BUILTIN_CD",
+		[OP_BUILTIN_PWD] = "OP_BUILTIN_PWD",
+		[OP_BUILTIN_EXPORT] = "OP_BUILTIN_EXPORT",
+		[OP_BUILTIN_UNSET] = "OP_BUILTIN_UNSET",
+		[OP_BUILTIN_ENV] = "OP_BUILTIN_ENV",
+		[OP_BUILTIN_EXIT] = "OP_BUILTIN_EXIT",
+		[OP_NO_TYPE] = "NO_TYPE"
+};
+
+static char	*g_relation_types__[REL_TAB_SIZE] = {
+		[REL_START] = "REL_START",
+		[REL_SEQ] = "REL_SEQ",
+		[REL_PIPE] = "REL_PIPE",
+		[REL_READ] = "REL_READ",
+		[REL_APPEND] = "REL_APPEND",
+		[REL_WRITE] = "REL_WRITE",
+		[REL_NO_TYPE] = "NO_TYPE",
+		[REL_END] = "REL_END"
+};
+
 const char	*execscheme_dump_op_type(t_exec_op_type type)
 {
-	if (type == OP_COMMAND)
-		return ("OP_COMMAND");
-	if (type == OP_PATH)
-		return ("PATH");
-	if (type == OP_ASSIGNMENT)
-		return ("OP_ASSIGNMENT");
-	if (type == OP_BUILTIN_ECHO)
-		return ("OP_BUILTIN_ECHO");
-	if (type == OP_BUILTIN_CD)
-		return ("OP_BUILTIN_CD");
-	if (type == OP_BUILTIN_PWD)
-		return ("OP_BUILTIN_PWD");
-	if (type == OP_BUILTIN_EXPORT)
-		return ("OP_BUILTIN_EXPORT");
-	if (type == OP_BUILTIN_UNSET)
-		return ("OP_BUILTIN_UNSET");
-	if (type == OP_BUILTIN_ENV)
-		return ("OP_BUILTIN_ENV");
-	if (type == OP_BUILTIN_EXIT)
-		return ("OP_BUILTIN_EXIT");
-	return ("NO_TYPE");
+	return (g_op_types__[type]);
 }
 
 const char	*execscheme_dump_relation_type(t_exec_relation_type type)
 {
-	if (type == REL_START)
-		return ("REL_START");
-	if (type == REL_SEQ)
-		return ("REL_SEQ");
-	if (type == REL_PIPE)
-		return ("REL_PIPE");
-	if (type == REL_READ)
-		return ("REL_READ");
-	if (type == REL_APPEND)
-		return ("REL_APPEND");
-	if (type == REL_WRITE)
-		return ("REL_WRITE");
-	if (type == REL_END)
-		return ("REL_END");
-	return ("NO_TYPE");
+	return (g_relation_types__[type]);
 }
 
 void	execscheme_pretty_dump(t_execscheme *root, int indent)
