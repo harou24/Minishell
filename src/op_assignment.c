@@ -22,12 +22,14 @@
 
 int	op_assignment(t_command *cmd)
 {
-	int		i;
+	const size_t	argc = argv_get_size(cmd->argv);
+	const char		**argv = argv_get_array(cmd->argv);
+	size_t			i;
 
 	i = 0;
-	while (i < cmd->argv->argc)
+	while (i < argc)
 	{
-		env_set_s_line(cmd->argv->argv[i], SCOPE_LOCAL);
+		env_set_s_line(argv[i], SCOPE_LOCAL);
 		i++;
 	}
 	return (0);

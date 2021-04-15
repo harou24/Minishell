@@ -20,29 +20,41 @@
 
 char	*argv_get(t_argv *argv, int index)
 {
-	if (index < argv->size)
-		return (argv->argv[index]);
-	return (NULL);
+	return ((char *)vector(&argv->argv_vec, V_PEEKAT, index, NULL));
 }
 
 t_bool	argv_push(t_argv *argv, char *arg)
 {
-	argv->argv[argv->argc] = arg;
-	argv->argc++;
-	return (TRUE);
+	return (vector(&argv->argv_vec, V_POPBACK, 0, NULL)
+		&& vector(&argv->argv_vec, V_PUSHBACK, 0, arg)
+		&& vector(&argv->argv_vec, V_PUSHBACK, 0, NULL));
 }
 
-t_argv	*argv_create(int size)
+const char	**argv_get_array(t_argv *argv)
 {
-	t_argv	*argv;
+	return ((const char **)vector(&argv->argv_vec, V_MEM, 0, NULL));
+}
 
-	if (size == 0)
-		return (NULL);
+size_t	argv_get_size(t_argv *argv)
+{
+	return (*(size_t *)vector(&argv->argv_vec, V_SIZE, 0, NULL) - 1);
+}
+
+t_argv	*argv_create(void)
+{
+	const size_t	vec_size = 16;
+	t_argv			*argv;
+
 	argv = ft_calloc(sizeof(t_argv), 1);
 	if (argv)
 	{
-		argv->size = size;
-		argv->argv = ft_calloc(sizeof(char *), size + 1);
+		argv->argv_vec = vector(&argv->argv_vec, V_CREATE, vec_size, NULL);
+		if (!argv->argv_vec)
+		{
+			free(argv);
+			return (NULL);
+		}
+		vector(&argv->argv_vec, V_PUSHBACK, 0, NULL);
 	}
 	return (argv);
 }
@@ -53,7 +65,7 @@ t_argv	*argv_destroy(t_argv **argv)
 		return (NULL);
 	if (*argv)
 	{
-		ft_array_destroy((void **)(*argv)->argv, (*argv)->size);
+		vector(&(*argv)->argv_vec, V_DESTROY, TRUE, NULL);
 		free(*argv);
 	}
 	return ((*argv = NULL));
@@ -61,16 +73,16 @@ t_argv	*argv_destroy(t_argv **argv)
 
 void	argv_pretty_dump(t_argv *argv, int indent)
 {
-	int	i;
+	size_t	i;
 
-	if (argv->argc == 0)
+	if (argv_get_size(argv) == 0)
 		return ;
-	dbg("%*s : %i\n", indent, "Argc", argv->argc);
+	dbg("%*s : %i\n", indent, "Argc", argv_get_size(argv));
 	dbg("%*s :\n", indent, "Argv");
 	i = 0;
-	while (i < argv->argc)
+	while (i < argv_get_size(argv))
 	{
-		dbg("%*s[%i] : %s\n", (int)(indent * 1.1), "", i, argv->argv[i]);
+		dbg("%*s[%i] : %s\n", (int)(indent * 1.1), "", i, argv_get(argv, i));
 		i++;
 	}
 }

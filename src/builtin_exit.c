@@ -17,14 +17,14 @@ int	builtin_exit(t_command *cmd)
 {
 	unsigned int	exit_status;
 
-	if (cmd->argv->argc == 2)
+	if (argv_get_size(cmd->argv) == 2)
 	{
-		exit_status = ft_atoi(cmd->argv->argv[1]);
+		exit_status = ft_atoi(argv_get(cmd->argv, 1));
 		if (exit_status > 255)
 			exit (255);
 		exit (exit_status);
 	}
-	else if (cmd->argv->argc == 1)
+	else if (argv_get_size(cmd->argv) == 1)
 		exit(0);
 	exit(128);
 }

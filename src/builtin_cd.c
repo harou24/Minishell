@@ -7,14 +7,15 @@
 
 #include "libft.h"
 
-#include "bash_ops.h"
+#include "command.h"
+#include "ft_unistd.h"
 #include "env_access.h"
 #include "filesystem_traversal.h"
 #include "filesystem.h"
 #include "ft_printf.h"
 #include "path.h"
 
-static int	update_dir_change(char *new_path)
+static int	update_dir_change(const char *new_path)
 {
 	char	*new_path_tmp;
 
@@ -25,14 +26,14 @@ static int	update_dir_change(char *new_path)
 	return (0);
 }
 
-static int	cd(char *fname)
+static int	cd(const char *fname)
 {
 	if (fs_change_dir(fname) == 0 && update_dir_change(fname) == 0)
 		return (0);
 	return (1);
 }
 
-static int	__exec_cd(char *fname)
+static int	__exec_cd(const char *fname)
 {
 	char	*new_path;
 
@@ -59,7 +60,7 @@ static int	__exec_cd(char *fname)
 	return (0);
 }
 
-static int	__handle_cd_tilde(char *fname)
+static int	__handle_cd_tilde(const char *fname)
 {
 	char	*path;
 
@@ -80,17 +81,22 @@ static int	__handle_cd_tilde(char *fname)
 
 int	builtin_cd(t_command *cmd)
 {
-	if (cmd->argv->argc == 1 || ft_strncmp("~", cmd->argv->argv[1], 1) == 0)
-		return (__handle_cd_tilde(cmd->argv->argv[1]));
-	else if (cmd->argv->argc == 2)
+	const size_t	argc = argv_get_size(cmd->argv);
+	const char		**argv = (const char **)argv_get_array(cmd->argv);
+
+	if (argc == 1 || ft_strncmp("~", argv[1], 1) == 0)
 	{
-		if (ft_strncmp("-", cmd->argv->argv[1], 2) == 0)
+		return (__handle_cd_tilde(argv[1]));
+	}
+	else if (argc == 2)
+	{
+		if (ft_strncmp("-", argv[1], 2) == 0)
 		{
 			ft_dprintf(STDOUT, "%s\n", env_get_prev_dir());
 			return (cd(env_get_prev_dir()));
 		}
 		else
-			return (__exec_cd(cmd->argv->argv[1]));
+			return (__exec_cd(argv[1]));
 	}
 	return (1);
 }
