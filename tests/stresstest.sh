@@ -96,8 +96,10 @@ declare -a testsArrayNonCrash=( \
 	'export FOO=bar; /usr/bin/env | wc -l' \
 	'export FOO=bar; export | grep -v "_=" | wc -l' \
 	'echo $1 123' \
-	#'echo > build/stress.tmp multi file ; wc -l build/stress.tmp' \
-	#'echo a b cd > build/stress.tmp multi file ; wc -l build/stress.tmp' \
+	'cat /dev/random | base64 | head -n1' \
+	'base64 < /dev/random | head -n1' \
+	'echo > build/stress.tmp multi file ; wc -l build/stress.tmp' \
+	'echo a b cd > build/stress.tmp multi file ; wc -l build/stress.tmp' \
 	)
 
 declare -a testsArrayCmp=( \
@@ -156,8 +158,9 @@ declare -a testsArrayCmp=( \
 	'FOO=bar; /usr/bin/env | wc -l' \
 	'FOO=bar; export | grep -v "_=" | wc -l' \
 	'echo $1 123' \
-	#'echo > build/stress.tmp multi file ; wc -l build/stress.tmp' \
-	#'echo a b cd > build/stress.tmp multi file ; wc -l build/stress.tmp' \
+	'echo > build/stress.tmp multi file ; wc -l build/stress.tmp' \
+	'touch build/stress.tmp; echo hello > build/stress.tmp > build/stress2.tmp ; wc -l build/stress.tmp; wc -l build/stress2.tmp' \
+	'echo a b cd > build/stress.tmp multi file ; wc -l build/stress.tmp' \
 	)
 
 run_tests()
@@ -203,12 +206,18 @@ run_tests()
 
 	for op in "${testsArrayCmp[@]}"
 	do
+		rm -f build/stress*.tmp &>/dev/null
+
 		echo "Running compare OP :'$op'"
 		timeout 3 ./build/apps/minishell -c "$op" > /tmp/minishell.out 2>/dev/null
 		minishell_err=$?
 
+		rm -f build/stress*.tmp &>/dev/null
+
 		bash -c "$op" > /tmp/bash.out 2>/dev/null
 		bash_err=$?
+
+		rm -f build/stress*.tmp &>/dev/null
 
 		if [ ! $bash_err -eq $minishell_err ]; then
 			echo "Compare OP '$op' failed!' bash_error{$bash_err}, minishell_error{$minishell_err} -> ./minimake.sh $1"
@@ -217,7 +226,7 @@ run_tests()
 		fi
 		diff /tmp/minishell.out /tmp/bash.out 
 		if [ ! $? -eq 0 ] ; then
-			echo "Compare OP '$op' failed!' -> ./minimake.sh $1"
+			echo "Compare OP '$op' failed!, outputs differ -> ./minimake.sh $1"
 			pkill -9 minishell
 			return 1
 		fi
