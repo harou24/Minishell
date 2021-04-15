@@ -38,9 +38,9 @@ TEST_CASE( "basics", "[bash_sym]" ) {
 									{"\\",						ESCAPE},
 									{"\n",						NEWLINE},
 									{";",						SEMICOLON},
-									{"<",						OP_READ},
-									{">>",						OP_APPEND},
-									{">",						OP_WRITE}
+									{"<",						LEFTSHIFT},
+									{">>",						DOUBLERIGHTSHIFT},
+									{">",						RIGHTSHIFT}
 								};
 	const size_t tsts_len = sizeof(tsts)/sizeof(tsts[0]);
 

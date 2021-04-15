@@ -90,9 +90,9 @@ TEST_CASE( "basic lexing", "[lexer]" ) {
 										{ "a   \n b",				"WORD SPACE NEWLINE SPACE WORD NULLBYTE " },
 										{ "echo a | cat",			"WORD SPACE WORD SPACE PIPE SPACE WORD NULLBYTE " },
 										{ "echo a ; echo b",		"WORD SPACE WORD SPACE SEMICOLON SPACE WORD SPACE WORD NULLBYTE " },
-										{ "echo a >> f",			"WORD SPACE WORD SPACE OP_APPEND SPACE WORD NULLBYTE " },
-										{ "echo a > f",				"WORD SPACE WORD SPACE OP_WRITE SPACE WORD NULLBYTE " },
-										{ "cat < f",				"WORD SPACE OP_READ SPACE WORD NULLBYTE " }
+										{ "echo a >> f",			"WORD SPACE WORD SPACE APPEND SPACE WORD NULLBYTE " },
+										{ "echo a > f",				"WORD SPACE WORD SPACE WRITE SPACE WORD NULLBYTE " },
+										{ "cat < f",				"WORD SPACE READ SPACE WORD NULLBYTE " }
 									};
 	lex_create();
 	const size_t testslen = sizeof(tests)/sizeof(s_tst);
