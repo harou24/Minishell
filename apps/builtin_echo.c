@@ -1,8 +1,10 @@
-#include "bash_ops.h"
-#include <stdio.h>
 #include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 
-void print_command(int argc, char **_argv)
+#include "bash_ops.h"
+
+void print_command(int argc, const char **_argv)
 {
 	int i = 1;
 	while (i < argc)
@@ -15,22 +17,24 @@ void print_command(int argc, char **_argv)
 
 int main(int argc, char **_argv)
 {
-	t_argv *argv = argv_create(argc + 1);
-	int i = 1;
+	const char *path = "/bin/path";
 
+	t_argv *argv = argv_create(strdup(path));
+
+	int i = 1;
 	while (i < argc)
 	{
 		argv_push(argv, _argv[i]);
 		i++;
 	}
-	t_command *command = command_create(ft_strdup("echo"), argv);
+	t_command *command = command_create(ft_strdup("path"));
 	
 	printf("--------echo test--------\n\n");
 	printf("Command is ->");
-	print_command(argc, _argv);
+	print_command(argv_get_size(argv), argv_get_array(argv));
 	builtin_echo(command);
 	printf("\n-------------------------\n\n");
-	exit(0);
-/*	command_destroy(&command);*/
+	command_destroy(&command);
+	argv_destroy(&argv);
 	return(0);
 }
