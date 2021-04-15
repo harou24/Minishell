@@ -63,7 +63,10 @@ static int	__export_to_environ(const char **argv, size_t argc)
 	while (i < argc)
 	{
 		if (!env_set_s_line(argv[i], SCOPE_ENVIRON))
+		{
+			dbg("Failed export var: %s to environ!\n", argv[i]);
 			return (1);
+		}
 		i++;
 	}
 	return (0);
