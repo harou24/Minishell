@@ -18,7 +18,7 @@
 
 typedef struct s_argv
 {
-	void			*argv_vec;
+	void			*vec;
 }					t_argv;
 
 char				*argv_get(t_argv *argv, int index);
@@ -27,7 +27,7 @@ t_bool				argv_push(t_argv *argv, char *arg);
 const char			**argv_get_array(t_argv *argv);
 size_t				argv_get_size(t_argv *argv);
 
-t_argv				*argv_create(void);
+t_argv				*argv_create(char *path);
 t_argv				*argv_destroy(t_argv **argv);
 
 void				argv_pretty_dump(t_argv *argv, int indent);
