@@ -21,7 +21,8 @@ typedef struct s_command
 	t_argv	*argv;
 }				t_command;
 
-t_command		*command_create(char *path, t_argv *argv);
+t_bool			command_push_argument(t_command *cmd, char *arg);
+t_command		*command_create(char *path);
 t_command		*command_destroy(t_command **_command);
 
 void			command_pretty_dump(t_command *cmd, int indent);

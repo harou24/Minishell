@@ -55,15 +55,18 @@ static int	__dump_environ(void)
 	return (0);
 }
 
-static int	__export_to_environ(t_command *cmd)
+static int	__export_to_environ(const char **argv, size_t argc)
 {
-	int	i;
+	size_t	i;
 
 	i = 1;
-	while (i < cmd->argv->argc)
+	while (i < argc)
 	{
-		if (!env_set_s_line(cmd->argv->argv[i], SCOPE_ENVIRON))
+		if (!env_set_s_line(argv[i], SCOPE_ENVIRON))
+		{
+			dbg("Failed export var: %s to environ!\n", argv[i]);
 			return (1);
+		}
 		i++;
 	}
 	return (0);
@@ -71,8 +74,11 @@ static int	__export_to_environ(t_command *cmd)
 
 int	builtin_export(t_command *cmd)
 {
-	if (cmd->argv->argc == 1)
+	const size_t	argc = argv_get_size(cmd->argv);
+	const char		**argv = argv_get_array(cmd->argv);
+
+	if (argc == 1)
 		return (__dump_environ());
 	else
-		return (__export_to_environ(cmd));
+		return (__export_to_environ(argv, argc));
 }

@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   exec_bin.c                                         :+:    :+:            */
+/*   op_execbin.c                                       :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: sverschu <sverschu@student.codam.n>          +#+                     */
 /*                                                   +#+                      */
@@ -49,7 +49,7 @@ t_bool	is_relative_path(char *fname)
 	return (FALSE);
 }
 
-int	exec_bin(t_command *cmd)
+int	op_execbin(t_command *cmd)
 {
 	char		*abspath;
 
@@ -67,7 +67,7 @@ int	exec_bin(t_command *cmd)
 				cmd->path);
 			exit(128);
 		}
-		execve(abspath, cmd->argv->argv, environ_get());
+		execve(abspath, (char *const *)argv_get_array(cmd->argv), environ_get());
 		dbg("execve failed for %s with error : %s\n", abspath, strerror(errno));
 		exit (1);
 	}

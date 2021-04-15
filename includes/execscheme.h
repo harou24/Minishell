@@ -6,7 +6,7 @@
 /*   By: sverschu <sverschu@student.codam.n>          +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/04/13 21:09:33 by sverschu      #+#    #+#                 */
-/*   Updated: 2021/04/13 21:09:35 by sverschu      ########   odam.nl         */
+/*   Updated: 2021/04/14 21:02:37 by sverschu      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,24 +15,21 @@
 
 # include "token.h"
 # include "command.h"
+# include "redirection.h"
 
 typedef enum e_exec_relation_type
 {
+	REL_NO_TYPE =	0,
 	REL_START =		1<<1,
 	REL_SEQ =		1<<2,
 	REL_PIPE =		1<<3,
-	REL_READ =		1<<4,
-	REL_APPEND =	1<<5,
-	REL_WRITE =		1<<6,
 	REL_END =		1<<7,
-	REL_NO_TYPE =	1<<8,
 	REL_TAB_SIZE
-}		t_exec_relation_type;
+}	t_exec_relation_type;
 
 typedef enum e_exec_op_type
 {
 	OP_COMMAND,
-	OP_PATH,
 	OP_ASSIGNMENT,
 	OP_BUILTIN_ECHO,
 	OP_BUILTIN_CD,
@@ -56,6 +53,7 @@ typedef struct s_execscheme
 	t_exec_relation_type	rel_type[2];
 	int						pipe[2];
 	pid_t					pid;
+	t_redirection			*redir;
 	t_command				*cmd;
 	struct s_execscheme		*prev;
 	struct s_execscheme		*next;
@@ -71,7 +69,8 @@ t_exec_relation_type	execscheme_get_relation_type_for_token(t_token *token);
 t_exec_op_type			execscheme_get_op_type_for_token(t_token *token);
 
 const char				*execscheme_dump_op_type(t_exec_op_type type);
-const char				*execscheme_dump_rel(t_exec_relation_type type);
+const char				*execscheme_dump_relation_type(t_exec_relation_type type);
 
 void					execscheme_pretty_dump(t_execscheme *root, int indent);
+
 #endif

@@ -31,9 +31,9 @@ typedef enum e_token_type_e
 	PIPE,
 	NEWLINE,
 	SEMICOLON,
-	OP_READ,
-	OP_APPEND,
-	OP_WRITE,
+	LEFTSHIFT,
+	RIGHTSHIFT,
+	DOUBLERIGHTSHIFT,
 	NULLBYTE,
 	NO_TYPE,
 	TOKEN_TYPE_SIZE
@@ -57,5 +57,12 @@ t_token				*token_create(t_range range, t_token_type_e type);
 t_token				*token_destroy(t_token *token);
 
 const char			*token_dump_type(t_token_type_e type);
+
+t_bool				token_is_variable(t_token *token);
+t_bool				token_is_redirection(t_token *token);
+t_bool				token_is_relation(t_token *token);
+t_bool				token_is_alnum(t_token *token);
+t_bool				token_is_space(t_token *token);
+t_bool				token_is_assignment(t_token *token);
 
 #endif

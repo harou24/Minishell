@@ -25,14 +25,10 @@ static int	rel_stub(t_execscheme *scheme)
 }
 
 static	int	(*g_schemetab__[REL_TAB_SIZE])(t_execscheme	*scheme) = {
-				[REL_START] = handler_scheme_seq,
+				[REL_END] = handler_scheme_seq,
 				[REL_SEQ] = handler_scheme_seq,
 				[REL_PIPE] = handler_scheme_pipe,
-				[REL_READ] = handler_scheme_redirection,
-				[REL_APPEND] = handler_scheme_redirection,
-				[REL_WRITE] = handler_scheme_redirection,
-				[REL_NO_TYPE] = rel_stub,
-				[REL_END] = handler_scheme_seq
+				[REL_NO_TYPE] = rel_stub
 			};
 
 static	int	op_stub(t_command *cmd)
@@ -42,8 +38,7 @@ static	int	op_stub(t_command *cmd)
 }
 
 static	int	(*g_comtab__[OP_TAB_SIZE])(t_command	*cmd) = {
-				[OP_COMMAND] = exec_bin,
-				[OP_PATH] = exec_bin,
+				[OP_COMMAND] = op_execbin,
 				[OP_ASSIGNMENT] = op_assignment,
 				[OP_BUILTIN_ECHO] = builtin_echo,
 				[OP_BUILTIN_CD] = builtin_cd,

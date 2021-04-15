@@ -15,7 +15,6 @@
 
 static char	*g_op_types__[OP_TAB_SIZE] = {
 		[OP_COMMAND] = "OP_COMMAND",
-		[OP_PATH] = "PATH",
 		[OP_ASSIGNMENT] = "OP_ASSIGNMENT",
 		[OP_BUILTIN_ECHO] = "OP_BUILTIN_ECHO",
 		[OP_BUILTIN_CD] = "OP_BUILTIN_CD",
@@ -28,12 +27,8 @@ static char	*g_op_types__[OP_TAB_SIZE] = {
 };
 
 static char	*g_relation_types__[REL_TAB_SIZE] = {
-		[REL_START] = "REL_START",
 		[REL_SEQ] = "REL_SEQ",
 		[REL_PIPE] = "REL_PIPE",
-		[REL_READ] = "REL_READ",
-		[REL_APPEND] = "REL_APPEND",
-		[REL_WRITE] = "REL_WRITE",
 		[REL_NO_TYPE] = "NO_TYPE",
 		[REL_END] = "REL_END"
 };
@@ -59,6 +54,7 @@ void	execscheme_pretty_dump(t_execscheme *root, int indent)
 			execscheme_dump_relation_type(root->rel_type[PREV_R]));
 		dbg("%*s : %s\n", (int)(indent * 1.5), "REL_NEXT",
 			execscheme_dump_relation_type(root->rel_type[NEXT_R]));
+		redir_pretty_dump(root->redir, indent * 1.5);
 		command_pretty_dump(root->cmd, indent * 1.5);
 		root = root->next;
 	}	

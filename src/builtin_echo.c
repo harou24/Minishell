@@ -4,27 +4,27 @@
 
 #define N_FLAG_POS 1
 
-static t_bool	check_has_n_flag(t_argv *argv)
+static t_bool	check_has_n_flag(size_t argc, const char **argv)
 {
-	return (argv->argc > N_FLAG_POS
-		&& ft_strcmp(argv->argv[N_FLAG_POS], "-n") == 0);
+	return (argc > N_FLAG_POS
+		&& ft_strcmp(argv[N_FLAG_POS], "-n") == 0);
 }
 
-static void	print_for_argv(t_argv *argv)
+static void	print_for_argv(size_t argc, const char **argv)
 {
-	int		index;
+	size_t	index;
 	t_bool	has_n_flag;
 
 	index = 1;
-	has_n_flag = check_has_n_flag(argv);
+	has_n_flag = check_has_n_flag(argc, argv);
 	if (has_n_flag)
 		index++;
-	while (index < argv->argc)
+	while (index < argc)
 	{
-		if (ft_strlen(argv_get(argv, index)) > 0)
+		if (ft_strlen(argv[index]) > 0)
 		{
-			ft_printf("%s", argv_get(argv, index));
-			if (index != argv->argc - 1)
+			ft_printf("%s", argv[index]);
+			if (index != argc - 1)
 				ft_printf(" ");
 		}
 		index++;
@@ -35,6 +35,6 @@ static void	print_for_argv(t_argv *argv)
 
 int	builtin_echo(t_command *cmd)
 {
-	print_for_argv(cmd->argv);
+	print_for_argv(argv_get_size(cmd->argv), argv_get_array(cmd->argv));
 	return (0);
 }

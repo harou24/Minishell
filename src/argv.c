@@ -20,29 +20,53 @@
 
 char	*argv_get(t_argv *argv, int index)
 {
-	if (index < argv->size)
-		return (argv->argv[index]);
-	return (NULL);
+	assert(argv);
+	return ((char *)vector(&argv->vec, V_PEEKAT, index, NULL));
 }
 
 t_bool	argv_push(t_argv *argv, char *arg)
 {
-	argv->argv[argv->argc] = arg;
-	argv->argc++;
-	return (TRUE);
+	assert(argv);
+	assert(argv->vec);
+	assert (*(size_t *)vector(&argv->vec, V_SIZE, 0, NULL) >= 1);
+	if (!arg)
+		return (FALSE);
+	vector(&argv->vec, V_POPBACK, 0, NULL);
+	return (vector(&argv->vec, V_PUSHBACK, 0, arg)
+		&& vector(&argv->vec, V_PUSHBACK, 0, NULL));
 }
 
-t_argv	*argv_create(int size)
+const char	**argv_get_array(t_argv *argv)
 {
-	t_argv	*argv;
+	assert(argv);
+	return ((const char **)vector(&argv->vec, V_MEM, 0, NULL));
+}
 
-	if (size == 0)
-		return (NULL);
+size_t	argv_get_size(t_argv *argv)
+{
+	assert(argv);
+	assert (*(size_t *)vector(&argv->vec, V_SIZE, 0, NULL) >= 1);
+	return (*(size_t *)vector(&argv->vec, V_SIZE, 0, NULL) - 1);
+}
+
+t_argv	*argv_create(char *path)
+{
+	const size_t	vec_size = 16;
+	t_argv			*argv;
+
+	assert(path);
 	argv = ft_calloc(sizeof(t_argv), 1);
 	if (argv)
 	{
-		argv->size = size;
-		argv->argv = ft_calloc(sizeof(char *), size + 1);
+		if (!vector(&argv->vec, V_CREATE, vec_size, NULL))
+		{
+			free(argv);
+			return (NULL);
+		}
+		vector(&argv->vec, V_PUSHBACK, 0, NULL);
+		argv_push(argv, path);
+		assert (*(size_t *)vector(&argv->vec, V_SIZE, 0, NULL) == 2);
+		assert(argv_get_size(argv) == 1);
 	}
 	return (argv);
 }
@@ -53,7 +77,7 @@ t_argv	*argv_destroy(t_argv **argv)
 		return (NULL);
 	if (*argv)
 	{
-		ft_array_destroy((void **)(*argv)->argv, (*argv)->size);
+		vector(&(*argv)->vec, V_DESTROY, TRUE, NULL);
 		free(*argv);
 	}
 	return ((*argv = NULL));
@@ -61,16 +85,17 @@ t_argv	*argv_destroy(t_argv **argv)
 
 void	argv_pretty_dump(t_argv *argv, int indent)
 {
-	int	i;
+	size_t	i;
 
-	if (argv->argc == 0)
+	assert(argv);
+	if (argv_get_size(argv) == 0)
 		return ;
-	dbg("%*s : %i\n", indent, "Argc", argv->argc);
-	dbg("%*s :\n", indent, "Argv");
+	dbg("%*s: %i\n", indent, "Argc ", argv_get_size(argv));
+	dbg("%*s: \n", indent, "Argv ");
 	i = 0;
-	while (i < argv->argc)
+	while (i < argv_get_size(argv))
 	{
-		dbg("%*s[%i] : %s\n", (int)(indent * 1.1), "", i, argv->argv[i]);
+		dbg("%*s[%i] : %s\n", (int)(indent) - 2, "", i, argv_get(argv, i));
 		i++;
 	}
 }

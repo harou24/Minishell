@@ -31,7 +31,7 @@ void	parse_perform_var_substitution(t_vector tokens,
 	parse_replace_tokens_with_token(tokens, var_sym, var_name, token);
 }
 
-t_bool	parse_is_variable(t_token *var_name)
+static t_bool	parse_can_be_variable_name(t_token *var_name)
 {
 	assert(var_name);
 	return (var_name && (var_name->type == WORD || var_name->type == SYM
@@ -44,7 +44,7 @@ t_bool	parse_expand_first_variable(t_vector tokens, t_token *var_sym)
 	t_token			*var_name;
 
 	var_name = journal_get(var_sym_index + 1);
-	if (!parse_is_variable(var_name))
+	if (!parse_can_be_variable_name(var_name))
 	{
 		var_sym->type = WORD;
 		journal_rebuild_tokens();

@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   executor_scheme_redirect.c                         :+:    :+:            */
+/*   executor_redirects.c                               :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: sverschu <sverschu@student.codam.n>          +#+                     */
 /*                                                   +#+                      */
@@ -19,12 +19,31 @@
 
 #include "filesystem.h"
 #include "ft_unistd.h"
-#include "process.h"
-#include "execscheme.h"
 #include "executor.h"
 
-#define CHILD 0
+t_bool	executor_handle_redirections_pre(t_execscheme *scheme)
+{
+	redir_std_push();
+	if (scheme->rel_type[PREV_R] == REL_PIPE && !redir_pipe_to_stdin(scheme->prev->pipe))
+		return (FALSE);
+	if (scheme->rel_type[NEXT_R] == REL_PIPE && !redir_stdout_to_pipe(scheme->pipe))
+		return (FALSE);
+	if (redir_has_redirections(scheme->redir) && !redir_perform_redirections(scheme->redir))
+		return (FALSE);
+	if (scheme->prev)
+		drop_pipe(scheme->prev->pipe);
+	drop_pipe(scheme->pipe);
+	return (TRUE);
+}
 
+t_bool	executor_handle_redirections_post(t_execscheme *scheme)
+{
+	redir_std_pop();
+	(void)scheme;
+	return (TRUE);
+}
+
+/*
 static void	child(t_execscheme *scheme)
 {
 	int	exitstatus;
@@ -78,34 +97,16 @@ static int	run_in_parent(t_execscheme *scheme)
 	return (exitstatus);
 }
 
-static int	parent(t_execscheme *scheme, pid_t childprocess)
-{
-	if (scheme->rel_type[PREV_R] == REL_PIPE)
-		drop_pipe(scheme->prev->pipe);
-	scheme->pid = childprocess;
-	return (0);
-}
 
 int	handler_scheme_redirection(t_execscheme *scheme)
 {
+	(void)scheme;
+	abort();
+	return (-1);
 	pid_t	pid;
 
 	if (!scheme->next || (scheme->rel_type[NEXT_R]
 			& REL_READ && !fs_exists(scheme->next->cmd->path)))
 		return (-1);
-	if (executor_should_run_in_parent(scheme))
-		return (run_in_parent(scheme));
-	pid = fork();
-	if (pid < 0)
-	{
-		dbg("Forking failed with error : %s\n", strerror(errno));
-		return (-1);
-	}
-	else if (pid == CHILD)
-	{
-		child(scheme);
-		exit(1);
-	}
-	else
-		return (parent(scheme, pid));
 }
+*/

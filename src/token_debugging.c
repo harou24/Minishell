@@ -18,12 +18,12 @@ static const char	*token_dump_type_continue(t_token_type_e type)
 		return ("NEWLINE");
 	if (type == SEMICOLON)
 		return ("SEMICOLON");
-	if (type == OP_READ)
-		return ("OP_READ");
-	if (type == OP_APPEND)
-		return ("OP_APPEND");
-	if (type == OP_WRITE)
-		return ("OP_WRITE");
+	if (type == LEFTSHIFT)
+		return ("READ");
+	if (type == RIGHTSHIFT)
+		return ("WRITE");
+	if (type == DOUBLERIGHTSHIFT)
+		return ("APPEND");
 	if (type == NULLBYTE)
 		return ("NULLBYTE");
 	if (type == NO_TYPE)

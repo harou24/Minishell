@@ -4,21 +4,21 @@
 
 int	builtin_unset(t_command *cmd)
 {
-	int	index;
-	int	exit_status;
+	const size_t	argc = argv_get_size(cmd->argv);
+	const char		**argv = argv_get_array(cmd->argv);
+	size_t			i;
 
-	if (cmd->argv->argc < 2)
+	if (argc < 2)
 	{
 		ft_dprintf(STDERR, "unset: not enough arguments");
-		return (-1);
+		return (1);
 	}
-	index = 1;
-	exit_status = EXIT_SUCCESS;
-	while (index < cmd->argv->argc)
+	i = 1;
+	while (i < argc)
 	{
-		if (!env_unset_s(cmd->argv->argv[index]))
-			exit_status = EXIT_FAILURE;
-		index++;
+		if (!env_unset_s(argv[i]))
+			return (1);
+		i++;
 	}
-	return (exit_status);
+	return (0);
 }

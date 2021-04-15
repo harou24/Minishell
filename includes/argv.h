@@ -13,19 +13,21 @@
 #ifndef ARGV_H
 # define ARGV_H
 
+# include "vector.h"
 # include "libft.h"
 
 typedef struct s_argv
 {
-	char			**argv;
-	int				argc;
-	int				size;
+	void			*vec;
 }					t_argv;
 
 char				*argv_get(t_argv *argv, int index);
 t_bool				argv_push(t_argv *argv, char *arg);
 
-t_argv				*argv_create(int size);
+const char			**argv_get_array(t_argv *argv);
+size_t				argv_get_size(t_argv *argv);
+
+t_argv				*argv_create(char *path);
 t_argv				*argv_destroy(t_argv **argv);
 
 void				argv_pretty_dump(t_argv *argv, int indent);
