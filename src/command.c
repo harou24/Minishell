@@ -18,15 +18,21 @@
 
 #include "command.h"
 
-t_command	*command_create(char *path, t_argv *argv)
+t_bool		command_push_argument(t_command *cmd, char *arg)
+{
+	return (argv_push(cmd->argv, arg));
+}
+
+t_command	*command_create(char *path)
 {
 	t_command	*cmd;
 
+	assert(path);
 	cmd = ft_calloc(sizeof(t_command), 1);
 	if (cmd)
 	{
 		cmd->path = path;
-		cmd->argv = argv;
+		cmd->argv = argv_create(ft_strdup(path));
 	}
 	return (cmd);
 }
@@ -47,7 +53,8 @@ t_command	*command_destroy(t_command **cmd)
 void	command_pretty_dump(t_command *cmd, int indent)
 {
 	assert(cmd);
-	dbg("%*s : %s\n", indent, "Path", cmd->path);
+	dbg("%*s:\n", indent, "Command ");
+	dbg("%*s: %s\n", indent, "Path ", cmd->path);
 	if (cmd->argv)
 		argv_pretty_dump(cmd->argv, indent);
 }
