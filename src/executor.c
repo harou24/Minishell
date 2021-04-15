@@ -29,7 +29,7 @@
 
 t_bool	executor_should_run_in_parent(t_execscheme *scheme)
 {
-	return ((scheme->op_type != OP_COMMAND && scheme->op_type != OP_PATH)
+	return ((scheme->op_type != OP_COMMAND)
 		|| scheme->op_type == OP_ASSIGNMENT);
 }
 
@@ -57,9 +57,6 @@ static int	executor_launch_processes(t_execscheme *scheme)
 		if (error != 0)
 			return (error);
 		scheme = scheme->next;
-		if (scheme && scheme->rel_type[PREV_R]
-			& (REL_READ | REL_WRITE | REL_APPEND))
-			scheme = scheme->next;
 	}
 	return (error);
 }

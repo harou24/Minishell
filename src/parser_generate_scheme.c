@@ -12,6 +12,7 @@
 
 #include <assert.h>
 #include <stdlib.h>
+#include <errno.h>
 
 #include "libft.h"
 
@@ -24,53 +25,60 @@ extern t_parser	*g_parser__;
 t_exec_op_type	parse_get_op_type_for_pattern(t_range area,
 						t_bash_pattern_type pat_type)
 {
-	t_exec_op_type	op_type;
-
-	if (pat_type == P_COMMAND || pat_type == P_PATH)
+	if (pat_type == P_COMMAND)
 	{
 		if (journal_get(area.begin)->type == SPACE)
 			area.begin++;
-		op_type = execscheme_get_op_type_for_token(journal_get(area.begin));
+		return(execscheme_get_op_type_for_token(journal_get(area.begin)));
 	}
 	else if (pat_type == P_ASSIGNMENT)
-		op_type = OP_ASSIGNMENT;
-	else if (pat_type == P_PATH)
-		op_type = OP_PATH;
-	else
-		op_type = OP_NO_TYPE;
-	return (op_type);
+		return (OP_ASSIGNMENT);
+	return (OP_NO_TYPE);
 }
 
-t_bool	execscheme_is_type_redirection(t_exec_relation_type rel_type)
+t_bool			parse_extract_redirection(t_redirection *redir, t_range *area)
 {
-	return (rel_type == REL_READ || rel_type == REL_WRITE || rel_type == REL_APPEND);
-}
+	char					*arg;
+	t_redirection_type	type;
 
-t_bool	parse_extract_redirections(t_execscheme *scheme, t_range *area)
-{
-	scheme->redirection_type = execscheme_get_relation_type_for_token(journal_get(area->begin));
-	dbg("token rel type: %s\n", execscheme_dump_relation_type(scheme->redirection_type));
-	while (area->begin <= area->end && execscheme_is_type_redirection(scheme->redirection_type))
+	if (token_is_redirection(journal_get(area->begin)))
 	{
-		abort();
-		if (scheme->redirection_type == REL_READ)
-		{
-			scheme->file[0] = parse_build_path(area);
-			if (!scheme->file[0])
-				return (FALSE);
-		}
-		else
-		{
-			scheme->file[1] = parse_build_path(area);
-			if (!scheme->file[1])
-				return (FALSE);
-		}
+		type = redir_get_type_for_token(journal_get(area->begin));
 		area->begin++;
-		scheme->redirection_type = execscheme_get_relation_type_for_token(journal_get(area->begin));
+		arg = parse_build_argument(area);
+		assert(arg);
+		return (redir_push(redir, type, arg));
 	}
+	return (TRUE);
+}
 
-	dbg("file 0 : %s\n", scheme->file[0]);
-	dbg("file 1 : %s\n", scheme->file[1]);
+t_bool			parse_extract_arguments(t_command *cmd, t_range *area)
+{
+	char	*arg;
+
+	if (token_is_alnum(journal_get(area->begin)) || token_is_assignment(journal_get(area->begin)))
+	{
+		arg = parse_build_argument(area);
+		assert(arg);
+		return (command_push_argument(cmd, arg));
+	}
+	return (TRUE);
+}
+
+t_bool			parse_extract_command_arguments(t_redirection *redir, t_command *cmd, t_range area)
+{
+	t_token *token;
+
+	token = journal_get(area.begin);
+	while (token && !token_is_relation(token) && area.begin <= area.end)
+	{
+		if (!parse_extract_redirection(redir, &area))
+			return (FALSE);
+		if (!parse_extract_arguments(cmd, &area))
+			return (FALSE);
+		area.begin++;
+		token = journal_get(area.begin);
+	}
 	return (TRUE);
 }
 
@@ -82,20 +90,16 @@ t_execscheme	*parse_build_execscheme(t_range area,
 	scheme = execscheme_create();
 	if (scheme)
 	{
-		if (!parse_extract_redirections(scheme, &area))
-			return (execscheme_destroy(&scheme));
-
-		NO!
-		
 		scheme->rel_type[NEXT_R] = execscheme_get_relation_type_for_token(
 				journal_get(area.end));
 		scheme->op_type = parse_get_op_type_for_pattern(area, pat_type);
-		scheme->cmd = parse_build_command(area);
-
-		THIS ->
-		scheme->redirections = parse_build_redirections(area);
-		SET g_parser__->matcharea accordingly!
-
+		scheme->cmd = command_create(parse_build_path(&area));
+		if (!parse_extract_command_arguments(scheme->redir, scheme->cmd, area))
+		{
+			dbg("Failed to extract command arguments!\n", "");
+			execscheme_destroy(&scheme);
+			return (NULL);
+		}
 		assert(scheme->cmd);
 	}
 	return (scheme);

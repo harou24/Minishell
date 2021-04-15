@@ -5,89 +5,137 @@
 /*                                                     +:+                    */
 /*   By: sverschu <sverschu@student.codam.n>          +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2021/04/13 21:05:29 by sverschu      #+#    #+#                 */
-/*   Updated: 2021/04/13 21:05:30 by sverschu      ########   odam.nl         */
+/*   Created: 2021/04/13 20:56:10 by sverschu      #+#    #+#                 */
+/*   Updated: 2021/04/13 20:56:17 by sverschu      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <assert.h>
 #include <stdlib.h>
 #include <errno.h>
-#include <unistd.h>
-#include <string.h>
-
-#include "debugger.h"
-#include "filesystem.h"
-#include "ft_unistd.h"
 
 #include "libft.h"
+#include "debugger.h"
 
-static int	g_fd__[2];
+#include "redirection.h"
 
-void	redirection_std_push(void)
+static const t_redirection_type	g_redirection_tab__[TOKEN_TYPE_SIZE] = {
+					[LEFTSHIFT] = RED_READ,
+					[DOUBLERIGHTSHIFT] = RED_APPEND,
+					[RIGHTSHIFT] = RED_WRITE,
+				};
+
+t_redirection_type redir_get_type_for_token(t_token *token)
 {
-	g_fd__[STDIN] = dup(STDIN);
-	g_fd__[STDOUT] = dup(STDOUT);
+	if (token->type >= TOKEN_TYPE_SIZE)
+	{
+		errno = ERANGE;
+		return (RED_NO_TYPE);
+	}
+	return (g_redirection_tab__[token->type]);
 }
 
-void	redirection_std_pop(void)
+char	*redir_get(t_redirection *redir, t_redirection_type type, size_t index)
 {
-	dup2(g_fd__[STDIN], STDIN);
-	dup2(g_fd__[STDOUT], STDOUT);
+	assert(redir);
+	return ((char *)vector(&redir->vec[type], V_PEEKAT, index, NULL));
 }
 
-t_bool	redirection_stdout_to_pipe(const char *fname,
-						t_bool should_append)
+t_bool	redir_push(t_redirection *redir, t_redirection_type type, char *fname)
 {
-	int			fd;
+	assert(redir);
+	return (vector(&redir->vec[type], V_PUSHBACK, 0, fname) != NULL);
+}
 
-	if (should_append)
-		fd = open(fname, O_WRONLY | O_CREAT | O_APPEND, 0644);
-	else
-		fd = open(fname, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (fd == -1)
+size_t	redir_get_size(t_redirection *redir, t_redirection_type type)
+{
+	assert(redir);
+	return (*(size_t *)vector(&redir->vec[type], V_SIZE, 0, NULL));
+}
+
+t_bool	redir_perform_redirection(t_redirection *redir, t_redirection_type type, size_t index)
+{
+	if (type == RED_APPEND)
+		return (redir_stdout_to_file(redir_get(redir, type, index), TRUE));
+	if (type == RED_WRITE)
+		return (redir_stdout_to_file(redir_get(redir, type, index), FALSE));
+	if (type == RED_READ)
+		return (redir_file_to_stdin(redir_get(redir, type, index)));
+	return (FALSE);
+}
+
+t_bool	redir_perform_redirections(t_redirection *redir)
+{
+	size_t	type_i;
+	size_t	size;
+
+	type_i = 0;
+	while (type_i < RED_TAB_SIZE)
 	{
-		dbg("Failing opening file{%s} for dupping to stdout, errno %s\n",
-			fname, strerror(errno));
-		return (FALSE);
+		size = redir_get_size(redir, type_i);
+		if (size > 0)
+		{
+			if (!redir_perform_redirection(redir, type_i, size - 1))
+				return (FALSE);
+		}
+		type_i++;
 	}
-	if (dup2(fd, STDOUT) == -1)
-	{
-		dbg("Failing dupping to stdout, errno %s\n", strerror(errno));
-		close(fd);
-		return (FALSE);
-	}
-	close (fd);
 	return (TRUE);
 }
 
-t_bool	redirection_file_to_stdin(const char *fname)
+t_bool	redir_has_redirections(t_redirection *redir)
 {
-	int			fd;
+	size_t	type_i;
 
-	fd = fs_open(fname, O_RDONLY);
-	if (fd == -1)
+	type_i = 0;
+	while (type_i < RED_TAB_SIZE)
 	{
-		dbg("Failing opening file{%s} for dupping to stdin, errno %s\n",
-			fname, strerror(errno));
-		return (FALSE);
+		if (redir_get_size(redir, type_i) > 0 )
+			return (TRUE);
+		type_i++;
 	}
-	if (dup2(fd, STDIN) == -1)
-	{
-		dbg("Failing dupping stdin, errno %s\n", strerror(errno));
-		close(fd);
-		return (FALSE);
-	}
-	close(fd);
-	return (TRUE);
+	return (FALSE);
 }
 
-t_bool	redirection_pipe_to_stdin(int pipe[2])
+t_redirection	*redir_create(void)
 {
-	if (dup2(pipe[PIPE_READ], STDIN) == -1)
+	const size_t	vec_size = 16;
+	t_redirection	*redir;
+	size_t			type_i;
+
+	redir = ft_calloc(sizeof(t_redirection), 1);
+	if (redir)
 	{
-		dbg("Failing dupping stdin, errno %s\n", strerror(errno));
-		return (FALSE);
+		type_i = 0;
+		while (type_i < RED_TAB_SIZE)
+		{
+			if (!vector(&redir->vec[type_i], V_CREATE, vec_size, NULL))
+			{
+				redir_destroy(&redir);
+				return (NULL);
+			}
+			type_i++;
+		}
 	}
-	drop_pipe(pipe);
-	return (TRUE);
+	return (redir);
+}
+
+t_redirection	*redir_destroy(t_redirection **redir)
+{
+	size_t		type_i;
+
+	if (!redir)
+		return (NULL);
+	if (*redir)
+	{
+		type_i = 0;
+		while (type_i < RED_TAB_SIZE)
+		{
+			if ((*redir)->vec[type_i])
+				vector(&(*redir)->vec[type_i], V_DESTROY, TRUE, NULL);
+			type_i++;
+		}
+		free(*redir);
+	}
+	return ((*redir = NULL));
 }

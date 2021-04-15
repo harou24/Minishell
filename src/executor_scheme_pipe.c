@@ -28,14 +28,10 @@ static void	child(t_execscheme *scheme)
 {
 	int	exitstatus;
 
-	if (dup2(scheme->pipe[PIPE_WRITE], STDOUT) == -1)
-		exit (1);
-	drop_pipe(scheme->pipe);
-	if (scheme->rel_type[PREV_R] == REL_PIPE)
-	{
-		if (!redirection_pipe_to_stdin(scheme->prev->pipe))
-			exit (1);
-	}
+	if (!executor_handle_redirections_pre(scheme))
+		exit (-1);
+	//if (dup2(scheme->pipe[PIPE_WRITE], STDOUT) == -1)
+	//	exit (1);
 	exitstatus = command_dispatch(scheme->op_type)(scheme->cmd);
 	dbg("FATAL: child process didn't exit! errno: %s\n", strerror(errno));
 	exit (exitstatus);
@@ -43,6 +39,7 @@ static void	child(t_execscheme *scheme)
 
 static int	parent(t_execscheme *scheme, pid_t childprocess)
 {
+	/* move this into redirection ? */
 	if (scheme->rel_type[PREV_R] == REL_PIPE)
 		close(scheme->prev->pipe[PIPE_WRITE]);
 	scheme->pid = childprocess;

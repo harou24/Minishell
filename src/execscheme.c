@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include <stdlib.h>
+#include <errno.h>
 #include "libft.h"
 #include "debugger.h"
 
@@ -18,7 +19,7 @@
 #include "journal.h"
 #include "execscheme.h"
 
-static const t_exec_relation_type	g_reltok_tab__[TOKEN_TYPE_SIZE] = {
+static const t_exec_relation_type	g_relation_tab__[TOKEN_TYPE_SIZE] = {
 					[WORD] = REL_SEQ,
 					[STRING] = REL_SEQ,
 					[LITERAL] = REL_SEQ,
@@ -29,18 +30,8 @@ static const t_exec_relation_type	g_reltok_tab__[TOKEN_TYPE_SIZE] = {
 					[PIPE] = REL_PIPE,
 					[NEWLINE] = REL_SEQ,
 					[SEMICOLON] = REL_SEQ,
-					[OP_READ] = REL_READ,
-					[OP_APPEND] = REL_APPEND,
-					[OP_WRITE] = REL_WRITE,
 					[NULLBYTE] = REL_SEQ,
 					[NO_TYPE] = REL_NO_TYPE
-				};
-
-static const t_exec_redirection_type	g_redirection_tab__[TOKEN_TYPE_SIZE] = {
-					[OP_READ] = RED_READ,
-					[OP_APPEND] = RED_APPEND,
-					[OP_WRITE] = RED_WRITE,
-					[NO_TYPE] = RED_NO_TYPE
 				};
 
 typedef struct s_optok__
@@ -77,17 +68,7 @@ t_exec_relation_type	execscheme_get_relation_type_for_token(t_token *token)
 	}
 	if (!token || token->type == NULLBYTE)
 		return (REL_END);
-	return (g_reltok_tab__[token->type]);
-}
-
-t_exec_redirection_type	execscheme_get_redirection_type_for_token(t_token *token)
-{
-	if (token->type >= TOKEN_TYPE_SIZE)
-	{
-		errno = ERANGE;
-		return (RED_NO_TYPE);
-	}
-	return (g_reltok_tab__[token->type]);
+	return (g_relation_tab__[token->type]);
 }
 
 t_exec_op_type	execscheme_get_op_type_for_token(t_token *token)
@@ -120,6 +101,7 @@ t_execscheme	*execscheme_create(void)
 	{
 		scheme->pipe[STDIN] = -1;
 		scheme->pipe[STDOUT] = -1;
+		scheme->redir = redir_create();
 	}
 	return (scheme);
 }
@@ -134,6 +116,7 @@ t_execscheme	*execscheme_destroy(t_execscheme **execscheme)
 		command_destroy(&(*execscheme)->cmd);
 		if ((*execscheme)->pid > 0)
 			p_signal((*execscheme)->pid, SIGTERM);
+		redir_destroy(&(*execscheme)->redir);
 		free(*execscheme);
 	}
 	return ((*execscheme = NULL));
