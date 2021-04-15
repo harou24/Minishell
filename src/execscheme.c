@@ -36,6 +36,13 @@ static const t_exec_relation_type	g_reltok_tab__[TOKEN_TYPE_SIZE] = {
 					[NO_TYPE] = REL_NO_TYPE
 				};
 
+static const t_exec_redirection_type	g_redirection_tab__[TOKEN_TYPE_SIZE] = {
+					[OP_READ] = RED_READ,
+					[OP_APPEND] = RED_APPEND,
+					[OP_WRITE] = RED_WRITE,
+					[NO_TYPE] = RED_NO_TYPE
+				};
+
 typedef struct s_optok__
 {
 	const t_exec_op_type	type;
@@ -63,8 +70,23 @@ void	execscheme_attach(t_execscheme *root, t_execscheme *scheme)
 
 t_exec_relation_type	execscheme_get_relation_type_for_token(t_token *token)
 {
+	if (token->type >= TOKEN_TYPE_SIZE)
+	{
+		errno = ERANGE;
+		return (REL_NO_TYPE);
+	}
 	if (!token || token->type == NULLBYTE)
 		return (REL_END);
+	return (g_reltok_tab__[token->type]);
+}
+
+t_exec_redirection_type	execscheme_get_redirection_type_for_token(t_token *token)
+{
+	if (token->type >= TOKEN_TYPE_SIZE)
+	{
+		errno = ERANGE;
+		return (RED_NO_TYPE);
+	}
 	return (g_reltok_tab__[token->type]);
 }
 
