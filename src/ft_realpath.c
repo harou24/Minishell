@@ -14,7 +14,7 @@
 #include <limits.h>
 #include <stdlib.h>
 
-char	*ft_realpath(char *path)
+char	*ft_realpath(const char *path)
 {
 	char	resolved_path[1024];
 
