@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   exec_bin.c                                         :+:    :+:            */
+/*   op_execbin.c                                       :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: sverschu <sverschu@student.codam.n>          +#+                     */
 /*                                                   +#+                      */
@@ -49,7 +49,7 @@ t_bool	is_relative_path(char *fname)
 	return (FALSE);
 }
 
-int	exec_bin(t_command *cmd)
+int	op_execbin(t_command *cmd)
 {
 	char		*abspath;
 
