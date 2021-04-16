@@ -1,6 +1,7 @@
 #include "bash_ops.h"
 #include "ft_printf.h"
 #include "libft.h"
+#include "string_processing.h"
 
 #define N_FLAG_POS 1
 
@@ -35,6 +36,7 @@ static void	print_for_argv(size_t argc, const char **argv)
 
 int	builtin_echo(t_command *cmd)
 {
+	argv_transform_escape_chars(cmd->argv);
 	print_for_argv(argv_get_size(cmd->argv), argv_get_array(cmd->argv));
 	return (0);
 }

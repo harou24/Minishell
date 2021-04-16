@@ -49,6 +49,8 @@ const char	*token_dump_type(t_token_type_e type)
 		return ("VARIABLE");
 	if (type == SPACE)
 		return ("SPACE");
+	if (type == ESCAPE_SPACE)
+		return ("ESCAPE_SPACE");
 	if (type == PIPE)
 		return ("PIPE");
 	return (token_dump_type_continue(type));

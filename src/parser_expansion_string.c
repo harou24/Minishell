@@ -47,7 +47,10 @@ void	parse_perform_string_substitution(t_vector tokens, t_token *first,
 	if (string != NULL)
 		token->string = string;
 	else
-		token->string = ft_strdup("");
+	{
+		token_destroy(token);
+		token = NULL;
+	}
 	parse_replace_tokens_with_token(tokens, first, last, token);
 }
 

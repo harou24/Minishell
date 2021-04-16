@@ -85,9 +85,11 @@ TEST_CASE( "basic lexing", "[lexer]" ) {
 										{ "\'\'",					"LITERAL LITERAL NULLBYTE " },
 										{ "a=5",					"WORD ASSIGNMENT WORD NULLBYTE " },
 										{ "$a$",					"VARIABLE WORD VARIABLE NULLBYTE " },
-										{ "a\n",					"WORD NEWLINE NULLBYTE " },
+										{ "a\\n",					"WORD ESCAPE WORD NULLBYTE " },
 										{ "\"\\\"\"",				"STRING ESCAPE STRING STRING NULLBYTE " },
-										{ "a   \n b",				"WORD SPACE NEWLINE SPACE WORD NULLBYTE " },
+										{ "a   \\n b",				"WORD SPACE ESCAPE WORD SPACE WORD NULLBYTE " },
+										{ "a\\ b",					"WORD ESCAPE_SPACE WORD NULLBYTE " },
+										{ "a\\\\\\ b",					"WORD ESCAPE ESCAPE_SPACE WORD NULLBYTE " },
 										{ "echo a | cat",			"WORD SPACE WORD SPACE PIPE SPACE WORD NULLBYTE " },
 										{ "echo a ; echo b",		"WORD SPACE WORD SPACE SEMICOLON SPACE WORD SPACE WORD NULLBYTE " },
 										{ "echo a >> f",			"WORD SPACE WORD SPACE APPEND SPACE WORD NULLBYTE " },
@@ -102,6 +104,8 @@ TEST_CASE( "basic lexing", "[lexer]" ) {
 		printf("%20s: %s\n", "KEY", tests[i].key);
 		printf("%20s: %s\n", "REF TOKENS", tests[i].tokens);
 		printf("%20s: %s\n", "RETURNED TOKENS", r);
+		if (strcmp(r, tests[i].tokens) != 0)
+			printf("Lexing failed for key: %s\n Expected: %s\n Got: %s\n", tests[i].key, tests[i].tokens, r);
 		CHECK(strcmp(r, tests[i].tokens) == 0);
 		free(r);
 	}

@@ -67,6 +67,7 @@ int	op_execbin(t_command *cmd)
 				cmd->path);
 			exit(128);
 		}
+		argv_transform_escape_chars(cmd->argv);
 		execve(abspath, (char *const *)argv_get_array(cmd->argv), environ_get());
 		dbg("execve failed for %s with error : %s\n", abspath, strerror(errno));
 		exit (1);
