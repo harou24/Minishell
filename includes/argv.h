@@ -32,4 +32,7 @@ t_argv				*argv_destroy(t_argv **argv);
 
 void				argv_pretty_dump(t_argv *argv, int indent);
 
+/* argv_transform.c */
+t_bool				argv_transform_escape_chars(t_argv *argv);
+
 #endif
