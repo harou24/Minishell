@@ -13,6 +13,9 @@
 #include <assert.h>
 #include <stdlib.h>
 
+#include "libft.h"
+#include "debugger.h"
+
 #include "parser.h"
 #include "env_singleton.h"
 
@@ -67,7 +70,7 @@ t_bool	parse_expand_first_string(t_vector tokens,
 static t_bool	is_string_in_matcharea(t_token_type_e string_type)
 {
 	return (parse_is_token_in_matcharea(journal_find_nth_type(string_type, 0))
-		&& parse_is_token_in_matcharea(journal_find_nth_type(string_type, 0)));
+		&& parse_is_token_in_matcharea(journal_find_nth_type(string_type, 1)));
 }
 
 t_bool	parse_expand_strings(t_token_type_e string_type)
