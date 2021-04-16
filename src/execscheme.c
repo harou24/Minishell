@@ -69,6 +69,8 @@ t_exec_op_type	execscheme_get_op_type_for_token(t_token *token)
 	char			*key;
 	size_t			i;
 
+	if (token_is_valid_argument(journal_get(token->index + 1)))
+		return (OP_COMMAND);
 	key = journal_get_string_for_token(token);
 	i = 0;
 	while (i < tabsize)
