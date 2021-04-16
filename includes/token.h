@@ -28,6 +28,7 @@ typedef enum e_token_type_e
 	ESCAPE,
 	VARIABLE,
 	SPACE,
+	ESCAPE_SPACE,
 	PIPE,
 	NEWLINE,
 	SEMICOLON,
@@ -65,5 +66,8 @@ t_bool				token_is_alnum(t_token *token);
 t_bool				token_is_space(t_token *token);
 t_bool				token_is_assignment(t_token *token);
 t_bool				token_is_escape(t_token *token);
+t_bool				token_is_escape_space(t_token *token);
+
+t_bool				token_is_valid_argument(t_token *token);
 
 #endif

@@ -63,3 +63,16 @@ t_bool	token_is_escape(t_token *token)
 {
 	return (token && token->type == ESCAPE);
 }
+
+t_bool	token_is_escape_space(t_token *token)
+{
+	return (token && token->type == ESCAPE_SPACE);
+}
+
+t_bool	token_is_valid_argument(t_token *token)
+{
+	return (token_is_alnum(token)
+	|| token_is_assignment(token)
+	|| token_is_escape(token)
+	|| token_is_escape_space(token));
+}
