@@ -36,7 +36,8 @@ TEST_CASE( "basics", "[bash_sym]" ) {
 									{"\'",						LITERAL},
 									{"=",						ASSIGNMENT},
 									{"\\",						ESCAPE},
-									{"\n",						NEWLINE},
+									{"\\ ",						ESCAPE_SPACE},
+									//{"\\n",						NEWLINE}, // no longer a lexing object
 									{";",						SEMICOLON},
 									{"<",						LEFTSHIFT},
 									{">>",						DOUBLERIGHTSHIFT},
@@ -46,6 +47,8 @@ TEST_CASE( "basics", "[bash_sym]" ) {
 
 	for (size_t i = 0; i < tsts_len; i++) {
 		t_tst tst = tsts[i];
+		if (bash_match(tst.str, strlen(tst.str)) != tst.type)
+			printf("Failed matcing teststring : '%s' to type %s\n", tst.str, token_dump_type(tst.type));
 		CHECK(bash_match(tst.str, strlen(tst.str)) == tst.type);
 	}
 }
