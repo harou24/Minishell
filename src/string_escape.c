@@ -47,6 +47,8 @@ char *extract_escape_chars(const char **str, char *nstr)
 	len = len_of_escape_chars(*str);
 	if (len % 2 == 0)
 		nstr = ft_strjoin_noreuse(nstr, ft_strsub(*str, 0, len / 2));
+	else if (*(*str + len) == '\0')
+		nstr = ft_strjoin_noreuse(nstr, ft_strsub(*str, 0, len / 2 + len % 2));
 	else
 		nstr = ft_strjoin_noreuse(nstr, ft_strsub(*str, 0, (len - 1) / 2));
 	*str = (char *)(*str + len);
