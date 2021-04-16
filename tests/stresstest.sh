@@ -161,6 +161,18 @@ declare -a testsArrayCmp=( \
 	'echo > build/stress.tmp multi file ; wc -l build/stress.tmp' \
 	'touch build/stress.tmp; echo hello > build/stress.tmp > build/stress2.tmp ; wc -l build/stress.tmp; wc -l build/stress2.tmp' \
 	'echo a b cd > build/stress.tmp multi file ; wc -l build/stress.tmp' \
+	'echo \t\t\t\t\t\t\t\t\t\tfoo\n' \
+	'echo 'je'"suis"charles\n' \
+	'echo\tfoo\t\t\t\t\t\t\n' \
+	'""""""""""""""""""""""""""""""""""""""""""""""""""""""""""echo bonjour\n' \
+	'echo  bonjour je suis  ] echo \ \ \ \ \ \ \ $A\ \ \ \ \ \ \n\' \
+	'export A=krakaka; echo \b\\o\\\nj\\\\\\\our\\je\\\\   ] echo [$A]\n' \
+	'export A=AAAAA B=BBBBB; echo $A$B$C\n; export C=CCCC;' \
+	'/bin/echo " \\\\\\\\ "\n' \
+	'"echo" $AAA""""""' \
+	'"echo""""""""" $AAA""""""' \
+	'"""""cat" $AAA""""""' \
+	'echo \\ '
 	)
 
 run_tests()
