@@ -64,5 +64,6 @@ t_bool				token_is_relation(t_token *token);
 t_bool				token_is_alnum(t_token *token);
 t_bool				token_is_space(t_token *token);
 t_bool				token_is_assignment(t_token *token);
+t_bool				token_is_escape(t_token *token);
 
 #endif

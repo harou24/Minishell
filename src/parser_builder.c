@@ -33,7 +33,7 @@ char	*parse_build_argument(t_range *matcharea)
 	arg = NULL;
 	token = journal_get(matcharea->begin);
 	while (token && matcharea->begin <= matcharea->end
-		&& (token_is_alnum(token) || token_is_assignment(token)))
+		&& (token_is_alnum(token) || token_is_assignment(token) || token_is_escape(token)))
 	{
 		arg = ft_strjoin_noreuse(arg, journal_get_string_for_token(token));
 		matcharea->begin++;

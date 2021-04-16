@@ -58,3 +58,8 @@ t_bool	token_is_assignment(t_token *token)
 {
 	return (token && token->type == ASSIGNMENT);
 }
+
+t_bool	token_is_escape(t_token *token)
+{
+	return (token && token->type == ESCAPE);
+}
