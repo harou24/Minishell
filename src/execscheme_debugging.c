@@ -27,6 +27,7 @@ static char	*g_op_types__[OP_TAB_SIZE] = {
 };
 
 static char	*g_relation_types__[REL_TAB_SIZE] = {
+		[REL_START] = "REL_START",
 		[REL_SEQ] = "REL_SEQ",
 		[REL_PIPE] = "REL_PIPE",
 		[REL_NO_TYPE] = "NO_TYPE",

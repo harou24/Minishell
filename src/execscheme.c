@@ -20,15 +20,7 @@
 #include "execscheme.h"
 
 static const t_exec_relation_type	g_relation_tab__[TOKEN_TYPE_SIZE] = {
-					[WORD] = REL_SEQ,
-					[STRING] = REL_SEQ,
-					[LITERAL] = REL_SEQ,
-					[ASSIGNMENT] = REL_SEQ,
-					[ESCAPE] = REL_SEQ,
-					[VARIABLE] = REL_SEQ,
-					[SPACE] = REL_SEQ,
 					[PIPE] = REL_PIPE,
-					[NEWLINE] = REL_SEQ,
 					[SEMICOLON] = REL_SEQ,
 					[NULLBYTE] = REL_SEQ,
 					[NO_TYPE] = REL_NO_TYPE
