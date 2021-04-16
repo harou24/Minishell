@@ -56,7 +56,7 @@ t_bool			parse_extract_arguments(t_command *cmd, t_range *area)
 {
 	char	*arg;
 
-	if (token_is_alnum(journal_get(area->begin)) || token_is_assignment(journal_get(area->begin)))
+	if (token_is_alnum(journal_get(area->begin)) || token_is_assignment(journal_get(area->begin)) || token_is_escape(journal_get(area->begin)))
 	{
 		arg = parse_build_argument(area);
 		assert(arg);
