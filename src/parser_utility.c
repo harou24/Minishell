@@ -65,10 +65,13 @@ void	parse_replace_tokens_with_token(t_vector tokens, t_token *first,
 		token_destroy(vector(&tokens, V_POPAT, index, NULL));
 		index--;
 	}
-	if (index_of_first < (ssize_t)journal_size())
-		vector(&tokens, V_PUSHAT, (size_t)index_of_first, token);
-	else
-		vector(&tokens, V_PUSHAT, journal_size(), token);
+	if (token != NULL)
+	{
+		if (index_of_first < (ssize_t)journal_size())
+			vector(&tokens, V_PUSHAT, (size_t)index_of_first, token);
+		else
+			vector(&tokens, V_PUSHAT, journal_size(), token);
+	}
 	assert(journal_size() > 0);
 	journal_rebuild_tokens();
 }
