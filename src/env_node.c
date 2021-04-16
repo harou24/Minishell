@@ -11,8 +11,8 @@ t_env_node	*env_node_create_from_pair(t_pair *pair, t_scope_e scope)
 	if (node)
 	{
 		node->environ_index = -1;
-		node->key = pair->f.key;
-		node->value = pair->s.value;
+		node->key = pair->u_f.key;
+		node->value = pair->u_s.value;
 		node->scope = scope;
 	}
 	return (node);

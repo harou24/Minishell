@@ -46,5 +46,5 @@ t_env_node	*env_get_next_node(t_env *env)
 	t_pair	pair;
 
 	pair = hm_get_seq(env->hm_store);
-	return ((t_env_node *)pair.s.value);
+	return ((t_env_node *)pair.u_s.value);
 }
