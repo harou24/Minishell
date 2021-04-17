@@ -88,7 +88,7 @@ int	_shell_exec(t_shell *shell, const char *command_string)
 	env_set_lasterror(0);
 	while (scheme)
 	{
-		execscheme_pretty_dump(scheme, 15);
+		execscheme_pretty_dump(scheme, 5);
 		error = execute(scheme);
 		env_set_lasterror(error);
 		scheme = parse(preparser_get_next_area());
