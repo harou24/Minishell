@@ -74,8 +74,7 @@ t_journal	*lex(const char *str)
 	if (!g_lex__)
 		return (NULL);
 	lex_clear();
-	//g_lex__->input = lexer_preprocess_string(str);
-	g_lex__->input = ft_strdup(str); // lexer_preprocess_string(str);
+	g_lex__->input = ft_strdup(str);
 	g_lex__->input_len = ft_strlen(g_lex__->input);
 	dbg("Lexing string: '%s'\n", g_lex__->input);
 	return (lex_build_journal(g_lex__->input));

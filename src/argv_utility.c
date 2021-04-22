@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   redirection_utility.c                              :+:    :+:            */
+/*   argv_utility.c                                     :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: sverschu <sverschu@student.codam.n>          +#+                     */
 /*                                                   +#+                      */
@@ -12,27 +12,37 @@
 
 #include <assert.h>
 #include <stdlib.h>
-#include <errno.h>
 
 #include "libft.h"
 #include "debugger.h"
 
-#include "redirection.h"
+#include "argv.h"
 
-char	*redir_get(t_redirection *redir, t_redirection_type type, size_t index)
+char	*argv_get(t_argv *argv, int index)
 {
-	assert(redir);
-	return ((char *)vector(&redir->vec[type], V_PEEKAT, index, NULL));
+	assert(argv);
+	return ((char *)vector(&argv->vec, V_PEEKAT, index, NULL));
 }
 
-t_bool	redir_push(t_redirection *redir, t_redirection_type type, char *fname)
+t_bool	argv_push(t_argv *argv, char *arg)
 {
-	assert(redir);
-	return (vector(&redir->vec[type], V_PUSHBACK, 0, fname) != NULL);
+	assert(argv);
+	assert(argv->vec);
+	if (!arg)
+		return (FALSE);
+	vector(&argv->vec, V_POPBACK, 0, NULL);
+	return (vector(&argv->vec, V_PUSHBACK, 0, arg)
+		&& vector(&argv->vec, V_PUSHBACK, 0, NULL));
 }
 
-size_t	redir_get_size(t_redirection *redir, t_redirection_type type)
+const char	**argv_get_array(t_argv *argv)
 {
-	assert(redir);
-	return (*(size_t *)vector(&redir->vec[type], V_SIZE, 0, NULL));
+	assert(argv);
+	return ((const char **)vector(&argv->vec, V_MEM, 0, NULL));
+}
+
+size_t	argv_get_size(t_argv *argv)
+{
+	assert(argv);
+	return (*(size_t *)vector(&argv->vec, V_SIZE, 0, NULL) - 1);
 }

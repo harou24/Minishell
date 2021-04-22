@@ -24,11 +24,14 @@
 t_bool	executor_handle_redirections_pre(t_execscheme *scheme)
 {
 	redir_std_push();
-	if (scheme->rel_type[PREV_R] == REL_PIPE && !redir_pipe_to_stdin(scheme->prev->pipe))
+	if (scheme->rel_type[PREV_R] == REL_PIPE
+		&& !redir_pipe_to_stdin(scheme->prev->pipe))
 		return (FALSE);
-	if (scheme->rel_type[NEXT_R] == REL_PIPE && !redir_stdout_to_pipe(scheme->pipe))
+	if (scheme->rel_type[NEXT_R] == REL_PIPE
+		&& !redir_stdout_to_pipe(scheme->pipe))
 		return (FALSE);
-	if (redir_has_redirections(scheme->redir) && !redir_perform_redirections(scheme->redir))
+	if (redir_has_redirections(scheme->redir)
+		&& !redir_perform_redirections(scheme->redir))
 		return (FALSE);
 	if (scheme->prev)
 		drop_pipe(scheme->prev->pipe);

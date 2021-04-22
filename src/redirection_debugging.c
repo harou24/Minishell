@@ -26,21 +26,24 @@ const char	*redir_dump_type(t_redirection_type type)
 	return ("NO_TYPE");
 }
 
-void redir_pretty_dump_for_type(t_redirection *redir, t_redirection_type type, int indent)
+void	redir_pretty_dump_for_type(
+			t_redirection *redir,
+			t_redirection_type type,
+			int indent)
 {
 	size_t	i;
-	
+
 	i = 0;
 	while (i < redir_get_size(redir, type))
 	{
-		dbg("%*s{%lu}: %s\n", (int)(indent + 1), redir_dump_type(type)
-			, i, redir_get(redir, type, i));
+		dbg("%*s{%lu}: %s\n", (int)(indent + 1), redir_dump_type(type),
+			i, redir_get(redir, type, i));
 		i++;
 	}
 	if (i == 0)
 	{
-		dbg("%*s : %s\n", (int)(indent + 1)
-			, redir_dump_type(type), "NO REDIRECTION");
+		dbg("%*s : %s\n", (int)(indent + 1),
+			redir_dump_type(type), "NO REDIRECTION");
 	}
 }
 

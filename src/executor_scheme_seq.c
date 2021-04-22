@@ -49,7 +49,6 @@ static int	run_in_parent(t_execscheme *scheme)
 
 static int	parent(t_execscheme *scheme, pid_t childprocess)
 {
-	/* can this be handled by redir ?*/
 	if (scheme->rel_type[PREV_R] == REL_PIPE)
 		drop_pipe(scheme->prev->pipe);
 	scheme->pid = childprocess;

@@ -1,34 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   argv_transform.c                                   :+:    :+:            */
+/*   redirection_std_stack.c                            :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: sverschu <sverschu@student.codam.n>          +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2021/04/13 20:56:10 by sverschu      #+#    #+#                 */
-/*   Updated: 2021/04/13 20:56:17 by sverschu      ########   odam.nl         */
+/*   Created: 2021/04/13 21:05:29 by sverschu      #+#    #+#                 */
+/*   Updated: 2021/04/13 21:05:30 by sverschu      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <assert.h>
 #include <stdlib.h>
+#include <errno.h>
+#include <unistd.h>
+#include <string.h>
 
-#include "vector.h"
-#include "libft.h"
 #include "debugger.h"
-#include "string_processing.h"
+#include "filesystem.h"
+#include "ft_unistd.h"
 
-#include "argv.h"
+#include "libft.h"
 
-static int	vec_transform_escapes(void **obj)
+static int	g_fd__[2];
+
+void	redir_std_push(void)
 {
-	if (*obj)
-		string_replace_escaped_chars_inline((char *)*obj);
-	return (1);
+	g_fd__[STDIN] = dup(STDIN);
+	g_fd__[STDOUT] = dup(STDOUT);
 }
 
-t_bool	argv_transform_escape_chars(t_argv *argv)
+void	redir_std_pop(void)
 {
-	return (vector(&argv->vec, V_TRANSFORM, 0, (void *)vec_transform_escapes)
-		== NULL);
+	dup2(g_fd__[STDIN], STDIN);
+	dup2(g_fd__[STDOUT], STDOUT);
 }

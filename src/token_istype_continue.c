@@ -18,35 +18,25 @@
 
 #include "token.h"
 
-t_bool	token_is_variable(t_token *token)
+t_bool	token_is_assignment(t_token *token)
 {
-	return (token && token->type == VARIABLE);
+	return (token && token->type == ASSIGNMENT);
 }
 
-t_bool	token_is_redirection(t_token *token)
+t_bool	token_is_escape(t_token *token)
 {
-	return (token
-		&& (token->type == LEFTSHIFT
-			|| token->type == RIGHTSHIFT
-			|| token->type == DOUBLERIGHTSHIFT));
+	return (token && token->type == ESCAPE);
 }
 
-t_bool	token_is_relation(t_token *token)
+t_bool	token_is_escape_space(t_token *token)
 {
-	return (token
-		&& (token->type == SEMICOLON
-			|| token->type == PIPE
-			|| token->type == NULLBYTE));
+	return (token && token->type == ESCAPE_SPACE);
 }
 
-t_bool	token_is_alnum(t_token *token)
+t_bool	token_is_valid_argument(t_token *token)
 {
-	return (token
-		&& (token->type == WORD
-			|| token->type == SYM));
-}
-
-t_bool	token_is_space(t_token *token)
-{
-	return (token && token->type == SPACE);
+	return (token_is_alnum(token)
+		|| token_is_assignment(token)
+		|| token_is_escape(token)
+		|| token_is_escape_space(token));
 }

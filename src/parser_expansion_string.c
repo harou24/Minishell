@@ -29,10 +29,6 @@ void	parse_perform_string_substitution(t_vector tokens, t_token *first,
 	size_t		index;
 	t_token		*token;
 
-	assert(first);
-	assert(last);
-	assert(tokens);
-	assert(subtokens);
 	token = token_create(range(first->range.begin, last->range.end), WORD);
 	index = 0;
 	string = NULL;
