@@ -66,4 +66,7 @@ void				parse_flush_tokens(t_range area);
 
 t_bool				parse_is_token_in_matcharea(t_token *token);
 
+t_bool				parse_extract_command_arguments(t_redirection *redir,
+						t_command *cmd, t_range area);
+
 #endif

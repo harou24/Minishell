@@ -28,10 +28,10 @@
 #  define DEBUG_FILE ""
 # endif
 
-t_bool				debug_init_tofile(const char *filename);
-t_bool				debug_init_tofd(int fd);
-void				debug_deinit(void);
-int					debug(const char *format, ...);
+t_bool	debug_init_tofile(const char *filename);
+t_bool	debug_init_tofd(int fd);
+void	debug_deinit(void);
+int		debug(const char *format, ...);
 
 # define DBG_FILENAME_LEN 60
 # define DBG_LINE_LEN 5
