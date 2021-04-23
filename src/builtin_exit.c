@@ -20,8 +20,6 @@ int	builtin_exit(t_command *cmd)
 	if (argv_get_size(cmd->argv) == 2)
 	{
 		exit_status = ft_atoi(argv_get(cmd->argv, 1));
-		if (exit_status > 255)
-			exit (255);
 		exit (exit_status);
 	}
 	else if (argv_get_size(cmd->argv) == 1)

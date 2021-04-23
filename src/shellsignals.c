@@ -54,7 +54,7 @@ void	_shell_manage_prompt_interrupts(int *last_error, char *line)
 {
 	if (_shell_received_signal() == SIGINT)
 	{
-		printf("\n");
+		ft_printf("\n");
 		*last_error = 130;
 	}
 	else if (line == NULL)
