@@ -172,7 +172,13 @@ declare -a testsArrayCmp=( \
 	'"echo" $AAA""""""' \
 	'"echo""""""""" $AAA""""""' \
 	'"""""cat" $AAA""""""' \
-	'echo \\ '
+	'echo \\ ' \
+	'exit' \
+	'exit 0' \
+	'exit 1' \
+	'exit 255' \
+	'exit 256' \
+	'exit 4200' \
 	)
 
 run_tests()
