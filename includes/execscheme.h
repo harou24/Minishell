@@ -69,7 +69,8 @@ t_exec_relation_type	execscheme_get_relation_type_for_token(t_token *token);
 t_exec_op_type			execscheme_get_op_type_for_token(t_token *token);
 
 const char				*execscheme_dump_op_type(t_exec_op_type type);
-const char				*execscheme_dump_relation_type(t_exec_relation_type type);
+const char				*execscheme_dump_relation_type(
+							t_exec_relation_type type);
 
 void					execscheme_pretty_dump(t_execscheme *root, int indent);
 

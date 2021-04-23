@@ -18,7 +18,7 @@
 
 #include "command.h"
 
-t_bool		command_push_argument(t_command *cmd, char *arg)
+t_bool	command_push_argument(t_command *cmd, char *arg)
 {
 	return (argv_push(cmd->argv, arg));
 }

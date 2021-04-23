@@ -39,6 +39,6 @@ t_lex		*lex_create(void);
 t_lex		*lex_destroy(t_lex **lex);
 
 /* lexer_preprocessing.c */
-char *lexer_preprocess_string(const char *str);
+char		*lexer_preprocess_string(const char *str);
 
 #endif

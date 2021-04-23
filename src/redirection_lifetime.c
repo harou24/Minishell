@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   redirection_utility.c                              :+:    :+:            */
+/*   redirection_lifetime.c                             :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: sverschu <sverschu@student.codam.n>          +#+                     */
 /*                                                   +#+                      */
@@ -19,20 +19,45 @@
 
 #include "redirection.h"
 
-char	*redir_get(t_redirection *redir, t_redirection_type type, size_t index)
+t_redirection	*redir_create(void)
 {
-	assert(redir);
-	return ((char *)vector(&redir->vec[type], V_PEEKAT, index, NULL));
+	const size_t	vec_size = 16;
+	t_redirection	*redir;
+	size_t			type_i;
+
+	redir = ft_calloc(sizeof(t_redirection), 1);
+	if (redir)
+	{
+		type_i = 0;
+		while (type_i < RED_TAB_SIZE)
+		{
+			if (!vector(&redir->vec[type_i], V_CREATE, vec_size, NULL))
+			{
+				redir_destroy(&redir);
+				return (NULL);
+			}
+			type_i++;
+		}
+	}
+	return (redir);
 }
 
-t_bool	redir_push(t_redirection *redir, t_redirection_type type, char *fname)
+t_redirection	*redir_destroy(t_redirection **redir)
 {
-	assert(redir);
-	return (vector(&redir->vec[type], V_PUSHBACK, 0, fname) != NULL);
-}
+	size_t		type_i;
 
-size_t	redir_get_size(t_redirection *redir, t_redirection_type type)
-{
-	assert(redir);
-	return (*(size_t *)vector(&redir->vec[type], V_SIZE, 0, NULL));
+	if (!redir)
+		return (NULL);
+	if (*redir)
+	{
+		type_i = 0;
+		while (type_i < RED_TAB_SIZE)
+		{
+			if ((*redir)->vec[type_i])
+				vector(&(*redir)->vec[type_i], V_DESTROY, TRUE, NULL);
+			type_i++;
+		}
+		free(*redir);
+	}
+	return ((*redir = NULL));
 }

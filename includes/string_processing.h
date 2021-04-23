@@ -1,7 +1,7 @@
 #ifndef STRING_PROCESSING_H
-#define STRING_PROCESSING_H
+# define STRING_PROCESSING_H
 
-#include "libft.h"
+# include "libft.h"
 
 /* string_escape.c */
 char	*string_replace_escaped_chars(const char *str);

@@ -40,7 +40,7 @@ size_t	len_until_escape_char(const char *str)
 	return (ft_strchr(str, '\\') - str);
 }
 
-char *extract_escape_chars(const char **str, char *nstr)
+char	*extract_escape_chars(const char **str, char *nstr)
 {
 	size_t	len;
 

@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   redirection_utility.c                              :+:    :+:            */
+/*   argv_debugging.c                                   :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: sverschu <sverschu@student.codam.n>          +#+                     */
 /*                                                   +#+                      */
@@ -12,27 +12,25 @@
 
 #include <assert.h>
 #include <stdlib.h>
-#include <errno.h>
 
 #include "libft.h"
 #include "debugger.h"
 
-#include "redirection.h"
+#include "argv.h"
 
-char	*redir_get(t_redirection *redir, t_redirection_type type, size_t index)
+void	argv_pretty_dump(t_argv *argv, int indent)
 {
-	assert(redir);
-	return ((char *)vector(&redir->vec[type], V_PEEKAT, index, NULL));
-}
+	size_t	i;
 
-t_bool	redir_push(t_redirection *redir, t_redirection_type type, char *fname)
-{
-	assert(redir);
-	return (vector(&redir->vec[type], V_PUSHBACK, 0, fname) != NULL);
-}
-
-size_t	redir_get_size(t_redirection *redir, t_redirection_type type)
-{
-	assert(redir);
-	return (*(size_t *)vector(&redir->vec[type], V_SIZE, 0, NULL));
+	assert(argv);
+	if (argv_get_size(argv) == 0)
+		return ;
+	dbg("%*s: %i\n", indent, "Argc ", argv_get_size(argv));
+	dbg("%*s: \n", indent, "Argv ");
+	i = 0;
+	while (i < argv_get_size(argv))
+	{
+		dbg("%*s[%i] : %s\n", (int)(indent) - 2, "", i, argv_get(argv, i));
+		i++;
+	}
 }
