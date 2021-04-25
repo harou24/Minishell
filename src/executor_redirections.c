@@ -24,7 +24,7 @@
 t_bool	executor_handle_redirections_pre(t_execscheme *scheme)
 {
 	redir_std_push();
-	if (scheme->rel_type[PREV_R] == REL_PIPE
+	if (scheme->rel_type[PREV_R] == REL_PIPE && scheme->op_type == OP_COMMAND
 		&& !redir_pipe_to_stdin(scheme->prev->pipe))
 		return (FALSE);
 	if (scheme->rel_type[NEXT_R] == REL_PIPE
