@@ -123,6 +123,7 @@ declare -a testsArrayCmp=( \
 	'ls -l ./src| cat ' \
 	'ls -l ./src| cat ; echo a' \
 	'ls -l ./src; echo $?' \
+	'ls -l | echo b' \
 	'  ls -l ./src| cat ' \
 	'  ls -l   ./src| cat ' \
 	'  cat < ./minimake.sh' \
@@ -172,6 +173,7 @@ declare -a testsArrayCmp=( \
 	'"echo" $AAA""""""' \
 	'"echo""""""""" $AAA""""""' \
 	'"""""cat" $AAA""""""' \
+	'echo a | echo b" , "ls | echo b' \
 	'echo \\ ' \
 	'exit' \
 	'exit 0' \
