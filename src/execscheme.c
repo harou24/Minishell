@@ -15,6 +15,7 @@
 #include "libft.h"
 #include "debugger.h"
 
+#include "ft_unistd.h"
 #include "process.h"
 #include "journal.h"
 #include "execscheme.h"
@@ -111,6 +112,7 @@ t_execscheme	*execscheme_destroy(t_execscheme **execscheme)
 		if ((*execscheme)->pid > 0)
 			p_signal((*execscheme)->pid, SIGTERM);
 		redir_destroy(&(*execscheme)->redir);
+		drop_pipe((*execscheme)->pipe);
 		free(*execscheme);
 	}
 	return ((*execscheme = NULL));

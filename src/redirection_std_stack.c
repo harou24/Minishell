@@ -33,4 +33,6 @@ void	redir_std_pop(void)
 {
 	dup2(g_fd__[STDIN], STDIN);
 	dup2(g_fd__[STDOUT], STDOUT);
+	close(g_fd__[STDIN]);
+	close(g_fd__[STDOUT]);
 }

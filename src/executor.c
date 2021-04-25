@@ -29,8 +29,7 @@
 
 t_bool	executor_should_run_in_parent(t_execscheme *scheme)
 {
-	return ((scheme->op_type != OP_COMMAND)
-		|| scheme->op_type == OP_ASSIGNMENT);
+	return (scheme->op_type != OP_COMMAND);
 }
 
 int	executor_launch_scheme(t_execscheme *scheme)
