@@ -16,17 +16,19 @@ void	prompt_destroy(t_prompt *_prompt)
 	free(_prompt);
 }
 
-t_prompt 	*prompt_create(const char *_username, const char *_hostname)
+t_prompt 	*prompt_create(const char *username, const char *hostname)
 {
 	t_prompt	*prompt;
 
-	assert(_username);
-	assert(_hostname);
+	if (!username)
+		username = "NOBODY";
+	if (!hostname)
+		username = "LOCALHOST";
 	prompt = ft_calloc(sizeof(t_prompt), 1);
 	if (!prompt)
 		return (NULL);
-	prompt->username = ft_strdup(_username);
-	prompt->hostname = ft_strdup(_hostname);
+	prompt->username = ft_strdup(username);
+	prompt->hostname = ft_strdup(hostname);
 	prompt->error_code = 0;
 	prompt->buffer = ft_calloc(sizeof(char), __PROMPT_BUFF_SIZE);
 	prompt->current_path = fs_get_cur_dir_name();
