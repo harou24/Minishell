@@ -16,3 +16,6 @@
 [submodule "extern/libpair"]
 	path = extern/libpair
 	url = https://github.com/harou24/pair.git
+[submodule "extern/libshiva"]
+	path = extern/libshiva
+	url = https://github.com/s-t-a-n/shiva.git
