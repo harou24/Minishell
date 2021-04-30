@@ -32,7 +32,9 @@ char	*get_relative_path(char *fname)
 
 t_bool	is_absolute_path(char *fname)
 {
-	return (ft_strncmp(fname, "./", 2) == 0 || ft_strncmp(fname, "/", 1) == 0);
+	return (ft_strncmp(fname, "./", 2) == 0
+		|| ft_strncmp(fname, "../", 2) == 0
+		|| ft_strncmp(fname, "/", 1) == 0);
 }
 
 t_bool	is_relative_path(char *fname)
