@@ -15,7 +15,7 @@ set_property(TARGET minishell PROPERTY C_STANDARD 90)
 target_include_directories(minishell PUBLIC ../includes)
 
 # This depends on (header only) boost
-target_link_libraries(minishell PRIVATE ft vector hashmap gnl printf pair)
+target_link_libraries(minishell PRIVATE ft vector hashmap gnl printf pair shiva-debugger)
 
 # IDEs should put the headers in a nice place
 source_group(
