@@ -181,6 +181,8 @@ declare -a testsArrayCmp=( \
 	'exit 255' \
 	'exit 256' \
 	'exit 4200' \
+	'echo ";"; echo a' \
+	'__A=5; echo $__A;' \
 	)
 
 run_tests()
