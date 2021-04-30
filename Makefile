@@ -16,15 +16,15 @@ MINIMAKE = ./minimake.sh
 
 all: $(NAME)
 
-cmake:
+cmake_RULE:
 	@which cmake || { [[ `uname` == "Darwin" ]] && brew install cmake; } \
 		|| { echo "Install cmake first."; exit 1; }
 
-$(NAME): cmake
+$(NAME): cmake_RULE
 	@$(MINIMAKE) release
-debug: cmake
+debug: cmake_RULE
 	@$(MINIMAKE) debug
-test: cmake
+test: cmake_RULE
 	@$(MINIMAKE) test
 
 clean:
@@ -39,4 +39,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY = cmake clean fclean re $(NAME)
+.PHONY = clean fclean re $(NAME)
