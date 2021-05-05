@@ -3,6 +3,9 @@
 #include "ft_printf.h"
 #include "prompt.h"
 
+#define __NB_BYTES 100
+#define __BUFFER_SIZE 2000
+
 static char	*__adjustedbuffer(t_prompt *_prompt)
 {
 	if (_prompt->error_code == 0)
@@ -33,12 +36,16 @@ void	prompt_set_error_code(t_prompt *_prompt, int _error_code)
 char	*prompt_read(void)
 {
 	char	*command_line;
+	int		nb_bytes;
+	char	buff[__BUFFER_SIZE];
 
 	command_line = NULL;
-	if (!(get_next_line(STDIN, &command_line) > 0))
+	do
 	{
-		free(command_line);
-		return (NULL);
+		nb_bytes = read(STDIN, buff, __NB_BYTES);
+		buff[nb_bytes] = 0;
 	}
+	while(!ft_strcmp(buff,"\n"));
+	command_line = ft_strdup(buff);
 	return (command_line);
 }
