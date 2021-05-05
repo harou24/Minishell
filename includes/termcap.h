@@ -11,6 +11,8 @@ typedef struct		s_termcap
 	char			*ce;
 }					t_termcap;
 
+t_termcap	*termcap_create(void);
 int	termcap_init(t_termcap *termcap);
-
+void	termcap_destroy(t_termcap *termcap);
+int	ft_putchar(int c);
 #endif

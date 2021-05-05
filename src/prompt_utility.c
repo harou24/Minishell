@@ -2,6 +2,7 @@
 #include "get_next_line.h"
 #include "ft_printf.h"
 #include "prompt.h"
+#include "termcap.h"
 
 #define __NB_BYTES 100
 #define __BUFFER_SIZE 2000
@@ -38,14 +39,29 @@ char	*prompt_read(void)
 	char	*command_line;
 	int		nb_bytes;
 	char	buff[__BUFFER_SIZE];
+	t_termcap	termcap;
 
 	command_line = NULL;
+	if(!termcap_init(&termcap))
+		return (NULL);
 	do
 	{
 		nb_bytes = read(STDIN, buff, __NB_BYTES);
 		buff[nb_bytes] = 0;
+		if (!ft_strcmp(buff, "\e[A"))
+		{
+			write(STDIN, "prev", 4);
+
+		}
+		else if (!ft_strcmp(buff, "\e[B"))
+		{
+			write(STDIN, "next", 4);
+
+		}
+		else
+			write(STDIN, buff, nb_bytes);
+		command_line = ft_strjoin(command_line, buff);
 	}
-	while(!ft_strcmp(buff,"\n"));
-	command_line = ft_strdup(buff);
+	while(ft_strcmp(buff,"\n"));
 	return (command_line);
 }
