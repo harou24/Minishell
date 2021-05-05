@@ -58,6 +58,10 @@ char	*prompt_read(void)
 			write(STDIN, "next", 4);
 
 		}
+		else if (!ft_strcmp(buff, "\177"))
+		{
+			tputs(tgetstr("cl", NULL), STDOUT, ft_putchar);
+		}
 		else
 			write(STDIN, buff, nb_bytes);
 		command_line = ft_strjoin(command_line, buff);
