@@ -3,7 +3,6 @@
 #include "ft_printf.h"
 #include "prompt.h"
 #include "termcap.h"
-#include "cursor.h"
 
 #define __NB_BYTES 100
 #define __BUFFER_SIZE 2000
