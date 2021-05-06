@@ -6,7 +6,7 @@
 /*   By: sverschu <sverschu@student.codam.n>          +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/04/13 21:04:39 by sverschu      #+#    #+#                 */
-/*   Updated: 2021/04/13 21:04:44 by sverschu      ########   odam.nl         */
+/*   Updated: 2021/05/06 19:12:14 by haachtch      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,5 +50,5 @@ char	*prompt(int last_error)
 	prompt_set_error_code(g_prompt__, last_error);
 	prompt_update(g_prompt__);
 	prompt_print(g_prompt__);
-	return (prompt_read());
+	return (prompt_read(g_prompt__));
 }

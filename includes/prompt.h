@@ -1,6 +1,8 @@
 #ifndef PROMPT_H
 # define PROMPT_H
 
+# include "history.h"
+
 typedef struct s_prompt
 {
 	char		*username;
@@ -15,11 +17,12 @@ typedef struct s_prompt
 	int			at_index;
 	int			colon_index;
 	int			bracket_index;
+	t_history	*history;
 }				t_prompt;
 
 t_prompt	*prompt_create(const char *_username, const char *_hostname);
 void		prompt_destroy(t_prompt *_prompt);
-char		*prompt_read(void);
+char		*prompt_read(t_prompt *prompt);
 void		prompt_set_error_code(t_prompt *_prompt, int _error_code);
 
 /* internal functions */

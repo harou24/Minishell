@@ -34,12 +34,13 @@ void	prompt_set_error_code(t_prompt *_prompt, int _error_code)
 	_prompt->error_code = _error_code;
 }
 
-char	*prompt_read(void)
+char	*prompt_read(t_prompt *prompt)
 {
 	char	*command_line;
 	int		nb_bytes;
 	char	buff[__BUFFER_SIZE];
 	t_termcap	termcap;
+	static int command_count;
 	
 	command_line = NULL;
 	if(!termcap_init(&termcap))
@@ -71,5 +72,8 @@ char	*prompt_read(void)
 		}
 	}
 	while(ft_strcmp(buff,"\n"));
+	history_add(prompt->history, ft_itoa(command_count), command_line);
+	command_count++;
+	history_print(prompt->history);
 	return (command_line);
 }
