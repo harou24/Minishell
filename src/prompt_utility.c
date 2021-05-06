@@ -60,7 +60,7 @@ char	*prompt_read(void)
 		}
 		else if (!ft_strcmp(buff, "\177"))
 		{
-			tputs(tgetstr("cl", NULL), STDOUT, ft_putchar);
+			tputs(tgetstr("dc", 0), 1, ft_putchar);
 		}
 		else
 			write(STDIN, buff, nb_bytes);
