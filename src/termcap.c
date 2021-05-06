@@ -9,14 +9,6 @@ int	ft_putchar(int c)
 	return(write(STDOUT, &c, 1));
 }
 
-t_termcap	*termcap_create()
-{
-	t_termcap	*termcap;
-
-	termcap = (t_termcap *)malloc(sizeof(t_termcap));
-	return (termcap);
-}
-
 int	termcap_init(t_termcap *termcap)
 {
 	char	*term_name;
@@ -34,7 +26,18 @@ int	termcap_init(t_termcap *termcap)
 	return (1);
 }
 
-void	termcap_destroy(t_termcap *termcap)
+void	termcap_arrow_up(void)
 {
-	free(termcap);
+	write(STDIN, "prev", 4);
+}
+
+void	termcap_arrow_down(void)
+{
+	write(STDIN, "next", 4);
+}
+
+void	termcap_backspace(void)
+{
+	tputs(tgetstr("le", 0), 1, ft_putchar);
+	tputs(tgetstr("dc", 0), 1, ft_putchar);
 }

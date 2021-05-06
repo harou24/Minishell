@@ -3,16 +3,20 @@
 
 # include <term.h>
 
+# define UP "\e[A"
+# define DOWN "\e[B"
+# define BACKSPACE "\177"
+
 typedef struct		s_termcap
 {
 	struct termios	term;
-	struct termios	save;
-	char			*cm;
-	char			*ce;
 }					t_termcap;
 
-t_termcap	*termcap_create(void);
-int	termcap_init(t_termcap *termcap);
-void	termcap_destroy(t_termcap *termcap);
-int	ft_putchar(int c);
+int		termcap_init(t_termcap *termcap);
+int		termcap_putchar(int c);
+
+void	termcap_arrow_up(void);
+void	termcap_arrow_down(void);
+void	termcap_backspace(void);
+
 #endif
