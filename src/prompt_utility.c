@@ -3,6 +3,7 @@
 #include "ft_printf.h"
 #include "prompt.h"
 #include "termcap.h"
+#include "history.h"
 
 static char	*__adjustedbuffer(t_prompt *_prompt)
 {
@@ -31,7 +32,7 @@ void	prompt_set_error_code(t_prompt *_prompt, int _error_code)
 	_prompt->error_code = _error_code;
 }
 
-char	*handle_buffer(char *buffer, char *command_line)
+char	*handle_buffer(char *buffer, char *command_line, t_prompt *prompt)
 {
 	if (ft_isprint(buffer[0]))
 	{
@@ -39,8 +40,13 @@ char	*handle_buffer(char *buffer, char *command_line)
 		write(1, buffer, 1);
 	}
 	else if (buffer[0] == 27 && buffer[1] == 91 && buffer[2] == 65)
-	{	
-		ft_printf("arrow_up\n");
+	{
+		free(command_line);
+		command_line = ft_strdup(history_get(prompt->hist));
+		termcap_execute("dl");
+		tputs(tgoto(tgetstr("ch", NULL), 0, 0), 1, termcap_putchar);
+		prompt_print(prompt);
+		ft_printf("%s", command_line);
 	}
 	else if (buffer[0] == 27 && buffer[1] == 91 && buffer[2] == 66)
 	{	
@@ -59,7 +65,12 @@ char	*handle_buffer(char *buffer, char *command_line)
 	return command_line;
 }
 
-char	*prompt_read(void)
+void	prompt_add_to_history(t_prompt *prompt, char *cmd)
+{
+	history_add(prompt->hist, cmd);
+}
+
+char	*prompt_read(t_prompt *prompt)
 {
 	char	*command_line;
 	t_termcap	term;
@@ -72,7 +83,7 @@ char	*prompt_read(void)
 	{
 		nb_bytes = read(STDIN, buffer, 15);
 		buffer[nb_bytes] = 0;
-		command_line = handle_buffer(buffer, command_line);
+		command_line = handle_buffer(buffer, command_line, prompt);
 	}
 	while (ft_strcmp(buffer, "\n"));
 	return (command_line);

@@ -6,7 +6,7 @@
 /*   By: sverschu <sverschu@student.codam.n>          +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/04/13 21:10:25 by sverschu      #+#    #+#                 */
-/*   Updated: 2021/04/13 21:10:26 by sverschu      ########   odam.nl         */
+/*   Updated: 2021/05/07 19:20:27 by haachtch      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,5 +20,6 @@ t_prompt	*prompt_init(void);
 void		prompt_deinit(t_prompt **prompt);
 
 char		*prompt(int last_error);
+t_prompt	*prompt_get(void);
 
 #endif

@@ -28,7 +28,6 @@ t_bool	termcap_backspace(void)
 	return (TRUE);
 }
 
-
 int	termcap_init(t_termcap *termcap)
 {
 	char	*term_name;
@@ -45,3 +44,4 @@ int	termcap_init(t_termcap *termcap)
 	tgetent(NULL, term_name);
 	return (1);
 }
+
