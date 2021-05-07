@@ -51,18 +51,15 @@ char	*prompt_read(t_prompt *prompt)
 		buff[nb_bytes] = 0;
 		if (!ft_strcmp(buff, UP))
 		{
-			termcap_arrow_up();
 		}
 		else if (!ft_strcmp(buff, DOWN))
 		{
-			termcap_arrow_down();
+
 		}
 		else if (!ft_strcmp(buff, BACKSPACE))
 		{
 			if (command_line && ft_strlen(command_line) > 0)
 			{
-				command_line[ft_strlen(command_line) - 1] = '\0';
-				termcap_backspace();
 			}
 		}
 		else

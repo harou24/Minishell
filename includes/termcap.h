@@ -9,14 +9,19 @@
 
 typedef struct		s_termcap
 {
-	struct termios	term;
-}					t_termcap;
+	char		*buffer;
+	char		*line;
+	int		cursor;
+	int		enter;
+	t_history	*current;
+}				t_termcap;
 
-int		termcap_init(t_termcap *termcap);
+int		termcap_init(t_termcap *term);
 int		termcap_putchar(int c);
 
-void	termcap_arrow_up(void);
-void	termcap_arrow_down(void);
-void	termcap_backspace(void);
+void		termcap_handle_key(t_termcap *term, char *buffer);
+void		termcap_print_cursor(t_termcap *term);
+
+
 
 #endif
