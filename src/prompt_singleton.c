@@ -6,7 +6,7 @@
 /*   By: sverschu <sverschu@student.codam.n>          +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/04/13 21:04:39 by sverschu      #+#    #+#                 */
-/*   Updated: 2021/05/07 19:20:20 by haachtch      ########   odam.nl         */
+/*   Updated: 2021/05/08 15:17:44 by haachtch      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,8 @@ char	*prompt(int last_error)
 	prompt_update(g_prompt__);
 	prompt_print(g_prompt__);
 	cmd = prompt_read(g_prompt__);
-	prompt_add_to_history(g_prompt__, ft_strdup(cmd));
+	if (ft_strlen(cmd))
+		prompt_add_to_history(g_prompt__, ft_strdup(cmd));
 	return (cmd);
 }
 

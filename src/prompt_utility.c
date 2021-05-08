@@ -34,25 +34,30 @@ void	prompt_set_error_code(t_prompt *_prompt, int _error_code)
 
 char	*handle_buffer(char *buffer, char *command_line, t_prompt *prompt)
 {
-	if (ft_isprint(buffer[0]))
+	if (termcap_is_key_printable(buffer))
 	{
 		command_line = ft_strjoin(command_line, buffer);
 		write(1, buffer, 1);
 	}
-	else if (buffer[0] == 27 && buffer[1] == 91 && buffer[2] == 65)
+	else if (termcap_is_key_arrow_up(buffer) && prompt->hist->size != 0)
 	{
+//		ft_printf("index->%d\n", prompt->hist->current_index);
 		free(command_line);
-		command_line = ft_strdup(history_get(prompt->hist));
-		termcap_execute("dl");
-		tputs(tgoto(tgetstr("ch", NULL), 0, 0), 1, termcap_putchar);
+		command_line = ft_strdup(history_get_next_cmd(prompt->hist));
+		termcap_clean_line();
 		prompt_print(prompt);
 		ft_printf("%s", command_line);
 	}
-	else if (buffer[0] == 27 && buffer[1] == 91 && buffer[2] == 66)
+	else if (termcap_is_key_arrow_down(buffer) && prompt->hist->size != 0  && prompt->hist->current_index != prompt->hist->size - 1)
 	{	
-		ft_printf("arrow_down\n");
+//		ft_printf("index->%d\n", prompt->hist->current_index);
+		free(command_line);
+		command_line = ft_strdup(history_get_prev_cmd(prompt->hist));
+		termcap_clean_line();
+		prompt_print(prompt);
+		ft_printf("%s", command_line);
 	}
-	else if (buffer[0] == 127)
+	else if (termcap_is_key_backspace(buffer))
 	{
 		if (command_line && ft_strlen(command_line) > 0)
 		{
@@ -60,9 +65,14 @@ char	*handle_buffer(char *buffer, char *command_line, t_prompt *prompt)
 			command_line[ft_strlen(command_line) - 1] = '\0';
 		}
 	}
-	else if (buffer[0] == '\n')
+	if (termcap_is_key_new_line(buffer))
+	{
+		if (!command_line || !ft_strlen(command_line))
+			command_line = ft_strdup("");
 		write(1, "\n", 1);
-	return command_line;
+		history_reset_current_index(prompt->hist);
+	}
+	return (command_line);
 }
 
 void	prompt_add_to_history(t_prompt *prompt, char *cmd)
@@ -72,10 +82,10 @@ void	prompt_add_to_history(t_prompt *prompt, char *cmd)
 
 char	*prompt_read(t_prompt *prompt)
 {
-	char	*command_line;
+	char		*command_line;
 	t_termcap	term;
-	char	buffer[15];
-	int		nb_bytes;
+	char		buffer[15];
+	int			nb_bytes;
 	
 	termcap_init(&term);
 	command_line = NULL;

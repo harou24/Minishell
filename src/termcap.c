@@ -28,6 +28,13 @@ t_bool	termcap_backspace(void)
 	return (TRUE);
 }
 
+t_bool	termcap_clean_line(void)
+{
+	termcap_execute("dl");
+	tputs(tgoto(tgetstr("ch", NULL), 0, 0), 1, termcap_putchar);
+	return (TRUE);
+}
+
 int	termcap_init(t_termcap *termcap)
 {
 	char	*term_name;
@@ -45,3 +52,29 @@ int	termcap_init(t_termcap *termcap)
 	return (1);
 }
 
+t_bool	termcap_is_key_arrow_up(char *buffer)
+{
+	return (buffer[0] == 27 && buffer[1] == 91 && buffer[2] == 65);
+}
+
+t_bool	termcap_is_key_arrow_down(char *buffer)
+{
+	return (buffer[0] == 27 && buffer[1] == 91 && buffer[2] == 66);
+}
+
+t_bool	termcap_is_key_new_line(char *buffer)
+{
+	return (buffer[0] == '\n');
+}
+
+t_bool	termcap_is_key_printable(char *buffer)
+{
+	if (ft_isprint(buffer[0]))
+		return (TRUE);
+	return (FALSE);
+}
+
+t_bool	termcap_is_key_backspace(char *buffer)
+{
+	return (buffer[0] == 127);
+}
