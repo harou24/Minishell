@@ -57,9 +57,8 @@ void	history_print(t_history *hist)
 
 void history_destroy(t_history *hist)
 {
-//	vector(&hist->vec, V_DESTROY, TRUE, NULL);
-//	free(hist);
-(void)hist;
+	vector(&hist->vec, V_DESTROY, TRUE, NULL);
+	free(hist);
 }
 
 char	**history_to_array(t_history *hist)
