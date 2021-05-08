@@ -65,6 +65,10 @@ char	*handle_buffer(char *buffer, char *command_line, t_prompt *prompt)
 			command_line[ft_strlen(command_line) - 1] = '\0';
 		}
 	}
+	else if (buffer[0] == 94 && buffer[1] == 67)
+	{
+		ft_printf("HELLO_WORLD");
+	}
 	if (termcap_is_key_new_line(buffer))
 	{
 		if (!command_line || !ft_strlen(command_line))

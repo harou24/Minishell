@@ -21,6 +21,8 @@ t_history *history_create(void)
 
 char	*history_get_last(t_history *hist)
 {
+	if (hist->size == 0)
+		return (NULL);
 	return ((char *)vector(&hist->vec, V_PEEKBACK, 0, NULL));
 
 }
@@ -53,10 +55,11 @@ void	history_print(t_history *hist)
 	}
 }
 
-void t_history_destroy(t_history *hist)
+void history_destroy(t_history *hist)
 {
-	vector(&hist->vec, V_DESTROY, TRUE, NULL);
-	free(hist);
+//	vector(&hist->vec, V_DESTROY, TRUE, NULL);
+//	free(hist);
+(void)hist;
 }
 
 char	**history_to_array(t_history *hist)
