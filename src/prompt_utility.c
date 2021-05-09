@@ -51,14 +51,22 @@ void    prompt_clean(t_prompt *prompt)
 void    prompt_move_cursor_left(t_prompt *prompt)
 {
     (void)prompt;
+    if (prompt->cursor_pos > 0)
+    {
 	    termcap_move_left();
+        prompt->cursor_pos--;
+    }
 }
 
-void    prompt_move_cursor_right(t_prompt *prompt)
+void    prompt_move_cursor_right(t_prompt *prompt, char *command_line)
 {
 
     (void)prompt;
+    if (command_line &&prompt->cursor_pos + 1 < (int)ft_strlen(command_line) + 1)
+    {
 	    termcap_move_right();
+        prompt->cursor_pos++;
+    }
 }
 
 char    *prompt_get_command_from_history(t_prompt *prompt, char *command_line, char *(*history_get)(t_history *hist))
@@ -70,13 +78,27 @@ char    *prompt_get_command_from_history(t_prompt *prompt, char *command_line, c
     return (command_line);
 }
 
+void    update_command_line(t_prompt *prompt, char *command_line, char *buffer)
+{
+    if (command_line && prompt->cursor_pos <= (int)ft_strlen(command_line))
+    {
+        char *first = ft_strsub(command_line, 0, prompt->cursor_pos);
+        char *second = ft_strsub(command_line, prompt->cursor_pos + 1, ft_strlen(command_line));
+        command_line = ft_strjoin_multi(3,first, buffer, second);
+    }
+    else
+    {
+        command_line = ft_strjoin(command_line, buffer);
+    }
+}
+
 char	*handle_key(char *buffer, char *command_line, t_prompt *prompt)
 {
 	if (termcap_is_key_printable(buffer))
 	{
-        prompt->cursor_pos++;
 		command_line = ft_strjoin(command_line, buffer);
         termcap_insert_char(buffer[0]);
+        prompt->cursor_pos++;
 	}
 	else if (termcap_is_key_arrow_up(buffer) && prompt->hist->size != 0)
 	{
@@ -102,7 +124,7 @@ char	*handle_key(char *buffer, char *command_line, t_prompt *prompt)
 	else if (termcap_is_key_arrow_left(buffer))
 	    prompt_move_cursor_left(prompt);
     else if (termcap_is_key_arrow_right(buffer))
-	    prompt_move_cursor_right(prompt);
+	    prompt_move_cursor_right(prompt, command_line);
     else if (termcap_is_key_backspace(buffer))
             prompt_remove_char(prompt, command_line);
 	if (termcap_is_key_new_line(buffer))
