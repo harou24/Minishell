@@ -21,9 +21,14 @@ t_bool	termcap_execute(const char *cap)
 	return (TRUE);
 }
 
-t_bool	termcap_backspace(void)
+void    termcap_move_left(void)
 {
 	termcap_execute(MOVE_CURSOR_LEFT);
+}
+
+t_bool	termcap_backspace(void)
+{
+    termcap_move_left();
 	termcap_execute(DELETE_CHAR);
 	return (TRUE);
 }
@@ -60,6 +65,16 @@ t_bool	termcap_is_key_arrow_up(char *buffer)
 t_bool	termcap_is_key_arrow_down(char *buffer)
 {
 	return (buffer[0] == 27 && buffer[1] == 91 && buffer[2] == 66);
+}
+
+t_bool	termcap_is_key_arrow_left(char *buffer)
+{
+	return (buffer[0] == 27 && buffer[1] == 91 && buffer[2] == 68);
+}
+
+t_bool	termcap_is_key_arrow_right(char *buffer)
+{
+	return (buffer[0] == 27 && buffer[1] == 91 && buffer[2] == 67);
 }
 
 t_bool	termcap_is_key_new_line(char *buffer)
