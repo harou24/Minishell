@@ -84,6 +84,8 @@ char	*handle_key(char *buffer, char *command_line, t_prompt *prompt)
 	}
 	else if (termcap_is_key_arrow_left(buffer))
 	    termcap_move_left();
+    else if (termcap_is_key_arrow_right(buffer))
+	    termcap_move_right();
     else if (termcap_is_key_backspace(buffer))
             prompt_remove_char(command_line);
 	if (termcap_is_key_new_line(buffer))

@@ -17,6 +17,7 @@ t_bool	termcap_backspace(void);
 t_bool	termcap_clean_line(void);
 t_bool	termcap_arrow_down(void);
 void termcap_move_left();
+void termcap_move_right();
 t_bool	termcap_is_key_arrow_up(char *buffer);
 t_bool	termcap_is_key_arrow_left(char *buffer);
 t_bool	termcap_is_key_arrow_right(char *buffer);

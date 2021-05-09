@@ -4,6 +4,7 @@
 #include "libft.h"
 
 # define MOVE_CURSOR_LEFT "le"
+# define MOVE_CURSOR_RIGHT "RI"
 # define DELETE_CHAR "dc"
 
 int	termcap_putchar(int c)
@@ -24,6 +25,13 @@ t_bool	termcap_execute(const char *cap)
 void    termcap_move_left(void)
 {
 	termcap_execute(MOVE_CURSOR_LEFT);
+}
+
+void    termcap_move_right(void)
+{
+	 char *code = tgetstr(MOVE_CURSOR_RIGHT, NULL);
+
+	tputs(tparm(code, 1), STDOUT, termcap_putchar);
 }
 
 t_bool	termcap_backspace(void)
