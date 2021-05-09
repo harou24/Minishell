@@ -32,7 +32,29 @@ void	prompt_set_error_code(t_prompt *_prompt, int _error_code)
 	_prompt->error_code = _error_code;
 }
 
-char	*handle_buffer(char *buffer, char *command_line, t_prompt *prompt)
+void    prompt_remove_char(char *command_line)
+{
+	if (command_line && ft_strlen(command_line) > 0)
+    {
+	    termcap_backspace();
+	    command_line[ft_strlen(command_line) - 1] = '\0';
+    }
+}
+
+void    prompt_clean(t_prompt *prompt)
+{
+	termcap_clean_line();
+	prompt_print(prompt);
+}
+
+char    *prompt_get_command_from_history(t_prompt *prompt, char *command_line, char *(*history_get)(t_history *hist))
+{
+	free(command_line);
+	command_line = ft_strdup(history_get(prompt->hist));
+    return (command_line);
+}
+
+char	*handle_key(char *buffer, char *command_line, t_prompt *prompt)
 {
 	if (termcap_is_key_printable(buffer))
 	{
@@ -41,34 +63,27 @@ char	*handle_buffer(char *buffer, char *command_line, t_prompt *prompt)
 	}
 	else if (termcap_is_key_arrow_up(buffer) && prompt->hist->size != 0)
 	{
-//		ft_printf("index->%d\n", prompt->hist->current_index);
-		free(command_line);
-		command_line = ft_strdup(history_get_next_cmd(prompt->hist));
-		termcap_clean_line();
-		prompt_print(prompt);
-		ft_printf("%s", command_line);
+		command_line = prompt_get_command_from_history(prompt, command_line, history_get_next_cmd);
+		prompt_clean(prompt);
+        ft_printf("%s", command_line);
 	}
-	else if (termcap_is_key_arrow_down(buffer) && prompt->hist->size != 0  && prompt->hist->current_index != prompt->hist->size - 1)
+	else if (termcap_is_key_arrow_down(buffer) && prompt->hist->size != 0)
 	{	
-//		ft_printf("index->%d\n", prompt->hist->current_index);
-		free(command_line);
-		command_line = ft_strdup(history_get_prev_cmd(prompt->hist));
-		termcap_clean_line();
-		prompt_print(prompt);
-		ft_printf("%s", command_line);
+        if (prompt->hist->current_index != prompt->hist->size - 1)
+        {
+            command_line = prompt_get_command_from_history(prompt, command_line, history_get_prev_cmd);
+		    prompt_clean(prompt);
+            ft_printf("%s", command_line);
+        }
+        else
+        {
+            free(command_line);
+            command_line = ft_strdup("");
+		    prompt_clean(prompt);
+        }
 	}
 	else if (termcap_is_key_backspace(buffer))
-	{
-		if (command_line && ft_strlen(command_line) > 0)
-		{
-			termcap_backspace();
-			command_line[ft_strlen(command_line) - 1] = '\0';
-		}
-	}
-	else if (buffer[0] == 94 && buffer[1] == 67)
-	{
-		ft_printf("HELLO_WORLD");
-	}
+            prompt_remove_char(command_line);
 	if (termcap_is_key_new_line(buffer))
 	{
 		if (!command_line || !ft_strlen(command_line))
@@ -79,7 +94,7 @@ char	*handle_buffer(char *buffer, char *command_line, t_prompt *prompt)
 	return (command_line);
 }
 
-void	prompt_add_to_history(t_prompt *prompt, char *cmd)
+void	prompt_add_cmd_to_history(t_prompt *prompt, char *cmd)
 {
 	history_add(prompt->hist, cmd);
 }
@@ -97,7 +112,7 @@ char	*prompt_read(t_prompt *prompt)
 	{
 		nb_bytes = read(STDIN, buffer, 15);
 		buffer[nb_bytes] = 0;
-		command_line = handle_buffer(buffer, command_line, prompt);
+		command_line = handle_key(buffer, command_line, prompt);
 	}
 	while (ft_strcmp(buffer, "\n"));
 	return (command_line);

@@ -28,6 +28,6 @@ void		prompt_set_error_code(t_prompt *_prompt, int _error_code);
 /* internal functions */
 void		prompt_print(t_prompt *_prompt);
 int			prompt_update(t_prompt *_prompt);
-void		prompt_add_to_history(t_prompt *prompt, char *cmd);
+void		prompt_add_cmd_to_history(t_prompt *prompt, char *cmd);
 
 #endif
