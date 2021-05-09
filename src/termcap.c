@@ -6,6 +6,11 @@
 # define MOVE_CURSOR_LEFT "le"
 # define MOVE_CURSOR_RIGHT "RI"
 # define DELETE_CHAR "dc"
+# define SAVE_CURSOR "sc"
+# define INSERT_MODE "im"
+# define INSERT_CHARACTER "ic"
+# define END_INSERT_MODE "er"
+# define RESTORE_CURSOR "rc"
 
 int	termcap_putchar(int c)
 {
@@ -24,12 +29,12 @@ t_bool	termcap_execute(const char *cap)
 
 void    termcap_insert_char(char c)
 {
-    tputs(tgetstr("sc", NULL), 1, termcap_putchar);
-    tputs(tgetstr("im", NULL), 1, termcap_putchar);
-    tputs(tgetstr("ic", NULL), 1, termcap_putchar);
+    tputs(tgetstr(SAVE_CURSOR, NULL), 1, termcap_putchar);
+    tputs(tgetstr(INSERT_MODE, NULL), 1, termcap_putchar);
+    tputs(tgetstr(INSERT_CHARACTER, NULL), 1, termcap_putchar);
     termcap_putchar(c);
-    tputs(tgetstr("ei", NULL), 1, termcap_putchar);
-    tputs(tgetstr("rc", NULL), 1, termcap_putchar);
+    tputs(tgetstr(END_INSERT_MODE, NULL), 1, termcap_putchar);
+    tputs(tgetstr(RESTORE_CURSOR, NULL), 1, termcap_putchar);
     tputs(tgetstr("nd", NULL), 1, termcap_putchar);
 }
 
