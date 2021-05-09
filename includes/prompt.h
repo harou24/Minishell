@@ -18,6 +18,7 @@ typedef struct s_prompt
 	int			colon_index;
 	int			bracket_index;
 	t_history	*hist;
+    int         cursor_pos;
 }				t_prompt;
 
 t_prompt	*prompt_create(const char *_username, const char *_hostname);

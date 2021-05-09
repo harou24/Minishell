@@ -32,10 +32,11 @@ void	prompt_set_error_code(t_prompt *_prompt, int _error_code)
 	_prompt->error_code = _error_code;
 }
 
-void    prompt_remove_char(char *command_line)
+void    prompt_remove_char(t_prompt *prompt, char *command_line)
 {
 	if (command_line && ft_strlen(command_line) > 0)
     {
+        prompt->cursor_pos--;//change this later to update at pos
 	    termcap_backspace();
 	    command_line[ft_strlen(command_line) - 1] = '\0';
     }
@@ -47,10 +48,25 @@ void    prompt_clean(t_prompt *prompt)
 	prompt_print(prompt);
 }
 
+void    prompt_move_cursor_left(t_prompt *prompt)
+{
+    (void)prompt;
+	    termcap_move_left();
+}
+
+void    prompt_move_cursor_right(t_prompt *prompt)
+{
+
+    (void)prompt;
+	    termcap_move_right();
+}
+
 char    *prompt_get_command_from_history(t_prompt *prompt, char *command_line, char *(*history_get)(t_history *hist))
 {
 	free(command_line);
 	command_line = ft_strdup(history_get(prompt->hist));
+    if (command_line)
+        prompt->cursor_pos = ft_strlen(command_line);
     return (command_line);
 }
 
@@ -58,8 +74,9 @@ char	*handle_key(char *buffer, char *command_line, t_prompt *prompt)
 {
 	if (termcap_is_key_printable(buffer))
 	{
+        prompt->cursor_pos++;
 		command_line = ft_strjoin(command_line, buffer);
-		write(1, buffer, 1);
+        termcap_insert_char(buffer[0]);
 	}
 	else if (termcap_is_key_arrow_up(buffer) && prompt->hist->size != 0)
 	{
@@ -83,11 +100,11 @@ char	*handle_key(char *buffer, char *command_line, t_prompt *prompt)
         }
 	}
 	else if (termcap_is_key_arrow_left(buffer))
-	    termcap_move_left();
+	    prompt_move_cursor_left(prompt);
     else if (termcap_is_key_arrow_right(buffer))
-	    termcap_move_right();
+	    prompt_move_cursor_right(prompt);
     else if (termcap_is_key_backspace(buffer))
-            prompt_remove_char(command_line);
+            prompt_remove_char(prompt, command_line);
 	if (termcap_is_key_new_line(buffer))
 	{
 		if (!command_line || !ft_strlen(command_line))

@@ -40,6 +40,7 @@ t_prompt 	*prompt_create(const char *username, const char *hostname)
 		prompt_destroy(prompt);
 		return (NULL);
 	}
+    prompt->cursor_pos = 0;
 	prompt_update(prompt);
 	return (prompt);
 }

@@ -22,6 +22,17 @@ t_bool	termcap_execute(const char *cap)
 	return (TRUE);
 }
 
+void    termcap_insert_char(char c)
+{
+    tputs(tgetstr("sc", NULL), 1, termcap_putchar);
+    tputs(tgetstr("im", NULL), 1, termcap_putchar);
+    tputs(tgetstr("ic", NULL), 1, termcap_putchar);
+    termcap_putchar(c);
+    tputs(tgetstr("ei", NULL), 1, termcap_putchar);
+    tputs(tgetstr("rc", NULL), 1, termcap_putchar);
+    tputs(tgetstr("nd", NULL), 1, termcap_putchar);
+}
+
 void    termcap_move_left(void)
 {
 	termcap_execute(MOVE_CURSOR_LEFT);
