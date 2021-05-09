@@ -35,11 +35,11 @@ void	prompt_set_error_code(t_prompt *_prompt, int _error_code)
 void    prompt_remove_char(t_prompt *prompt, char *command_line)
 {
 	if (command_line && ft_strlen(command_line) > 0)
-    {
-        prompt->cursor_pos--;//change this later to update at pos
-	    termcap_backspace();
-	    command_line[ft_strlen(command_line) - 1] = '\0';
-    }
+	{
+		prompt->cursor_pos--;//change this later to update at pos
+		termcap_backspace();
+		command_line[ft_strlen(command_line) - 1] = '\0';
+   	}
 }
 
 void    prompt_clean(t_prompt *prompt)
@@ -97,36 +97,36 @@ char	*handle_key(char *buffer, char *command_line, t_prompt *prompt)
 	if (termcap_is_key_printable(buffer))
 	{
 		command_line = ft_strjoin(command_line, buffer);
-        termcap_insert_char(buffer[0]);
-        prompt->cursor_pos++;
+	        termcap_insert_char(buffer[0]);
+        	prompt->cursor_pos++;
 	}
 	else if (termcap_is_key_arrow_up(buffer) && prompt->hist->size != 0)
 	{
 		command_line = prompt_get_command_from_history(prompt, command_line, history_get_next_cmd);
 		prompt_clean(prompt);
-        ft_printf("%s", command_line);
+        	ft_printf("%s", command_line);
 	}
 	else if (termcap_is_key_arrow_down(buffer) && prompt->hist->size != 0)
 	{	
-        if (prompt->hist->current_index != prompt->hist->size - 1)
-        {
-            command_line = prompt_get_command_from_history(prompt, command_line, history_get_prev_cmd);
-		    prompt_clean(prompt);
-            ft_printf("%s", command_line);
-        }
-        else
-        {
-            free(command_line);
-            command_line = ft_strdup("");
-		    prompt_clean(prompt);
-        }
+		if (prompt->hist->current_index != prompt->hist->size - 1)
+		{
+			command_line = prompt_get_command_from_history(prompt, command_line, history_get_prev_cmd);
+			prompt_clean(prompt);
+			ft_printf("%s", command_line);
+		}
+		else
+		{
+			free(command_line);
+			command_line = ft_strdup("");
+			prompt_clean(prompt);
+		}
 	}
 	else if (termcap_is_key_arrow_left(buffer))
-	    prompt_move_cursor_left(prompt);
-    else if (termcap_is_key_arrow_right(buffer))
-	    prompt_move_cursor_right(prompt, command_line);
-    else if (termcap_is_key_backspace(buffer))
-            prompt_remove_char(prompt, command_line);
+		prompt_move_cursor_left(prompt);
+	else if (termcap_is_key_arrow_right(buffer))
+		prompt_move_cursor_right(prompt, command_line);
+	else if (termcap_is_key_backspace(buffer))
+		prompt_remove_char(prompt, command_line);
 	if (termcap_is_key_new_line(buffer))
 	{
 		if (!command_line || !ft_strlen(command_line))
