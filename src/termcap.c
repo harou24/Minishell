@@ -11,6 +11,7 @@
 # define INSERT_CHARACTER "ic"
 # define END_INSERT_MODE "er"
 # define RESTORE_CURSOR "rc"
+# define MOVE_CURSOR_ONE_RIGHT "nd"
 
 int	termcap_putchar(int c)
 {
@@ -27,15 +28,16 @@ t_bool	termcap_execute(const char *cap)
 	return (TRUE);
 }
 
-void    termcap_insert_char(char c)
+t_bool    termcap_insert_char(char c)
 {
-    tputs(tgetstr(SAVE_CURSOR, NULL), 1, termcap_putchar);
-    tputs(tgetstr(INSERT_MODE, NULL), 1, termcap_putchar);
-    tputs(tgetstr(INSERT_CHARACTER, NULL), 1, termcap_putchar);
+    termcap_execute(SAVE_CURSOR);
+    termcap_execute(INSERT_MODE);
+    termcap_execute(INSERT_CHARACTER);
     termcap_putchar(c);
-    tputs(tgetstr(END_INSERT_MODE, NULL), 1, termcap_putchar);
-    tputs(tgetstr(RESTORE_CURSOR, NULL), 1, termcap_putchar);
-    tputs(tgetstr("nd", NULL), 1, termcap_putchar);
+    termcap_execute(END_INSERT_MODE);
+    termcap_execute(RESTORE_CURSOR);
+    termcap_execute(MOVE_CURSOR_ONE_RIGHT);
+    return(TRUE);
 }
 
 void    termcap_move_left(void)
@@ -45,9 +47,9 @@ void    termcap_move_left(void)
 
 void    termcap_move_right(void)
 {
-	 char *code = tgetstr(MOVE_CURSOR_RIGHT, NULL);
+	 char *code = tgetstr(MOVE_CURSOR_ONE_RIGHT, NULL);
 
-	tputs(tparm(code, 1), STDOUT, termcap_putchar);
+	tputs(code, STDOUT, termcap_putchar);
 }
 
 t_bool	termcap_backspace(void)
@@ -81,39 +83,3 @@ int	termcap_init(t_termcap *termcap)
 	return (1);
 }
 
-t_bool	termcap_is_key_arrow_up(char *buffer)
-{
-	return (buffer[0] == 27 && buffer[1] == 91 && buffer[2] == 65);
-}
-
-t_bool	termcap_is_key_arrow_down(char *buffer)
-{
-	return (buffer[0] == 27 && buffer[1] == 91 && buffer[2] == 66);
-}
-
-t_bool	termcap_is_key_arrow_left(char *buffer)
-{
-	return (buffer[0] == 27 && buffer[1] == 91 && buffer[2] == 68);
-}
-
-t_bool	termcap_is_key_arrow_right(char *buffer)
-{
-	return (buffer[0] == 27 && buffer[1] == 91 && buffer[2] == 67);
-}
-
-t_bool	termcap_is_key_new_line(char *buffer)
-{
-	return (buffer[0] == '\n');
-}
-
-t_bool	termcap_is_key_printable(char *buffer)
-{
-	if (ft_isprint(buffer[0]))
-		return (TRUE);
-	return (FALSE);
-}
-
-t_bool	termcap_is_key_backspace(char *buffer)
-{
-	return (buffer[0] == 127);
-}

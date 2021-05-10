@@ -4,6 +4,7 @@
 #include "prompt.h"
 #include "termcap.h"
 #include "history.h"
+#include "key_listener.h"
 
 static char	*__adjustedbuffer(t_prompt *_prompt)
 {
@@ -116,7 +117,7 @@ char    *get_new_cmd(t_prompt *prompt, char *command_line, char *buffer)
 
 char	*handle_key(char *buffer, char *command_line, t_prompt *prompt)
 {
-	if (termcap_is_key_printable(buffer))
+	if (is_key_printable(buffer))
 	{
 	    termcap_insert_char(buffer[0]);
         prompt->cursor_pos++;
@@ -124,13 +125,13 @@ char	*handle_key(char *buffer, char *command_line, t_prompt *prompt)
         free(command_line);
         command_line = new;
 	}
-	else if (termcap_is_key_arrow_up(buffer) && prompt->hist->size != 0)
+	else if (is_key_arrow_up(buffer) && prompt->hist->size != 0)
 	{
 		command_line = prompt_get_command_from_history(prompt, command_line, history_get_next_cmd);
 		prompt_clean(prompt);
         	ft_printf("%s", command_line);
 	}
-	else if (termcap_is_key_arrow_down(buffer) && prompt->hist->size != 0)
+	else if (is_key_arrow_down(buffer) && prompt->hist->size != 0)
 	{	
 		if (prompt->hist->current_index != prompt->hist->size - 1)
 		{
@@ -145,18 +146,18 @@ char	*handle_key(char *buffer, char *command_line, t_prompt *prompt)
 			prompt_clean(prompt);
 		}
 	}
-	else if (termcap_is_key_arrow_left(buffer) && command_line)
+	else if (is_key_arrow_left(buffer) && command_line)
 		prompt_move_cursor_left(prompt);
-	else if (termcap_is_key_arrow_right(buffer))
+	else if (is_key_arrow_right(buffer))
 		prompt_move_cursor_right(prompt, command_line);
-	else if (termcap_is_key_backspace(buffer))
+	else if (is_key_backspace(buffer))
 	{
         prompt_remove_char(prompt, command_line);
 	    char *new = prompt_get_updated_command_line(prompt, command_line);
         free(command_line);
         command_line = new;
     }
-	if (termcap_is_key_new_line(buffer))
+	if (is_key_new_line(buffer))
 	{
 		if (!command_line || !ft_strlen(command_line))
 			command_line = ft_strdup("");
