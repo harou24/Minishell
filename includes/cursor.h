@@ -10,6 +10,7 @@ typedef struct s_cursor
     int     end;
 }           t_cursor;
 
+t_cursor    *cursor_create(void);
 t_bool  cursor_move_left(t_cursor *cursor);
 t_bool  cursor_move_right(t_cursor *cursor);
 void    cursor_reset(t_cursor *cursor);

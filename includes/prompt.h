@@ -2,6 +2,7 @@
 # define PROMPT_H
 
 # include "history.h"
+# include "cursor.h"
 
 typedef struct s_prompt
 {
@@ -18,7 +19,7 @@ typedef struct s_prompt
 	int			colon_index;
 	int			bracket_index;
 	t_history	*hist;
-    int         cursor_pos;
+    t_cursor    *cursor;
 }				t_prompt;
 
 t_prompt	*prompt_create(const char *_username, const char *_hostname);

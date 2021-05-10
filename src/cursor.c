@@ -19,8 +19,7 @@ t_bool    cursor_move_left(t_cursor *cursor)
 {
     if (cursor->pos > cursor->start)
     {
-        if (!termcap_execute(MOVE_CURSOR_LEFT))
-            return (FALSE);
+        termcap_move_left();
         cursor->pos--;
         return (TRUE);
     }
@@ -29,10 +28,9 @@ t_bool    cursor_move_left(t_cursor *cursor)
 
 t_bool    cursor_move_right(t_cursor *cursor)
 {
-    if (cursor->pos + 1 < cursor->end)
+    if (cursor->pos + 1 < cursor->end + 1)
     {
-        if (!termcap_execute(MOVE_CURSOR_ONE_RIGHT))
-            return (FALSE);
+        termcap_move_right();
         cursor->pos++;
         return (TRUE);
     }
@@ -42,6 +40,8 @@ t_bool    cursor_move_right(t_cursor *cursor)
 void    cursor_reset(t_cursor *cursor)
 {
     cursor->pos = 0;
+    cursor->start = 0;
+    cursor->end = 0;
 }
 
 void    cursor_set_start(t_cursor *cursor, int pos)
