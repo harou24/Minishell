@@ -3,19 +3,26 @@
 #include <unistd.h>
 #include "libft.h"
 
-# define MOVE_CURSOR_LEFT "le"
-# define MOVE_CURSOR_RIGHT "RI"
-# define DELETE_CHAR "dc"
-# define SAVE_CURSOR "sc"
-# define INSERT_MODE "im"
-# define INSERT_CHARACTER "ic"
-# define END_INSERT_MODE "er"
-# define RESTORE_CURSOR "rc"
-# define MOVE_CURSOR_ONE_RIGHT "nd"
-
 int	termcap_putchar(int c)
 {
 	return(write(STDOUT, &c, 1));
+}
+
+t_bool  termcap_init(t_termcap *termcap)
+{
+	char	*term_name;
+
+	tcgetattr(STDIN, &termcap->term);
+	termcap->term.c_lflag &= ~ICANON;
+	termcap->term.c_lflag &= ~ECHO;
+	termcap->term.c_cc[VMIN] = 1;
+	termcap->term.c_cc[VTIME] = 0;
+	tcsetattr(STDIN, TCSANOW, &termcap->term);
+	term_name = env_get_s("TERM");
+	if (!term_name)
+		return (FALSE);
+	tgetent(NULL, term_name);
+	return (TRUE);
 }
 
 t_bool	termcap_execute(const char *cap)
@@ -47,8 +54,7 @@ void    termcap_move_left(void)
 
 void    termcap_move_right(void)
 {
-	 char *code = tgetstr(MOVE_CURSOR_ONE_RIGHT, NULL);
-
+	char *code = tgetstr(MOVE_CURSOR_ONE_RIGHT, NULL);
 	tputs(code, STDOUT, termcap_putchar);
 }
 
@@ -66,20 +72,4 @@ t_bool	termcap_clean_line(void)
 	return (TRUE);
 }
 
-int	termcap_init(t_termcap *termcap)
-{
-	char	*term_name;
-
-	tcgetattr(STDIN, &termcap->term);
-	termcap->term.c_lflag &= ~ICANON;
-	termcap->term.c_lflag &= ~ECHO;
-	termcap->term.c_cc[VMIN] = 1;
-	termcap->term.c_cc[VTIME] = 0;
-	tcsetattr(STDIN, TCSANOW, &termcap->term);
-	term_name = env_get_s("TERM");
-	if (!term_name)
-		return (0);
-	tgetent(NULL, term_name);
-	return (1);
-}
 

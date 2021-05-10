@@ -24,13 +24,11 @@ char	*history_get_last(t_history *hist)
 	if (hist->size == 0)
 		return (NULL);
 	return ((char *)vector(&hist->vec, V_PEEKBACK, 0, NULL));
-
 }
 
 char	*history_get_first(t_history *hist)
 {
 	return ((char *)vector(&hist->vec, V_PEEKFRONT, 0, NULL));
-
 }
 
 void	history_add(t_history *hist, char *cmd)
@@ -40,19 +38,6 @@ void	history_add(t_history *hist, char *cmd)
 	vector(&hist->vec, V_PUSHBACK, 0, cmd);
 	hist->size++;
 	hist->current_index = hist->size - 1;
-}
-
-void	history_print(t_history *hist)
-{
-	char	*cmd;
-	int 	i;
-
-	i = 0;
-	while (i < hist->size)
-	{
-		cmd = (char *)vector(&hist->vec, V_PEEKAT, i, NULL);
-		ft_printf("%s\n", cmd);
-	}
 }
 
 void history_destroy(t_history *hist)

@@ -4,13 +4,23 @@
 # include <term.h>
 # include "libft.h"
 
+# define MOVE_CURSOR_LEFT "le"
+# define MOVE_CURSOR_RIGHT "RI"
+# define DELETE_CHAR "dc"
+# define SAVE_CURSOR "sc"
+# define INSERT_MODE "im"
+# define INSERT_CHARACTER "ic"
+# define END_INSERT_MODE "er"
+# define RESTORE_CURSOR "rc"
+# define MOVE_CURSOR_ONE_RIGHT "nd"
+
 typedef struct s_termcap
 {
 	struct	termios term;
 }			t_termcap;
 
 int		termcap_putchar(int c);
-int		termcap_init(t_termcap *term);
+t_bool		termcap_init(t_termcap *term);
 t_bool		termcap_execute(const char *cap);
 
 t_bool	termcap_backspace(void);
