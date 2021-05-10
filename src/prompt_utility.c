@@ -61,7 +61,6 @@ void    prompt_remove_char(t_prompt *prompt, char *command_line)
         }
 }
 
-
 void    prompt_clean(t_prompt *prompt)
 {
 	termcap_clean_line();
@@ -79,7 +78,6 @@ void    prompt_move_cursor_left(t_prompt *prompt)
 
 void    prompt_move_cursor_right(t_prompt *prompt, char *command_line)
 {
-
     if (command_line &&prompt->cursor_pos + 1 < (int)ft_strlen(command_line) + 1)
     {
 	    termcap_move_right();
@@ -96,13 +94,35 @@ char    *prompt_get_command_from_history(t_prompt *prompt, char *command_line, c
     return (command_line);
 }
 
+char    *get_new_cmd(t_prompt *prompt, char *command_line, char *buffer)
+{
+    char    *first;
+    char    *second;
+    char    *new_cmd;
+
+    if (!command_line)
+        new_cmd = ft_strdup(buffer);
+    else
+    {
+        first = ft_substr(command_line, 0, prompt->cursor_pos - 1);
+        first = ft_strjoin(first, buffer);
+        second = ft_strsub(command_line, prompt->cursor_pos - 1, ft_strlen(command_line));
+        new_cmd = ft_strjoin(first, second);
+        free(first);
+        free(second);
+    }
+    return (new_cmd);
+}
+
 char	*handle_key(char *buffer, char *command_line, t_prompt *prompt)
 {
 	if (termcap_is_key_printable(buffer))
 	{
-		command_line = ft_strjoin(command_line, buffer);
-	        termcap_insert_char(buffer[0]);
-        	prompt->cursor_pos++;
+	    termcap_insert_char(buffer[0]);
+        prompt->cursor_pos++;
+        char *new = get_new_cmd(prompt, command_line, buffer);
+        free(command_line);
+        command_line = new;
 	}
 	else if (termcap_is_key_arrow_up(buffer) && prompt->hist->size != 0)
 	{
