@@ -153,6 +153,7 @@ char *prompt_get_hist(t_prompt *prompt, char *command_line, char *buffer)
             free(command_line);
             command_line = ft_strdup("");
             prompt_clean(prompt);
+            cursor_reset(prompt->cursor);
         }
     }
     return (command_line);
@@ -217,5 +218,6 @@ char	*prompt_read(t_prompt *prompt)
     while (ft_strcmp(buffer, "\n"));
     history_reset_current_index(prompt->hist);
     cursor_reset(prompt->cursor);
+//    termcap_deinit(&term);
     return (command_line);
 }

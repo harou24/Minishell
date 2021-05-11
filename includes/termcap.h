@@ -22,6 +22,7 @@ typedef struct s_termcap
 int		termcap_putchar(int c);
 t_bool		termcap_init(t_termcap *term);
 t_bool		termcap_execute(const char *cap);
+void		termcap_deinit(t_termcap *term);
 
 t_bool	termcap_backspace(void);
 t_bool	termcap_clean_line(void);

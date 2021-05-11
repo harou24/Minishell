@@ -25,6 +25,13 @@ t_bool  termcap_init(t_termcap *termcap)
 	return (TRUE);
 }
 
+void    termcap_deinit(t_termcap *termcap)
+{
+    tcgetattr(STDIN, &termcap->term);
+	termcap->term.c_lflag |= (ECHO | ICANON | ISIG);
+	tcsetattr(STDIN, TCSANOW, &termcap->term);
+}
+
 t_bool	termcap_execute(const char *cap)
 {
 	const char *code = tgetstr((char *)cap, NULL);
