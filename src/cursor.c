@@ -44,6 +44,26 @@ void    cursor_reset(t_cursor *cursor)
     cursor->end = 0;
 }
 
+t_bool    cursor_decrease_pos(t_cursor *cursor)
+{
+    if (cursor->pos > 0)
+    {
+        cursor->pos--;
+        return (TRUE);
+    }
+    return (FALSE);
+}
+
+t_bool    cursor_increase_pos(t_cursor *cursor)
+{
+    if (cursor->pos < cursor->end + 1)
+    {
+        cursor->pos++;
+        return (TRUE);
+    }
+    return (FALSE);
+}
+
 void    cursor_set_start(t_cursor *cursor, int pos)
 {
     cursor->start = pos;

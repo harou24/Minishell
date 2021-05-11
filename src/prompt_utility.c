@@ -55,12 +55,8 @@ char    *prompt_get_updated_command_line(t_prompt *prompt, char *command_line)
 
 void    prompt_remove_char(t_prompt *prompt, char *command_line)
 {
-    if (prompt->cursor->pos > 0 && command_line)
-    {    
+    if (command_line && cursor_decrease_pos(prompt->cursor))
         termcap_backspace();
-        prompt->cursor->pos--;
-        //            ft_printf("\n|cmd->%s|\n", command_line);
-    }
 }
 
 void    prompt_clean(t_prompt *prompt)
@@ -111,17 +107,34 @@ char    *get_new_cmd(t_prompt *prompt, char *command_line, char *buffer)
     return (new_cmd);
 }
 
-char	*handle_key(char *buffer, char *command_line, t_prompt *prompt)
+t_bool    prompt_insert_char(t_prompt *prompt, char c)
 {
-    if (is_key_printable(buffer))
-    {
-        termcap_insert_char(buffer[0]);
-        prompt->cursor->pos++;
+        if (cursor_increase_pos(prompt->cursor))
+        {
+            termcap_insert_char(c);
+            return (TRUE);
+        }
+        return (FALSE);
+}
+
+char    *command_line_update(t_prompt *prompt, char *command_line, char *buffer)
+{
         char *new = get_new_cmd(prompt, command_line, buffer);
         free(command_line);
         command_line = new;
-    }
-    else if (is_key_arrow_up(buffer) && prompt->hist->size != 0)
+        return (new);
+}
+void    prompt_manage_history_up(t_prompt *prompt, char *command_line)
+{
+   command_line = prompt_get_command_from_history(prompt, command_line, history_get_next_cmd);
+        prompt_clean(prompt);
+        ft_printf("%s", command_line);
+
+}
+
+char *prompt_get_hist(t_prompt *prompt, char *command_line, char *buffer)
+{
+    if (is_key_arrow_up(buffer) && prompt->hist->size != 0)
     {
         command_line = prompt_get_command_from_history(prompt, command_line, history_get_next_cmd);
         prompt_clean(prompt);
@@ -142,6 +155,14 @@ char	*handle_key(char *buffer, char *command_line, t_prompt *prompt)
             prompt_clean(prompt);
         }
     }
+    return (command_line);
+}
+char	*handle_key(char *buffer, char *command_line, t_prompt *prompt)
+{
+    if (is_key_printable(buffer) && prompt_insert_char(prompt, buffer[0]))
+            command_line = command_line_update(prompt, command_line, buffer);
+    else if (is_key_arrow_up(buffer) || is_key_arrow_down(buffer) )
+        command_line = prompt_get_hist(prompt, command_line, buffer);
     else if (is_key_arrow_left(buffer) && command_line)
         prompt_move_cursor_left(prompt);
     else if (is_key_arrow_right(buffer))
