@@ -1,14 +1,5 @@
 #include "key_listener.h"
 
-# define NEW_LINE       10
-# define ESCAPE_CHAR    27
-# define CHARACTER_A    65
-# define CHARACTER_B    66
-# define CHARACTER_C    67
-# define CHARACTER_D    68
-# define BRACKET_LEFT   91
-# define DELETE         127
-
 t_bool  is_key_arrow_up(const char *key)
 {
     return (key[0] == ESCAPE_CHAR  && key[1] == BRACKET_LEFT && key[2] == CHARACTER_A);

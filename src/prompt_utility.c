@@ -174,6 +174,13 @@ char	*handle_key(char *buffer, char *command_line, t_prompt *prompt)
         free(command_line);
         command_line = new;
     }
+    else if (buffer[0] == CNTRL_U)
+    {
+        free(command_line);
+        command_line = ft_strdup("");
+        prompt_clean(prompt);
+        cursor_reset(prompt->cursor);
+    }
     if (is_key_new_line(buffer))
     {
         if (!command_line || !ft_strlen(command_line))
@@ -200,6 +207,8 @@ char	*prompt_read(t_prompt *prompt)
     do
     {
         nb_bytes = read(STDIN, buffer, 15);
+        if (nb_bytes == -1 || buffer[0] == CNTRL_D)
+           break ;
         buffer[nb_bytes] = 0;
         if (command_line)
             cursor_set_end(prompt->cursor, ft_strlen(command_line));
