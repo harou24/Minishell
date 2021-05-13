@@ -3,7 +3,7 @@
 #include "libft.h"
 #include "ft_printf.h"
 
-t_history *history_create(void)
+t_history	*history_create(void)
 {
 	const size_t	vec_size = 100;
 	t_history		*hist;
@@ -34,13 +34,13 @@ char	*history_get_first(t_history *hist)
 void	history_add(t_history *hist, char *cmd)
 {
 	if (hist->size != 0 && !ft_strcmp(history_get_last(hist), cmd))
-		return;
+		return ;
 	vector(&hist->vec, V_PUSHBACK, 0, cmd);
 	hist->size++;
 	hist->current_index = hist->size - 1;
 }
 
-void history_destroy(t_history *hist)
+void	history_destroy(t_history *hist)
 {
 	vector(&hist->vec, V_DESTROY, TRUE, NULL);
 	free(hist);
@@ -55,7 +55,7 @@ char	**history_to_array(t_history *hist)
 
 char	*history_get_next_cmd(t_history *hist)
 {
-	char *cmd;
+	char	*cmd;
 
 	if (hist->size == 0)
 		return (NULL);
@@ -71,7 +71,7 @@ char	*history_get_next_cmd(t_history *hist)
 
 char	*history_get_prev_cmd(t_history *hist)
 {
-	char *cmd;
+	char	*cmd;
 
 	if (hist->current_index == hist->size)
 		return (NULL);
