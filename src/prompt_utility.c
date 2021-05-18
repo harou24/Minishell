@@ -170,10 +170,13 @@ char	*prompt_get_hist(t_prompt *prompt, char *command_line, char *buffer)
 
 char	*cmd_update_char_removal(t_prompt *prompt, char *command_line)
 {
+	char	*new;
+
 	prompt_remove_char(prompt, command_line);
-	char *new = prompt_get_updated_command_line(prompt, command_line);
+	new = prompt_get_updated_command_line(prompt, command_line);
 	free(command_line);
 	command_line = new;
+	return (command_line);
 }
 
 char	*handle_key(char *buffer, char *command_line, t_prompt *prompt)
@@ -187,9 +190,7 @@ char	*handle_key(char *buffer, char *command_line, t_prompt *prompt)
 	else if (is_key_arrow_right(buffer))
 		prompt_move_cursor_right(prompt, command_line);
 	else if (is_key_backspace(buffer))
-	{
 		command_line = cmd_update_char_removal(prompt, command_line);
-	}
 	else if (buffer[0] == CNTRL_U)
 	{
 		free(command_line);
@@ -232,6 +233,6 @@ char	*prompt_read(t_prompt *prompt)
 	}
 	history_reset_current_index(prompt->hist);
 	cursor_reset(prompt->cursor);
-	//    termcap_deinit(&term);
+	termcap_deinit(&term);
 	return (command_line);
 }
