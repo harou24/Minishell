@@ -5,10 +5,10 @@
 
 int	termcap_putchar(int c)
 {
-	return(write(STDOUT, &c, 1));
+	return (write(STDOUT, &c, 1));
 }
 
-t_bool  termcap_init(t_termcap *termcap)
+t_bool	termcap_init(t_termcap *termcap)
 {
 	char	*term_name;
 
@@ -25,16 +25,17 @@ t_bool  termcap_init(t_termcap *termcap)
 	return (TRUE);
 }
 
-void    termcap_deinit(t_termcap *termcap)
+void	termcap_deinit(t_termcap *termcap)
 {
-    tcgetattr(STDIN, &termcap->term);
+	tcgetattr(STDIN, &termcap->term);
 	termcap->term.c_lflag |= (ECHO | ICANON | ISIG);
 	tcsetattr(STDIN, TCSANOW, &termcap->term);
 }
 
 t_bool	termcap_execute(const char *cap)
 {
-	const char *code = tgetstr((char *)cap, NULL);
+	const char	*code = tgetstr((char *)cap, NULL);
+
 	if (!code)
 		return (FALSE);
 	if (!tputs(code, STDOUT, termcap_putchar))
@@ -42,32 +43,34 @@ t_bool	termcap_execute(const char *cap)
 	return (TRUE);
 }
 
-t_bool    termcap_insert_char(char c)
+t_bool	termcap_insert_char(char c)
 {
-    termcap_execute(SAVE_CURSOR);
-    termcap_execute(INSERT_MODE);
-    termcap_execute(INSERT_CHARACTER);
-    termcap_putchar(c);
-    termcap_execute(END_INSERT_MODE);
-    termcap_execute(RESTORE_CURSOR);
-    termcap_execute(MOVE_CURSOR_ONE_RIGHT);
-    return(TRUE);
+	termcap_execute(SAVE_CURSOR);
+	termcap_execute(INSERT_MODE);
+	termcap_execute(INSERT_CHARACTER);
+	termcap_putchar(c);
+	termcap_execute(END_INSERT_MODE);
+	termcap_execute(RESTORE_CURSOR);
+	termcap_execute(MOVE_CURSOR_ONE_RIGHT);
+	return (TRUE);
 }
 
-void    termcap_move_left(void)
+void	termcap_move_left(void)
 {
 	termcap_execute(MOVE_CURSOR_LEFT);
 }
 
-void    termcap_move_right(void)
+void	termcap_move_right(void)
 {
-	char *code = tgetstr(MOVE_CURSOR_ONE_RIGHT, NULL);
+	char	*code;
+
+	code = tgetstr(MOVE_CURSOR_ONE_RIGHT, NULL);
 	tputs(code, STDOUT, termcap_putchar);
 }
 
 t_bool	termcap_backspace(void)
 {
-    termcap_move_left();
+	termcap_move_left();
 	termcap_execute(DELETE_CHAR);
 	return (TRUE);
 }
@@ -78,5 +81,3 @@ t_bool	termcap_clean_line(void)
 	tputs(tgoto(tgetstr("ch", NULL), 0, 0), 1, termcap_putchar);
 	return (TRUE);
 }
-
-
