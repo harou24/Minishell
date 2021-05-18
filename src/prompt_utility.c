@@ -168,7 +168,7 @@ char	*prompt_get_hist(t_prompt *prompt, char *command_line, char *buffer)
 	return (command_line);
 }
 
-void	cmd_update_char_removal(t_prompt *prompt, char *command_line)
+char	*cmd_update_char_removal(t_prompt *prompt, char *command_line)
 {
 	prompt_remove_char(prompt, command_line);
 	char *new = prompt_get_updated_command_line(prompt, command_line);
@@ -188,7 +188,7 @@ char	*handle_key(char *buffer, char *command_line, t_prompt *prompt)
 		prompt_move_cursor_right(prompt, command_line);
 	else if (is_key_backspace(buffer))
 	{
-		cmd_update_char_removal(prompt, command_line);
+		command_line = cmd_update_char_removal(prompt, command_line);
 	}
 	else if (buffer[0] == CNTRL_U)
 	{
