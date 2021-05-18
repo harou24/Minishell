@@ -16,20 +16,20 @@
 
 typedef struct s_termcap
 {
-	struct	termios term;
+	struct termios	term;
 }			t_termcap;
 
 int		termcap_putchar(int c);
-t_bool		termcap_init(t_termcap *term);
-t_bool		termcap_execute(const char *cap);
-void		termcap_deinit(t_termcap *term);
+t_bool	termcap_init(t_termcap *term);
+t_bool	termcap_execute(const char *cap);
+void	termcap_deinit(t_termcap *term);
 
 t_bool	termcap_backspace(void);
 t_bool	termcap_clean_line(void);
 t_bool	termcap_arrow_down(void);
-void termcap_move_left();
-void termcap_move_right();
-t_bool    termcap_insert_char(char c);
+void	termcap_move_left(void);
+void	termcap_move_right(void);
+t_bool	termcap_insert_char(char c);
 t_bool	termcap_is_key_arrow_up(char *buffer);
 t_bool	termcap_is_key_arrow_left(char *buffer);
 t_bool	termcap_is_key_arrow_right(char *buffer);
