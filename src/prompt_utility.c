@@ -168,6 +168,14 @@ char	*prompt_get_hist(t_prompt *prompt, char *command_line, char *buffer)
 	return (command_line);
 }
 
+void	cmd_update_char_removal(t_prompt *prompt, char *command_line)
+{
+	prompt_remove_char(prompt, command_line);
+	char *new = prompt_get_updated_command_line(prompt, command_line);
+	free(command_line);
+	command_line = new;
+}
+
 char	*handle_key(char *buffer, char *command_line, t_prompt *prompt)
 {
 	if (is_key_printable(buffer) && prompt_insert_char(prompt, buffer[0]))
@@ -180,10 +188,7 @@ char	*handle_key(char *buffer, char *command_line, t_prompt *prompt)
 		prompt_move_cursor_right(prompt, command_line);
 	else if (is_key_backspace(buffer))
 	{
-		prompt_remove_char(prompt, command_line);
-		char *new = prompt_get_updated_command_line(prompt, command_line);
-		free(command_line);
-		command_line = new;
+		cmd_update_char_removal(prompt, command_line);
 	}
 	else if (buffer[0] == CNTRL_U)
 	{
@@ -215,7 +220,7 @@ char	*prompt_read(t_prompt *prompt)
 
 	termcap_init(&term);
 	command_line = NULL;
-	do
+	while (ft_strcmp(buffer, "\n"))
 	{
 		nb_bytes = read(STDIN, buffer, 15);
 		if (nb_bytes == -1 || buffer[0] == CNTRL_D)
@@ -225,7 +230,6 @@ char	*prompt_read(t_prompt *prompt)
 			cursor_set_end(prompt->cursor, ft_strlen(command_line));
 		command_line = handle_key(buffer, command_line, prompt);
 	}
-	while (ft_strcmp(buffer, "\n"));
 	history_reset_current_index(prompt->hist);
 	cursor_reset(prompt->cursor);
 	//    termcap_deinit(&term);
