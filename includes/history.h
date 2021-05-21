@@ -8,6 +8,7 @@ typedef struct s_history
 	void	*vec;
 	int		size;
 	int		current_index;
+    int     prev_index;
 }			t_history;
 
 t_history	*history_create(void);

@@ -18,15 +18,15 @@ char	**history_to_array(t_history *hist)
 
 char	*history_get_next_cmd(t_history *hist)
 {
-	char	*cmd;
+    char	*cmd;
 
 	if (hist->size == 0)
 		return (NULL);
 	if (hist->current_index >= 0)
 	{
-		cmd = history_to_array(hist)[hist->current_index];
 		if (hist->current_index > 0)
 			hist->current_index--;
+		cmd = history_to_array(hist)[hist->current_index];
 		return (cmd);
 	}
 	return (history_get_first(hist));
@@ -36,19 +36,18 @@ char	*history_get_prev_cmd(t_history *hist)
 {
 	char	*cmd;
 
-	if (hist->current_index == hist->size)
-		return (NULL);
-	if (hist->current_index >= 0 && hist->current_index < hist->size - 1)
+	if (hist->current_index >= 0 && hist->current_index < hist->size)
 	{
 		if (hist->current_index < hist->size)
 			hist->current_index++;
 		cmd = history_to_array(hist)[hist->current_index];
 		return (cmd);
 	}
-	return (history_get_last(hist));
+    else
+        return (ft_strdup(""));
 }
 
 void	history_reset_current_index(t_history *hist)
 {
-	hist->current_index = hist->size - 1;
+	hist->current_index = hist->size;
 }

@@ -37,5 +37,5 @@ void	history_add(t_history *hist, char *cmd)
 		return ;
 	vector(&hist->vec, V_PUSHBACK, 0, cmd);
 	hist->size++;
-	hist->current_index = hist->size - 1;
+	hist->current_index = hist->size;
 }
