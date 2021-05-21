@@ -18,7 +18,7 @@ char	**history_to_array(t_history *hist)
 
 char	*history_get_next_cmd(t_history *hist)
 {
-    char	*cmd;
+	char	*cmd;
 
 	if (hist->size == 0)
 		return (NULL);
@@ -41,10 +41,10 @@ char	*history_get_prev_cmd(t_history *hist)
 		if (hist->current_index < hist->size)
 			hist->current_index++;
 		cmd = history_to_array(hist)[hist->current_index];
-		return (cmd);
 	}
-    else
-        return (ft_strdup(""));
+	else
+		cmd = ft_strdup("");
+	return (cmd);
 }
 
 void	history_reset_current_index(t_history *hist)

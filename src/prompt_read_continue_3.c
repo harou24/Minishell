@@ -31,7 +31,7 @@ char	*prompt_get_hist(t_prompt *prompt, char *command_line, char *buffer)
 			command_line = ft_strdup("");
 			prompt_clean(prompt);
 			cursor_reset(prompt->cursor);
-            history_reset_current_index(prompt->hist);
+			history_reset_current_index(prompt->hist);
 		}
 	}
 	return (command_line);
