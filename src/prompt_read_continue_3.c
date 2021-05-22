@@ -7,6 +7,13 @@
 #include "key_listener.h"
 #include "cursor.h"
 
+void	__reset(t_prompt *prompt)
+{
+	prompt_clean(prompt);
+	cursor_reset(prompt->cursor);
+	history_reset_current_index(prompt->hist);
+}
+
 char	*prompt_get_hist(t_prompt *prompt, char *command_line, char *buffer)
 {
 	if (is_key_arrow_up(buffer) && prompt->hist->size != 0)
@@ -29,9 +36,7 @@ char	*prompt_get_hist(t_prompt *prompt, char *command_line, char *buffer)
 		{
 			free(command_line);
 			command_line = ft_strdup("");
-			prompt_clean(prompt);
-			cursor_reset(prompt->cursor);
-			history_reset_current_index(prompt->hist);
+			__reset(prompt);
 		}
 	}
 	return (command_line);
