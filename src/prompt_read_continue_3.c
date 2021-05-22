@@ -46,10 +46,13 @@ char	*cmd_update_char_removal(t_prompt *prompt, char *command_line)
 {
 	char	*new;
 
-	prompt_remove_char(prompt, command_line);
-	new = prompt_get_updated_command_line(prompt, command_line);
-	free(command_line);
-	command_line = new;
+    new = NULL;
+	if (prompt_remove_char(prompt, command_line))
+    {        
+	    new = prompt_get_updated_command_line(prompt, command_line);
+	    free(command_line);
+	    command_line = new;
+    }
 	return (command_line);
 }
 

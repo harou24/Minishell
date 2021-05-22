@@ -28,10 +28,14 @@ char	*prompt_get_updated_command_line(t_prompt *prompt, char *command_line)
 	return (new_cmd);
 }
 
-void	prompt_remove_char(t_prompt *prompt, char *command_line)
+t_bool  prompt_remove_char(t_prompt *prompt, char *command_line)
 {
 	if (command_line && cursor_decrease_pos(prompt->cursor))
+    {
 		termcap_backspace();
+        return (TRUE);
+    }
+    return (FALSE);
 }
 
 void	prompt_clean(t_prompt *prompt)

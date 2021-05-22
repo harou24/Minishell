@@ -32,7 +32,7 @@ void		prompt_set_error_code(t_prompt *_prompt, int _error_code);
 void		prompt_print(t_prompt *_prompt);
 int			prompt_update(t_prompt *_prompt);
 void		prompt_add_cmd_to_history(t_prompt *prompt, char *cmd);
-void		prompt_remove_char(t_prompt *prompt, char *command_line);
+t_bool		prompt_remove_char(t_prompt *prompt, char *command_line);
 void		prompt_clean(t_prompt *prompt);
 void		prompt_move_cursor_right(t_prompt *prompt, char *command_line);
 void		prompt_move_cursor_left(t_prompt *prompt);
