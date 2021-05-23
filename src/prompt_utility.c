@@ -47,7 +47,10 @@ char	*prompt_read(t_prompt *prompt)
 	{
 		nb_bytes = read(STDIN, buffer, 15);
 		if (nb_bytes == -1 || buffer[0] == CNTRL_D)
+        {
+            prompt_clean(prompt);
 			break ;
+        }
 		buffer[nb_bytes] = 0;
 		if (command_line)
 			cursor_set_end(prompt->cursor, ft_strlen(command_line));
