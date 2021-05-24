@@ -14,7 +14,7 @@ void	prompt_destroy(t_prompt *_prompt)
 	free(_prompt->hostname);
 	free(_prompt->current_path);
 	free(_prompt->buffer);
-	history_destroy(_prompt->hist);
+	history_destroy(&_prompt->hist);
 	cursor_destroy(_prompt->cursor);
 	free(_prompt);
 }
