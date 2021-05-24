@@ -10,7 +10,7 @@ t_history	*history_destroy(t_history **hist)
     if (*hist)
     {
 	    vector(&(*hist)->vec, V_DESTROY, TRUE, NULL);
-	    free(hist);
+	    free(*hist);
     }
     return ((*hist = NULL));
 }
