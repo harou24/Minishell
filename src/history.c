@@ -5,14 +5,14 @@
 
 t_history	*history_destroy(t_history **hist)
 {
-    if (!hist)
-        return (NULL);
-    if (*hist)
-    {
-	    vector(&(*hist)->vec, V_DESTROY, TRUE, NULL);
-	    free(*hist);
-    }
-    return ((*hist = NULL));
+	if (!hist)
+		return (NULL);
+	if (*hist)
+	{
+		vector(&(*hist)->vec, V_DESTROY, TRUE, NULL);
+		free(*hist);
+	}
+	return ((*hist = NULL));
 }
 
 char	**history_to_array(t_history *hist)
