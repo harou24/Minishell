@@ -18,6 +18,6 @@ char		*history_get_next_cmd(t_history *hist);
 char		*history_get_prev_cmd(t_history *hist);
 char		**history_to_array(t_history *cmd);
 void		history_reset_current_index(t_history *hist);
-t_history		*history_destroy(t_history **hist);
+t_history	*history_destroy(t_history **hist);
 
 #endif
