@@ -21,8 +21,6 @@ t_history	*history_create(void)
 
 char	*history_get_last(t_history *hist)
 {
-	if (hist->size == 0)
-		return (NULL);
 	return ((char *)vector(&hist->vec, V_PEEKBACK, 0, NULL));
 }
 
@@ -33,10 +31,9 @@ char	*history_get_first(t_history *hist)
 
 void	history_add(t_history *hist, char *cmd)
 {
-	if (hist->size != 0 && !ft_strcmp(history_get_last(hist), cmd))
+	if (hist->size != 0 && ft_strcmp(history_get_last(hist), cmd) == 0)
 		return ;
 	vector(&hist->vec, V_PUSHBACK, 0, cmd);
 	hist->size++;
 	hist->current_index = hist->size - 1;
 }
-

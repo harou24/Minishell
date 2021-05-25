@@ -53,7 +53,7 @@ char	*prompt(int last_error)
 	prompt_update(g_prompt__);
 	prompt_print(g_prompt__);
 	cmd = prompt_read(g_prompt__);
-	if (cmd && ft_strlen(cmd))
+	if (cmd && ft_strlen(cmd) > 0)
 		prompt_add_cmd_to_history(g_prompt__, ft_strdup(cmd));
 	return (cmd);
 }
