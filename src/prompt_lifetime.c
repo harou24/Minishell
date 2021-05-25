@@ -4,6 +4,7 @@
 #include "filesystem_traversal.h"
 #include "ft_printf.h"
 #include "prompt.h"
+#include "cursor.h"
 
 #define __PROMPT_BUFF_SIZE 255
 
@@ -13,6 +14,8 @@ void	prompt_destroy(t_prompt *_prompt)
 	free(_prompt->hostname);
 	free(_prompt->current_path);
 	free(_prompt->buffer);
+	history_destroy(&_prompt->hist);
+	cursor_destroy(_prompt->cursor);
 	free(_prompt);
 }
 
@@ -32,8 +35,11 @@ t_prompt 	*prompt_create(const char *username, const char *hostname)
 	prompt->error_code = 0;
 	prompt->buffer = ft_calloc(sizeof(char), __PROMPT_BUFF_SIZE);
 	prompt->current_path = fs_get_cur_dir_name();
+	prompt->hist = history_create();
+	prompt->cursor = cursor_create();
 	if (!prompt->current_path || !prompt->buffer
-		|| !prompt->username || !prompt->hostname)
+		|| !prompt->username || !prompt->hostname
+		|| !prompt->hist || !prompt->cursor)
 	{
 		prompt_destroy(prompt);
 		return (NULL);

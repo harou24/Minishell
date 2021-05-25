@@ -6,7 +6,7 @@
 /*   By: sverschu <sverschu@student.codam.n>          +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/04/13 21:04:39 by sverschu      #+#    #+#                 */
-/*   Updated: 2021/04/13 21:04:44 by sverschu      ########   odam.nl         */
+/*   Updated: 2021/05/11 20:35:15 by haachtch      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,9 +46,19 @@ void	prompt_deinit(t_prompt **prompt)
 
 char	*prompt(int last_error)
 {
+	char	*cmd;
+
 	__prompt_init();
 	prompt_set_error_code(g_prompt__, last_error);
 	prompt_update(g_prompt__);
 	prompt_print(g_prompt__);
-	return (prompt_read());
+	cmd = prompt_read(g_prompt__);
+	if (cmd && ft_strlen(cmd) > 0)
+		prompt_add_cmd_to_history(g_prompt__, ft_strdup(cmd));
+	return (cmd);
+}
+
+t_prompt	*prompt_get(void)
+{
+	return (g_prompt__);
 }

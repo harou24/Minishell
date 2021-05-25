@@ -2,6 +2,10 @@
 #include "get_next_line.h"
 #include "ft_printf.h"
 #include "prompt.h"
+#include "termcap.h"
+#include "history.h"
+#include "key_listener.h"
+#include "cursor.h"
 
 static char	*__adjustedbuffer(t_prompt *_prompt)
 {
@@ -30,15 +34,30 @@ void	prompt_set_error_code(t_prompt *_prompt, int _error_code)
 	_prompt->error_code = _error_code;
 }
 
-char	*prompt_read(void)
+char	*prompt_read(t_prompt *prompt)
 {
-	char	*command_line;
+	char		*command_line;
+	t_termcap	term;
+	char		buffer[15];
+	int			nb_bytes;
 
+	termcap_init(&term);
 	command_line = NULL;
-	if (!(get_next_line(STDIN, &command_line) > 0))
+	while (ft_strcmp(buffer, "\n"))
 	{
-		free(command_line);
-		return (NULL);
+		nb_bytes = read(STDIN, buffer, 15);
+		if (nb_bytes == -1 || buffer[0] == CNTRL_D)
+		{
+			prompt_clean(prompt);
+			break ;
+		}
+		buffer[nb_bytes] = 0;
+		if (command_line)
+			cursor_set_end(prompt->cursor, ft_strlen(command_line));
+		command_line = handle_key(buffer, command_line, prompt);
 	}
+	history_reset_current_index(prompt->hist);
+	cursor_reset(prompt->cursor);
+	termcap_deinit(&term);
 	return (command_line);
 }
